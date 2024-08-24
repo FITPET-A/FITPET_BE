@@ -2,14 +2,13 @@ package FITPET.dev.entity;
 
 import FITPET.dev.common.enums.*;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @Builder
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class Insurance {
 
     @Id
@@ -23,8 +22,8 @@ public class Insurance {
     @Column(nullable = false)
     private int age;
 
-    @Column(nullable = false)
-    private String dogBreedRank;
+    @Column(nullable = false, length = 10)
+    private String dogBreedRank; // 견종등급
 
     @Column(nullable = false)
     private RenewalCycle renewalCycle; // 갱신주기

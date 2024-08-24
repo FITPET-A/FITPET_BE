@@ -2,14 +2,13 @@ package FITPET.dev.entity;
 
 import FITPET.dev.common.enums.Company;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @Builder
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class CompanyDogBreed {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,10 +18,10 @@ public class CompanyDogBreed {
     @Column(nullable = false)
     private Company company;
 
-    @Column(nullable = true)
-    private String dogBreed;
+    @Column(nullable = true, length = 30)
+    private String dogBreed; // 견종분류
 
-    @Column(nullable = false)
-    private String dogBreedRank;
+    @Column(nullable = false, length = 10)
+    private String dogBreedRank; // 견종등급
 
 }

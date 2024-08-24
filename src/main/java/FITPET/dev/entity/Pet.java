@@ -2,14 +2,13 @@ package FITPET.dev.entity;
 
 import FITPET.dev.common.enums.PetType;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @Builder
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class Pet {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +26,6 @@ public class Pet {
     @Column(nullable = false)
     private PetType petType;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     private String detailType;
 }

@@ -1,14 +1,13 @@
 package FITPET.dev.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @Builder
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class DogBreedDetail {
 
     @Id
@@ -19,10 +18,10 @@ public class DogBreedDetail {
     @Column(nullable = false)
     private boolean isFierceDog;
 
-    @Column(nullable = true)
+    @Column(nullable = true, length = 30)
     private String liabilityCap; // 배상책임인수제한
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10)
     private String isMajorDogBreed; // 주요 견종 여부
 
 }
