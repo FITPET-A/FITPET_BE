@@ -53,9 +53,8 @@ public class InitService {
     private void parseDogInsuranceSheet(Workbook workbook, Company company, int sheetNum){
         Sheet sheet = readExcelSheet(workbook, sheetNum);
 
-        for (int i = 7; i < sheet.getLastRowNum(); i++){
+        for (int i = 6; i < sheet.getLastRowNum(); i++){
             Row row = sheet.getRow(i);
-
             if (row == null) continue;
 
             // read cell data and parse enum data
@@ -84,34 +83,52 @@ public class InitService {
         }
     }
 
-    private int parseNumericCellValue(Row row, int cellNum){
-        int value = 0;
-        try{
-            value = (int) row.getCell(cellNum).getNumericCellValue();
-        } catch (NullPointerException e){
-            return value;
-        }
-        catch (Exception e){
-            if (cellNum != 7) return 0;
-
-            String valueString = row.getCell(7).getStringCellValue();
-            if (valueString.equals("인수제한"))
-                value = -1;
-        }
-        return value;
-    }
-
-    private String parseStringCellValue(Row row, int cellNum){
-        String value;
-        try{
-            value = row.getCell(cellNum).getStringCellValue();
-        } catch (Exception e){
-            value = "";
-        }
-        return value;
-    }
 
     private void initCatInsurance() {
+        // read excel file
+        Workbook catInsurance = readExcelFile("assets/SCins_펫보험견적서통합본_240806_전달용.xlsx");
+
+        // read excel file's sheet and parse insurance data
+        parseCatInsuranceSheet(catInsurance, Company.MERITZ, 15);
+        parseCatInsuranceSheet(catInsurance, Company.DB, 16);
+        parseCatInsuranceSheet(catInsurance, Company.KB, 17);
+        parseCatInsuranceSheet(catInsurance, Company.HYUNDAE, 18);
+    }
+
+    private void parseCatInsuranceSheet(Workbook workbook, Company company, int sheetNum){
+        Sheet sheet = readExcelSheet(workbook, sheetNum);
+
+        int startIndex = 4;
+        if (company == Company.MERITZ)
+            startIndex = 5;
+
+        for (int i = startIndex; i < sheet.getLastRowNum(); i++){
+            Row row = sheet.getRow(i);
+            if (row == null) continue;
+
+            // read cell data and parse enum data
+            int age = parseNumericCellValue(row, 0);
+            String renewalCycleString = parseStringCellValue(row, 1);
+            String coverageRatioString = parseStringCellValue(row, 2);
+            String deductibleString = parseStringCellValue(row, 3);
+            String compensationString = parseStringCellValue(row, 4);
+            int premium = parseNumericCellValue(row, 6);
+
+            // parse enum data
+            RenewalCycle renewalCycle = RenewalCycle.getRenewalCycle(renewalCycleString);
+            CoverageRatio coverageRatio = CoverageRatio.getCoverageRatio(coverageRatioString);
+            Deductible deductible = Deductible.getDeductible(deductibleString);
+            Compensation compensation = Compensation.getCompensation(compensationString);
+
+            // create insurance entity
+            Insurance insurance = InsuranceConverter.toCatInsurance(
+                    company, age, renewalCycle,
+                    coverageRatio, deductible, compensation, premium);
+
+            System.out.println(insurance.toString());
+
+            insuranceRepository.save(insurance);
+        }
     }
 
     private void initDogBreedList() {
@@ -136,5 +153,37 @@ public class InitService {
         } catch (Exception e){
             throw new GeneralException(ErrorStatus.FAILURE_READ_EXCEL_SHEET);
         }
+    }
+
+    private int parseNumericCellValue(Row row, int cellNum){
+        int value = 0;
+        try{
+            value = (int) row.getCell(cellNum).getNumericCellValue();
+        } catch (NullPointerException e){
+            return value;
+        }
+        catch (Exception e){
+            if (cellNum == 6){
+                String valueString = row.getCell(6).getStringCellValue();
+                if (valueString.equals("가입불가"))
+                    value = -1;
+            }
+            else if (cellNum == 7){
+                String valueString = row.getCell(7).getStringCellValue();
+                if (valueString.equals("인수제한"))
+                    value = -1;
+            }
+        }
+        return value;
+    }
+
+    private String parseStringCellValue(Row row, int cellNum){
+        String value;
+        try{
+            value = row.getCell(cellNum).getStringCellValue();
+        } catch (Exception e){
+            value = "";
+        }
+        return value;
     }
 }

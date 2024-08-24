@@ -27,7 +27,7 @@ public class Insurance {
     @Column(nullable = false)
     private int age;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = true, length = 20)
     private String dogBreedRank; // 견종등급
 
     @Enumerated(EnumType.STRING)

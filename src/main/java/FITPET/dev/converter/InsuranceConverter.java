@@ -20,14 +20,14 @@ public class InsuranceConverter {
                 .build();
     }
 
-    public static Insurance toCatInsurance(Company company, int age, String dogBreedRank,
+    public static Insurance toCatInsurance(Company company, int age,
                                            RenewalCycle renewalCycle, CoverageRatio coverageRatio,
                                            Deductible deductible, Compensation compensation, int premium){
         return Insurance.builder()
                 .company(company)
                 .petType(PetType.CAT)
                 .age(age)
-                .dogBreedRank(dogBreedRank)
+                .dogBreedRank(null)
                 .renewalCycle(renewalCycle)
                 .coverageRatio(coverageRatio)
                 .deductible(deductible)
