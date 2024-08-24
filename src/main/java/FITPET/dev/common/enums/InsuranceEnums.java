@@ -11,4 +11,13 @@ enum CoverageRatio {
 }
 
 // 자부담 금액
-enum Ded
+enum Deductible {
+    ONE, THREE
+}
+
+// 1일 보상 금액
+enum Compensation {
+    FIFTEEN, THIRTY
+}
+
+
