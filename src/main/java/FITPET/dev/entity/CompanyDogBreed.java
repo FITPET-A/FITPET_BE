@@ -15,6 +15,7 @@ public class CompanyDogBreed {
     @Column(nullable = false)
     private Long companyDogBreedId;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Company company;
 

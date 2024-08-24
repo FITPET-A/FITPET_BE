@@ -23,6 +23,7 @@ public class Pet {
     @JoinColumn(name = "companyDogBreedId", nullable = true)
     private CompanyDogBreed companyDogBreed;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PetType petType;
 
