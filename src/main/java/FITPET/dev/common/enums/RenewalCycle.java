@@ -11,6 +11,13 @@ public enum RenewalCycle {
     FIVE_YEARS("5년");
 
     private final String label;
+
+    public static RenewalCycle getRenewalCycle(String label) {
+        if (label.equals("3년"))
+            return THREE_YEARS ;
+        else
+            return FIVE_YEARS;
+    }
 }
 
 

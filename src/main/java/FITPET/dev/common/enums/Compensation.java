@@ -10,4 +10,11 @@ public enum Compensation {
     FIFTEEN("15만"), THIRTY("30만");
 
     private final String label;
+
+    public static Compensation getCompensation(String label) {
+        if (label.equals("15만"))
+            return FIFTEEN ;
+        else
+            return THIRTY;
+    }
 }

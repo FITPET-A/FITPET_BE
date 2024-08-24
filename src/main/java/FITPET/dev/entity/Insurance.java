@@ -27,7 +27,7 @@ public class Insurance {
     @Column(nullable = false)
     private int age;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 20)
     private String dogBreedRank; // 견종등급
 
     @Enumerated(EnumType.STRING)
@@ -48,4 +48,18 @@ public class Insurance {
 
     @Column(nullable = true)
     private int premium; // 보험료
+
+
+    @Override
+    public String toString() {
+        return "company="+company
+                +"/petType="+petType
+                +"/age="+age
+                +"/dogBreedRank="+dogBreedRank
+                +"/renewalCycle="+renewalCycle
+                +"/coverageRatio="+coverageRatio
+                +"/deductible="+deductible
+                +"/compensation="+compensation
+                +"/premium="+premium;
+    }
 }
