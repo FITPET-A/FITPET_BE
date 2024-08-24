@@ -26,10 +26,10 @@ public class InitService {
     @Transactional
     public void initDatabase(){
         // 강아지 보험 entity parsing
-        initDogInsurance();
+        initInsuranceData("assets/SCins_펫보험견적서통합본_240806_전달용.xlsx", PetType.DOG, new int[]{9, 10, 11, 12, 13});
 
         // 고양이 보험 entity parsing
-        initCatInsurance();
+        initInsuranceData("assets/SCins_펫보험견적서통합본_240806_전달용.xlsx", PetType.CAT, new int[]{15, 16, 17, 18});
 
         // 통합견종리스트 parsing
         initDogBreedList();
@@ -38,81 +38,36 @@ public class InitService {
         initCatBreedList();
     }
 
-    private void initDogInsurance() {
-        // read excel file
-        Workbook dogInsurance = readExcelFile("assets/SCins_펫보험견적서통합본_240806_전달용.xlsx");
+    private void initInsuranceData(String filePath, PetType petType, int[] sheetNumbers) {
+        Workbook workbook = readExcelFile(filePath);
+        Company[] companies = PetType.isDog(petType)
+                ? new Company[]{Company.MERITZ, Company.DB, Company.HYUNDAE, Company.KB, Company.SAMSUNG}
+                : new Company[]{Company.MERITZ, Company.DB, Company.KB, Company.HYUNDAE};
 
-        // read excel file's sheet and parse insurance data
-        parseDogInsuranceSheet(dogInsurance, Company.MERITZ, 9);
-        parseDogInsuranceSheet(dogInsurance, Company.DB, 10);
-        parseDogInsuranceSheet(dogInsurance, Company.HYUNDAE, 11);
-        parseDogInsuranceSheet(dogInsurance, Company.KB, 12);
-        parseDogInsuranceSheet(dogInsurance, Company.SAMSUNG, 13);
-    }
-
-    private void parseDogInsuranceSheet(Workbook workbook, Company company, int sheetNum){
-        Sheet sheet = readExcelSheet(workbook, sheetNum);
-
-        for (int i = 6; i < sheet.getLastRowNum(); i++){
-            Row row = sheet.getRow(i);
-            if (row == null) continue;
-
-            // read cell data and parse enum data
-            int age = parseNumericCellValue(row, 0);
-            String dogBreedRank = parseStringCellValue(row, 1);
-            String renewalCycleString = parseStringCellValue(row, 2);
-            String coverageRatioString = parseStringCellValue(row, 3);
-            String deductibleString = parseStringCellValue(row, 4);
-            String compensationString = parseStringCellValue(row, 5);
-            int premium = parseNumericCellValue(row, 7);
-
-            // parse enum data
-            RenewalCycle renewalCycle = RenewalCycle.getRenewalCycle(renewalCycleString);
-            CoverageRatio coverageRatio = CoverageRatio.getCoverageRatio(coverageRatioString);
-            Deductible deductible = Deductible.getDeductible(deductibleString);
-            Compensation compensation = Compensation.getCompensation(compensationString);
-
-            // create insurance entity
-            Insurance insurance = InsuranceConverter.toDogInsurance(
-                    company, age, dogBreedRank, renewalCycle,
-                    coverageRatio, deductible, compensation, premium);
-
-            System.out.println(insurance.toString());
-
-            insuranceRepository.save(insurance);
+        for (int i = 0; i < sheetNumbers.length; i++) {
+            parseInsuranceSheet(workbook, companies[i], sheetNumbers[i], petType);
         }
     }
 
-
-    private void initCatInsurance() {
-        // read excel file
-        Workbook catInsurance = readExcelFile("assets/SCins_펫보험견적서통합본_240806_전달용.xlsx");
-
-        // read excel file's sheet and parse insurance data
-        parseCatInsuranceSheet(catInsurance, Company.MERITZ, 15);
-        parseCatInsuranceSheet(catInsurance, Company.DB, 16);
-        parseCatInsuranceSheet(catInsurance, Company.KB, 17);
-        parseCatInsuranceSheet(catInsurance, Company.HYUNDAE, 18);
-    }
-
-    private void parseCatInsuranceSheet(Workbook workbook, Company company, int sheetNum){
+    private void parseInsuranceSheet(Workbook workbook, Company company, int sheetNum, PetType petType) {
         Sheet sheet = readExcelSheet(workbook, sheetNum);
 
-        int startIndex = 4;
-        if (company == Company.MERITZ)
-            startIndex = 5;
+        int startIndex = (PetType.isDog(petType) || company == Company.MERITZ) ? 6 : 4;
+        for (int i = startIndex; i < sheet.getLastRowNum(); i++) {
 
-        for (int i = startIndex; i < sheet.getLastRowNum(); i++){
+            // read row data
             Row row = sheet.getRow(i);
             if (row == null) continue;
 
-            // read cell data and parse enum data
+            // read cell data
             int age = parseNumericCellValue(row, 0);
-            String renewalCycleString = parseStringCellValue(row, 1);
-            String coverageRatioString = parseStringCellValue(row, 2);
-            String deductibleString = parseStringCellValue(row, 3);
-            String compensationString = parseStringCellValue(row, 4);
-            int premium = parseNumericCellValue(row, 6);
+            String dogBreedRank = PetType.isDog(petType) ? parseStringCellValue(row, 1) : null;
+            int premium = parseNumericCellValue(row, PetType.isDog(petType) ? 7 : 6);
+
+            String renewalCycleString = parseStringCellValue(row, PetType.isDog(petType) ? 2 : 1);
+            String coverageRatioString = parseStringCellValue(row, PetType.isDog(petType) ? 3 : 2);
+            String deductibleString = parseStringCellValue(row, PetType.isDog(petType) ? 4 : 3);
+            String compensationString = parseStringCellValue(row, PetType.isDog(petType) ? 5 : 4);
 
             // parse enum data
             RenewalCycle renewalCycle = RenewalCycle.getRenewalCycle(renewalCycleString);
@@ -120,13 +75,11 @@ public class InitService {
             Deductible deductible = Deductible.getDeductible(deductibleString);
             Compensation compensation = Compensation.getCompensation(compensationString);
 
-            // create insurance entity
-            Insurance insurance = InsuranceConverter.toCatInsurance(
-                    company, age, renewalCycle,
+            // save insurance entity
+            Insurance insurance = InsuranceConverter.toInsurance(company, petType, age, dogBreedRank, renewalCycle,
                     coverageRatio, deductible, compensation, premium);
 
             System.out.println(insurance.toString());
-
             insuranceRepository.save(insurance);
         }
     }
@@ -156,34 +109,34 @@ public class InitService {
     }
 
     private int parseNumericCellValue(Row row, int cellNum){
-        int value = 0;
         try{
-            value = (int) row.getCell(cellNum).getNumericCellValue();
+            return (int) row.getCell(cellNum).getNumericCellValue();
         } catch (NullPointerException e){
-            return value;
+            return 0;
         }
         catch (Exception e){
             if (cellNum == 6){
                 String valueString = row.getCell(6).getStringCellValue();
                 if (valueString.equals("가입불가"))
-                    value = -1;
+                    return -1;
             }
             else if (cellNum == 7){
                 String valueString = row.getCell(7).getStringCellValue();
                 if (valueString.equals("인수제한"))
-                    value = -1;
+                    return -1;
             }
+            return 0;
         }
-        return value;
     }
 
     private String parseStringCellValue(Row row, int cellNum){
-        String value;
-        try{
-            value = row.getCell(cellNum).getStringCellValue();
-        } catch (Exception e){
-            value = "";
+        try {
+            return row.getCell(cellNum).getStringCellValue();
+        } catch (IllegalStateException e) {
+            // 셀이 숫자형 등 다른 타입일 경우 예외 처리
+            return String.valueOf((int) row.getCell(cellNum).getNumericCellValue());
+        } catch (Exception e) {
+            return "";
         }
-        return value;
     }
 }

@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 public enum PetType {
     DOG, CAT;
 
-    public boolean isDog(PetType petType){
+    public static boolean isDog(PetType petType){
         return petType == DOG;
     }
 }
