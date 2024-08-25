@@ -15,11 +15,11 @@ public enum ErrorStatus {
      *  404 : 존재하지 않는 정보에 대한 요청.
      */
 
-    TEMP(400, "테스트용 ErrorStatus입니다.");
-
     /**
      * 400
      */
+    FAILURE_READ_EXCEL_FILE(400, "엑셀 파일을 읽는 과정에서 오류가 발생했습니다."),
+    FAILURE_READ_EXCEL_SHEET(400, "엑셀 시트를 읽는 과정에서 오류가 발생했습니다.");;
 
     /**
      * 404
