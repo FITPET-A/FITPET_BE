@@ -117,12 +117,23 @@ public class InitService {
         }
     }
 
-
     private void initCatBreedList() {
+        Workbook workbook = readExcelFile("assets/240823_SC개발 요구사항.xlsx");
+        Sheet sheet = readExcelSheet(workbook, 1);
+
+        for (int i = 371; i <= sheet.getLastRowNum(); i++) {
+            // read row data
+            Row row = sheet.getRow(i);
+            if (row == null) continue;
+
+            // Pet entity 저장
+            savePetEntity(row, PetType.CAT);
+        }
     }
 
     private Pet savePetEntity(Row row, PetType petType) {
         String detailType = parseStringCellValue(row, 1);
+
         Pet pet = PetConverter.toPet(petType, detailType);
         petRepository.save(pet);
         return pet;
