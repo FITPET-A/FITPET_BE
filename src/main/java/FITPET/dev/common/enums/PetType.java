@@ -12,4 +12,12 @@ public enum PetType {
     public static boolean isDog(PetType petType){
         return petType == DOG;
     }
+
+    public static PetType getPetType(String petType){
+        if (petType.equals("DOG"))
+            return DOG;
+        else if (petType.equals("CAT"))
+            return CAT;
+        else return null;
+    }
 }
