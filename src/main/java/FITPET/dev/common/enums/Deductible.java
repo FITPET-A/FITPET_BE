@@ -12,9 +12,9 @@ public enum Deductible {
     private final String label;
 
     public static Deductible getDeductible(String label) {
-        if (label.equals("1만원"))
+        if (label.contains("1만"))
             return ONE ;
-        else if (label.equals("3만원"))
+        else if (label.contains("3만"))
             return THREE;
         else
             return FIVE;
