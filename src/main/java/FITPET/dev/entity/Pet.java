@@ -4,6 +4,8 @@ import FITPET.dev.common.enums.PetType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Builder
@@ -15,13 +17,11 @@ public class Pet {
     @Column(nullable = false)
     private Long petId;
 
-    @OneToOne
-    @JoinColumn(name = "dogBreedDetailId", nullable = true)
-    private DogBreedDetail dogBreedDetailId;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "pet")
+    private DogBreedDetail dogBreedDetail;
 
-    @OneToOne
-    @JoinColumn(name = "companyDogBreedId", nullable = true)
-    private CompanyDogBreed companyDogBreed;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pet")
+    private List<CompanyDogBreed> companyDogBreedList;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

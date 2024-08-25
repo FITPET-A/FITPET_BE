@@ -15,6 +15,10 @@ public class DogBreedDetail {
     @Column(nullable = false)
     private Long dogBreedDetailId;
 
+    @OneToOne
+    @JoinColumn(name = "pet_id", nullable = true)
+    private Pet pet;
+
     @Column(nullable = false)
     private boolean isFierceDog;
 

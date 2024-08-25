@@ -15,6 +15,10 @@ public class CompanyDogBreed {
     @Column(nullable = false)
     private Long companyDogBreedId;
 
+    @ManyToOne
+    @JoinColumn(name = "pet_id", nullable = true)
+    private Pet pet;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Company company;
@@ -22,7 +26,7 @@ public class CompanyDogBreed {
     @Column(nullable = true, length = 30)
     private String dogBreed; // 견종분류
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = true, length = 10)
     private String dogBreedRank; // 견종등급
 
 }
