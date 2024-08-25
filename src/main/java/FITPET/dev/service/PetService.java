@@ -24,7 +24,7 @@ public class PetService {
         if (petType == null)
             throw new GeneralException(ErrorStatus.INVALID_PET_TYPE);
 
-        List<Pet> petList = petRepository.findByPetTypeAndDetailTypeContaining(petType, detailType);
+        List<Pet> petList = petRepository.findPetListContainingDetailType(petType, detailType);
         return PetConverter.toPetDetailTypeListDto(petList);
     }
 }
