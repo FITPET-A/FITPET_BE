@@ -19,11 +19,13 @@ public enum ErrorStatus {
      * 400
      */
     FAILURE_READ_EXCEL_FILE(400, "엑셀 파일을 읽는 과정에서 오류가 발생했습니다."),
-    FAILURE_READ_EXCEL_SHEET(400, "엑셀 시트를 읽는 과정에서 오류가 발생했습니다.");;
+    FAILURE_READ_EXCEL_SHEET(400, "엑셀 시트를 읽는 과정에서 오류가 발생했습니다."),
 
     /**
      * 404
+     * NOT_FOUND
      */
+    NOT_EXIST_PET(404, "존재하지 않는 품종입니다.");
 
 
     private final int code;

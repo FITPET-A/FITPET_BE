@@ -7,14 +7,16 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Deductible {
-    ONE("1만원"), THREE("3만원");
+    ONE("1만원"), THREE("3만원"), FIVE("5만원");
 
     private final String label;
 
     public static Deductible getDeductible(String label) {
-        if (label.equals("1만원"))
+        if (label.contains("1만"))
             return ONE ;
-        else
+        else if (label.contains("3만"))
             return THREE;
+        else
+            return FIVE;
     }
 }
