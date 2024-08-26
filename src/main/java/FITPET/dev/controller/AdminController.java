@@ -34,12 +34,11 @@ public class AdminController {
     }
 
     @GetMapping("/insurance/downloads")
-    public ApiResponse downloadInsurances(
+    public void downloadInsurances(
             HttpServletResponse servletResponse,
             @RequestParam(name = "company", required = false, defaultValue = "all") String company
     ){
         adminService.downloadsInsurances(servletResponse, company);
-        return ApiResponse.SuccessResponse(SuccessStatus.DOWNLOADS_INSURANCE_TABLE);
     }
 
 }
