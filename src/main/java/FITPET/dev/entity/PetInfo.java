@@ -18,6 +18,10 @@ public class PetInfo {
     @Column(nullable = false)
     private Long petInfoId;
 
+    @ManyToOne
+    @JoinColumn(name = "pet_id", nullable = true)
+    private Pet pet;
+
     @Column(nullable = false, length = 100)
     private String name;
 
@@ -29,5 +33,7 @@ public class PetInfo {
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
+
 
 }
