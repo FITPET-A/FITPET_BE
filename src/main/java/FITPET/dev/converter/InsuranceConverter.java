@@ -71,6 +71,7 @@ public class InsuranceConverter {
 
     public static InsuranceResponse.InsuranceDetailExcelDto toInsuranceDetailExcelDto(Insurance insurance){
         return InsuranceResponse.InsuranceDetailExcelDto.builder()
+                .company(insurance.getCompany().getLabel())
                 .insuranceId(insurance.getInsuranceId())
                 .petType(insurance.getPetType())
                 .age(insurance.getAge())

@@ -7,10 +7,7 @@ import FITPET.dev.common.enums.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -65,7 +62,8 @@ public class InsuranceResponse {
     @AllArgsConstructor
     @ExcelFile
     public static class InsuranceDetailExcelDto {
-        @ExcelColumn
+        private String company;
+        @ExcelColumn(headerName = "InsuranceId")
         private Long insuranceId;
         @ExcelColumn(headerName = "품종")
         private PetType petType;

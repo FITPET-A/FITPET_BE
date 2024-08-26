@@ -15,12 +15,13 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -34,14 +35,20 @@ public class ExcelUtils implements ExcelUtilFactory {
         // 엑셀파일(Workbook) 객체 생성
         Workbook workbook = getXSSFWorkBook();
 
-        // 엑셀파일 sheet를 만들고, sheet의 이름 지정
-        Sheet sheet = workbook.createSheet(sheetName);
+        // 데이터를 회사별로 그룹화
+        Map<String, List<InsuranceResponse.InsuranceDetailExcelDto>> groupedByCompany = data.stream()
+                .collect(Collectors.groupingBy(InsuranceResponse.InsuranceDetailExcelDto::getCompany));
 
-        // 엑셀 Header 생성
-        createHeaderRow(sheet, data);
+        // 회사별로 시트 생성 및 데이터 작성
+        groupedByCompany.forEach((companyName, companyData) -> {
+            Sheet sheet = workbook.createSheet(companyName);
 
-        // 헤더 아래에 들어갈 내용을 그림
-        createInsurancesBody(data, sheet);
+            // 엑셀 Header 생성
+            createHeaderRow(sheet, companyData);
+
+            // 헤더 아래에 들어갈 내용을 그림
+            createInsurancesBody(companyData, sheet);
+        });
 
         // 파일 다운로드를 위해 파일 형식 지정
         response.setContentType("ms-vnd/excel");
@@ -177,8 +184,12 @@ public class ExcelUtils implements ExcelUtilFactory {
 
             // 클래스에 선언되어 있는 필드들을 List에 추가
             for (Field field : clazz.getDeclaredFields()) {
-                field.setAccessible(true);
-                result.add(field.get(obj));
+
+                // @ExcelColumn 어노테이션이 붙은 칼럼만 추출
+                if (field.isAnnotationPresent(ExcelColumn.class)) {
+                    field.setAccessible(true);
+                    result.add(field.get(obj));
+                }
             }
             return result;
 
