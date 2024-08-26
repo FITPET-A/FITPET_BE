@@ -40,4 +40,27 @@ public class InsuranceConverter {
                 .build();
     }
 
+    public static InsuranceResponse.InsuranceDetailDto toInsuranceDetailDto(Insurance insurance) {
+        return InsuranceResponse.InsuranceDetailDto.builder()
+                .petType(insurance.getPetType())
+                .age(insurance.getAge())
+                .dogBreedRank(insurance.getDogBreedRank())
+                .renewalCycle(insurance.getRenewalCycle().getLabel())
+                .coverageRatio(insurance.getCoverageRatio().getLabel())
+                .deductible(insurance.getDeductible().getLabel())
+                .compensation(insurance.getCompensation().getLabel())
+                .premium(insurance.getPremium())
+                .build();
+    }
+
+    public static InsuranceResponse.InsuranceDetailListDto toInsuranceDetailListDto(List<Insurance> insuranceList){
+        List<InsuranceResponse.InsuranceDetailDto> insuranceDetailDtoList = insuranceList.stream()
+                .map(InsuranceConverter::toInsuranceDetailDto)
+                .toList();
+
+        return InsuranceResponse.InsuranceDetailListDto.builder()
+                .insuranceDetailDtoList(insuranceDetailDtoList)
+                .build();
+    }
+
 }

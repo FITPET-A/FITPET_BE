@@ -19,5 +19,7 @@ public interface InsuranceRepository extends JpaRepository<Insurance, Long> {
                                       @Param("coverageRatio") CoverageRatio coverageRatio,
                                       @Param("deductible") Deductible deductible,
                                       @Param("compensation") Compensation compensation);
+
+    List<Insurance> findByCompany(Company company);
 }
 
