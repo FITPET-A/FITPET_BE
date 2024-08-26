@@ -27,7 +27,12 @@ public enum ErrorStatus {
      * 404
      * NOT_FOUND
      */
-    NOT_EXIST_PET(404, "존재하지 않는 품종입니다.");
+    NOT_EXIST_PET(404, "존재하지 않는 품종입니다."),
+
+    /**
+     * 500
+     */
+    FAILURE_RENDER_EXCEL_BODY(500, "엑셀 바디를 그리는 중 오류가 발생했습니다.");
 
 
     private final int code;

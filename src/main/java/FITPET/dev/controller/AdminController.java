@@ -4,6 +4,7 @@ import FITPET.dev.common.basecode.SuccessStatus;
 import FITPET.dev.common.response.ApiResponse;
 import FITPET.dev.service.AdminService;
 import FITPET.dev.service.InitService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,15 @@ public class AdminController {
             @RequestParam(name = "page", required = false, defaultValue = "0") int page
     ){
         return ApiResponse.SuccessResponse(SuccessStatus.GET_INSURANCE_TABLE, adminService.getInsurances(page, company));
+    }
+
+    @GetMapping("/insurance/downloads")
+    public ApiResponse downloadInsurances(
+            HttpServletResponse servletResponse,
+            @RequestParam(name = "company", required = false, defaultValue = "all") String company
+    ){
+        adminService.downloadsInsurances(servletResponse, company);
+        return ApiResponse.SuccessResponse(SuccessStatus.DOWNLOADS_INSURANCE_TABLE);
     }
 
 }
