@@ -22,6 +22,9 @@ public enum ErrorStatus {
     FAILURE_READ_EXCEL_SHEET(400, "엑셀 시트를 읽는 과정에서 오류가 발생했습니다."),
     INVALID_PET_TYPE(400, "잘못된 품종 정보입니다."),
 
+    INVALID_PHONE_NUMBER(400,"유효하지 않은 전화번호 형식입니다."),
+    INVALID_AGE(400,"유효하지 않은 나이 값입니다."),
+
     /**
      * 404
      * NOT_FOUND

@@ -9,6 +9,7 @@ import FITPET.dev.entity.Pet;
 import FITPET.dev.entity.PetInfo;
 import FITPET.dev.repository.PetInfoRepository;
 import FITPET.dev.repository.PetRepository;
+import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +21,14 @@ public class PetInfoService {
     private final PetRepository petRepository;
     private final InsuranceService insuranceService;
 
+    private static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile("^010\\d{8}$"); //  전화번호 정규식(010+숫자 8자리)
+    private static final int MAX_AGE = 100;
+
 
     // PetInfo 생성 및 저장 후 보험료 조회
     public InsuranceResponse.InsuranceListDto createPetInfoAndGetInsurance(PetInfoRequest petInfoRequest) {
+        validatePhoneNumber(petInfoRequest.getPhoneNum());
+        validateAge(petInfoRequest.getAge());
         Pet pet = findPetByDetailType(petInfoRequest.getDetailType());
 
         // PetInfo 생성하고 저장
@@ -50,6 +56,20 @@ public class PetInfoService {
         String compensation = "15만";
 
         return insuranceService.getInsurancePremium(detailType, age, renewalCycle, coverageRatio, deductible, compensation);
+    }
+
+    // 전화번호 유효성 검사
+    private void validatePhoneNumber(String phoneNum) {
+        if (!PHONE_NUMBER_PATTERN.matcher(phoneNum).matches()) {
+            throw new GeneralException(ErrorStatus.INVALID_PHONE_NUMBER);
+        }
+    }
+
+    // 나이 유효성 검사
+    private void validateAge(int age) {
+        if (age < 0 || age > MAX_AGE) {
+            throw new GeneralException(ErrorStatus.INVALID_AGE);
+        }
     }
 
 
