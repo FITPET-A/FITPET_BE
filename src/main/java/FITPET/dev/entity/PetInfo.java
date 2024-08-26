@@ -1,6 +1,7 @@
 package FITPET.dev.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,4 +26,8 @@ public class PetInfo {
 
     @Column(nullable = false, length = 20)
     private String phoneNum;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
 }
