@@ -3,6 +3,7 @@ package FITPET.dev.converter;
 import FITPET.dev.common.enums.*;
 import FITPET.dev.dto.response.InsuranceResponse;
 import FITPET.dev.entity.Insurance;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -37,6 +38,33 @@ public class InsuranceConverter {
 
         return InsuranceResponse.InsuranceListDto.builder()
                 .insuranceDtoList(insuranceDtoList)
+                .build();
+    }
+
+    public static InsuranceResponse.InsuranceDetailDto toInsuranceDetailDto(Insurance insurance) {
+        return InsuranceResponse.InsuranceDetailDto.builder()
+                .petType(insurance.getPetType())
+                .age(insurance.getAge())
+                .dogBreedRank(insurance.getDogBreedRank())
+                .renewalCycle(insurance.getRenewalCycle().getLabel())
+                .coverageRatio(insurance.getCoverageRatio().getLabel())
+                .deductible(insurance.getDeductible().getLabel())
+                .compensation(insurance.getCompensation().getLabel())
+                .premium(insurance.getPremium())
+                .build();
+    }
+
+    public static InsuranceResponse.InsuranceDetailPageDto toInsuranceDetailPageDto(Page<Insurance> page){
+        List<InsuranceResponse.InsuranceDetailDto> insuranceDetailDtoList = page.getContent().stream()
+                .map(InsuranceConverter::toInsuranceDetailDto)
+                .toList();
+
+        return InsuranceResponse.InsuranceDetailPageDto.builder()
+                .content(insuranceDetailDtoList)
+                .currentPage(page.getNumber())
+                .pageSize(page.getSize())
+                .totalNumber(page.getNumberOfElements())
+                .totalPage(page.getTotalPages())
                 .build();
     }
 
