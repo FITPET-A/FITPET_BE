@@ -3,6 +3,7 @@ package FITPET.dev.converter;
 import FITPET.dev.common.enums.*;
 import FITPET.dev.dto.response.InsuranceResponse;
 import FITPET.dev.entity.Insurance;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -53,13 +54,17 @@ public class InsuranceConverter {
                 .build();
     }
 
-    public static InsuranceResponse.InsuranceDetailListDto toInsuranceDetailListDto(List<Insurance> insuranceList){
-        List<InsuranceResponse.InsuranceDetailDto> insuranceDetailDtoList = insuranceList.stream()
+    public static InsuranceResponse.InsuranceDetailPageDto toInsuranceDetailPageDto(Page<Insurance> page){
+        List<InsuranceResponse.InsuranceDetailDto> insuranceDetailDtoList = page.getContent().stream()
                 .map(InsuranceConverter::toInsuranceDetailDto)
                 .toList();
 
-        return InsuranceResponse.InsuranceDetailListDto.builder()
-                .insuranceDetailDtoList(insuranceDetailDtoList)
+        return InsuranceResponse.InsuranceDetailPageDto.builder()
+                .content(insuranceDetailDtoList)
+                .currentPage(page.getNumber())
+                .pageSize(page.getSize())
+                .totalNumber(page.getNumberOfElements())
+                .totalPage(page.getTotalPages())
                 .build();
     }
 

@@ -2,6 +2,8 @@ package FITPET.dev.repository;
 
 import FITPET.dev.common.enums.*;
 import FITPET.dev.entity.Insurance;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,6 +22,18 @@ public interface InsuranceRepository extends JpaRepository<Insurance, Long> {
                                       @Param("deductible") Deductible deductible,
                                       @Param("compensation") Compensation compensation);
 
-    List<Insurance> findByCompany(Company company);
+
+    @Query("SELECT i FROM Insurance i " +
+            "WHERE i.company = :company " +
+            "ORDER BY " +
+            "CASE WHEN i.premium > 0 THEN 0 ELSE 1 END ASC, " +
+            "i.premium ASC")
+    Page<Insurance> findByCompany(@Param(("company")) Company company,
+                                  Pageable pageable);
+
+    @Query("SELECT i FROM Insurance i ORDER BY " +
+            "CASE WHEN i.premium > 0 THEN 0 ELSE 1 END ASC, " +
+            "i.premium ASC")
+    Page<Insurance> findAll(Pageable pageable);
 }
 

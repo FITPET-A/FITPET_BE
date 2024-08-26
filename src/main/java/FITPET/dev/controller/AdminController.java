@@ -25,8 +25,11 @@ public class AdminController {
     }
 
     @GetMapping("/insurance")
-    public ApiResponse getInsurances(@RequestParam(name = "company", required = false, defaultValue = "all") String company){
-        return ApiResponse.SuccessResponse(SuccessStatus.GET_INSURANCE_TABLE, adminService.getInsurances(company));
+    public ApiResponse getInsurances(
+            @RequestParam(name = "company", required = false, defaultValue = "all") String company,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page
+    ){
+        return ApiResponse.SuccessResponse(SuccessStatus.GET_INSURANCE_TABLE, adminService.getInsurances(page, company));
     }
 
 }
