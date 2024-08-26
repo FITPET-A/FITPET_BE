@@ -18,6 +18,6 @@ public class PetController {
     @GetMapping("")
     public ApiResponse getDetailTypeList(@RequestParam(name = "petType") String petType,
                                          @RequestParam(name = "detailType") String detailType){
-        return ApiResponse.SuccessResponse(SuccessStatus.SUCCESS, petService.getPetDetailTypeList(petType, detailType));
+        return ApiResponse.SuccessResponse(SuccessStatus.GET_DETAILTYPE_LIST, petService.getPetDetailTypeList(petType, detailType));
     }
 }

@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/v1/init")
-public class InitController {
+@RequestMapping("/api/v1/admin")
+public class AdminController {
     private final InitService initService;
 
     // excel file DB에 저장
-    @GetMapping("")
+    @GetMapping("/init")
     public ApiResponse initDatabase(){
-        initService.initDatabase();
+//        initService.initDatabase();
         return ApiResponse.SuccessResponse(SuccessStatus.SUCCESS);
     }
 
