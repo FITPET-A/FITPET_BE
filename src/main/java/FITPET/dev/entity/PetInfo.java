@@ -18,7 +18,7 @@ public class PetInfo {
     @Column(nullable = false)
     private Long petInfoId;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "pet_id", nullable = true)
     private Pet pet;
 

@@ -26,7 +26,8 @@ public enum ErrorStatus {
      * 404
      * NOT_FOUND
      */
-    NOT_EXIST_PET(404, "존재하지 않는 품종입니다.");
+    NOT_EXIST_PET(404, "존재하지 않는 품종입니다."),
+    NOT_EXIST_PET_INFO(404, "존재하지 않는 펫 정보입니다.");
 
 
     private final int code;
