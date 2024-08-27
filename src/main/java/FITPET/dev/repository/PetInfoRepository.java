@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface PetInfoRepository extends JpaRepository<PetInfo, Long> {
 
-    @Query("SELECT p FROM PetInfo p WHERE (:startDate IS NULL OR p.createdAt >= :startDate) AND (:endDate IS NULL OR p.createdAt <= :endDate) ORDER BY p.createdAt DESC")
+    @Query("SELECT p FROM PetInfo p WHERE (:startDate IS NULL OR p.createdAt >= :startDate) AND (:endDate IS NULL OR p.createdAt <= :endDate)")
     Page<PetInfo> findAllByCreatedAtBetweenAndSort(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
 
 

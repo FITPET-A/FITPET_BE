@@ -142,7 +142,7 @@ public class AdminService {
      * PetInfo를 조회
      * @param page, size, sort, startDate, endDate
      */
-    public Page<PetInfoResponse.PetInfoExcelDto> getPetInfos(String startDate, String endDate, int page, String sort) {
+    public Page<PetInfoResponse.PetInfoExcelDto> getPetInfos(String startDate, String endDate, int page, String sort, int size) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         LocalDateTime start = null;
@@ -160,7 +160,7 @@ public class AdminService {
         }
 
         Sort sortOption = sort.equalsIgnoreCase("asc") ? Sort.by("createdAt").ascending() : Sort.by("createdAt").descending();
-        Pageable pageable = PageRequest.of(page, 20, sortOption);
+        Pageable pageable = PageRequest.of(page, size, sortOption);
 
         Page<PetInfo> petInfoPage = petInfoRepository.findAllByCreatedAtBetweenAndSort(start, end, pageable);
 
