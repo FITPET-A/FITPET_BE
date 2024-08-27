@@ -24,8 +24,8 @@ public class InsuranceService {
     private final PetRepository petRepository;
 
     // 회사별 월 보험료 조회
-    public InsuranceResponse.InsuranceListDto getInsurancePremium(String detailType, int age, String renewalCycle,
-                                                                  String coverageRatio, String deductible, String compensation){
+    public InsuranceResponse.InsuranceListDto getInsurancePremium(
+            String detailType, int age, String renewalCycle, String deductible, String compensation){
 
         // 품종 분류
         Pet pet = findPetByDetailType(detailType);
@@ -34,7 +34,7 @@ public class InsuranceService {
         validateAge(age);
 
         // 1차 insurance list 조회
-        List<Insurance> insuranceList = findInsurancePremiumList(pet, age, renewalCycle, coverageRatio+"%", deductible, compensation);
+        List<Insurance> insuranceList = findInsurancePremiumList(pet, age, renewalCycle, deductible, compensation);
         if (pet.getPetType() == PetType.CAT)
             return InsuranceConverter.toInsuranceListDto(insuranceList);
 
@@ -56,11 +56,10 @@ public class InsuranceService {
     }
 
     private List<Insurance> findInsurancePremiumList(Pet pet, int age, String renewalCycle,
-                                           String coverageRatio, String deductible, String compensation){
+                                           String deductible, String compensation){
 
         return insuranceRepository.findInsuranceList(pet.getPetType(), age,
                 RenewalCycle.getRenewalCycle(renewalCycle),
-                CoverageRatio.getCoverageRatio(coverageRatio),
                 Deductible.getDeductible(deductible),
                 Compensation.getCompensation(compensation));
     }

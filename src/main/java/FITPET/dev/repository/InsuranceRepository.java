@@ -13,12 +13,11 @@ import java.util.List;
 public interface InsuranceRepository extends JpaRepository<Insurance, Long> {
     @Query("SELECT i FROM Insurance i " +
             "WHERE i.petType = :petType AND i.age = :age " +
-            "AND i.renewalCycle = :renewalCycle AND i.coverageRatio = :coverageRatio " +
+            "AND i.renewalCycle = :renewalCycle " +
             "AND i.deductible = :deductible AND i.compensation = :compensation")
     List<Insurance> findInsuranceList(@Param("petType") PetType petType,
                                       @Param("age") int age,
                                       @Param("renewalCycle") RenewalCycle renewalCycle,
-                                      @Param("coverageRatio") CoverageRatio coverageRatio,
                                       @Param("deductible") Deductible deductible,
                                       @Param("compensation") Compensation compensation);
 

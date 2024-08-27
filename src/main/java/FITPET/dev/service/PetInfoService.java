@@ -51,11 +51,10 @@ public class PetInfoService {
         String detailType = petInfo.getPet().getDetailType();
         int age = petInfo.getAge();
         String renewalCycle = "3년";
-        String coverageRatio = "70%";
         String deductible = "1만원";
         String compensation = "15만";
 
-        return insuranceService.getInsurancePremium(detailType, age, renewalCycle, coverageRatio, deductible, compensation);
+        return insuranceService.getInsurancePremium(detailType, age, renewalCycle, deductible, compensation);
     }
 
     // 전화번호 유효성 검사

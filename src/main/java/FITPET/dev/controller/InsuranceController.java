@@ -19,11 +19,10 @@ public class InsuranceController {
     public ApiResponse getInsurancePremium(@RequestParam(name = "detailType") String detailType,
                                            @RequestParam(name = "age", defaultValue = "0") int age,
                                            @RequestParam(name = "renewalCycle", defaultValue = "3년", required = false) String renewalCycle,
-                                           @RequestParam(name = "coverageRatio", defaultValue = "70") String coverageRatio,
                                            @RequestParam(name = "deductible", defaultValue = "1만원", required = false) String deductible,
                                            @RequestParam(name = "compensation", defaultValue = "15만", required = false) String compensation
                                            ){
         return ApiResponse.SuccessResponse(SuccessStatus.GET_INSURANCE_PREMIUM,
-                insuranceService.getInsurancePremium(detailType, age, renewalCycle, coverageRatio, deductible, compensation));
+                insuranceService.getInsurancePremium(detailType, age, renewalCycle, deductible, compensation));
     }
 }
