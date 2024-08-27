@@ -6,5 +6,5 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface ExcelUtilFactory {
-    void downloadInsurances(HttpServletResponse response, List<InsuranceResponse.InsuranceDetailExcelDto> data);
+    void downloadInsurances(HttpServletResponse response, List<InsuranceResponse.InsuranceExcelDto> data);
 }

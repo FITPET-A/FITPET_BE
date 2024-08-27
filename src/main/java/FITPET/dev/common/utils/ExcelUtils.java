@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @Component
 public class ExcelUtils implements ExcelUtilFactory {
     @Override
-    public void downloadInsurances(HttpServletResponse response, List<InsuranceResponse.InsuranceDetailExcelDto> data) {
+    public void downloadInsurances(HttpServletResponse response, List<InsuranceResponse.InsuranceExcelDto> data) {
 
         final String sheetName = "회사별 보험 정보";
         final String fileName = "SC_회사별_보험_정보";
@@ -36,8 +36,8 @@ public class ExcelUtils implements ExcelUtilFactory {
         Workbook workbook = getXSSFWorkBook();
 
         // 데이터를 회사별로 그룹화
-        Map<String, List<InsuranceResponse.InsuranceDetailExcelDto>> groupedByCompany = data.stream()
-                .collect(Collectors.groupingBy(InsuranceResponse.InsuranceDetailExcelDto::getCompany));
+        Map<String, List<InsuranceResponse.InsuranceExcelDto>> groupedByCompany = data.stream()
+                .collect(Collectors.groupingBy(InsuranceResponse.InsuranceExcelDto::getCompany));
 
         // 회사별로 시트 생성 및 데이터 작성
         groupedByCompany.forEach((companyName, companyData) -> {
@@ -79,7 +79,7 @@ public class ExcelUtils implements ExcelUtilFactory {
      * @param sheet
      * @param data
      */
-    private void createHeaderRow(Sheet sheet, List<InsuranceResponse.InsuranceDetailExcelDto> data) {
+    private void createHeaderRow(Sheet sheet, List<InsuranceResponse.InsuranceExcelDto> data) {
         // 엑셀의 Header에 들어갈 내용 추출
         List<String> excelHeaderList = getHeaderName(getClass(data));
 
@@ -105,12 +105,12 @@ public class ExcelUtils implements ExcelUtilFactory {
      * @param row
      * @param cell
      */
-    private void createInsurancesBody(List<InsuranceResponse.InsuranceDetailExcelDto> data, Sheet sheet) {
+    private void createInsurancesBody(List<InsuranceResponse.InsuranceExcelDto> data, Sheet sheet) {
 
         // 시작 행 인덱스 지정
         int rowIndex = 1;
 
-        for (InsuranceResponse.InsuranceDetailExcelDto insurance : data) {
+        for (InsuranceResponse.InsuranceExcelDto insurance : data) {
 
             // insurance data의 필드값들을 List로 반환
             List<Object> fields = getFieldValues(getClass(data), insurance);

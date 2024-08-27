@@ -61,9 +61,9 @@ public class InsuranceResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     @ExcelFile
-    public static class InsuranceDetailExcelDto {
+    public static class InsuranceExcelDto {
         private String company;
-        @ExcelColumn(headerName = "InsuranceId")
+        @ExcelColumn(headerName = "보험Id")
         private Long insuranceId;
         @ExcelColumn(headerName = "품종")
         private PetType petType;
