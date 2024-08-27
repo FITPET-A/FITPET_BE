@@ -2,6 +2,7 @@ package FITPET.dev.common.utils;
 
 import FITPET.dev.common.annotation.ExcelColumn;
 import FITPET.dev.common.basecode.ErrorStatus;
+import FITPET.dev.common.enums.PetType;
 import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.dto.response.InsuranceResponse;
 import FITPET.dev.dto.response.PetInfoResponse;
@@ -39,15 +40,26 @@ public class ExcelUtils implements ExcelUtilFactory {
         Map<String, List<InsuranceResponse.InsuranceExcelDto>> groupedByCompany = data.stream()
                 .collect(Collectors.groupingBy(InsuranceResponse.InsuranceExcelDto::getCompany));
 
-        // 회사별로 시트 생성 및 데이터 작성
+        // 그룹화된 데이터에 대해 forEach문 수행
         groupedByCompany.forEach((companyName, companyData) -> {
-            Sheet sheet = workbook.createSheet(companyName);
 
-            // 엑셀 Header 생성
-            createHeaderRow(sheet, companyData);
+            // 데이터를 PetType enum별로 그룹화
+            Map<PetType, List<InsuranceResponse.InsuranceExcelDto>> groupedByPet = companyData.stream()
+                    .collect(Collectors.groupingBy(InsuranceResponse.InsuranceExcelDto::getPetType));
 
-            // 헤더 아래에 들어갈 내용을 그림
-            createInsurancesBody(companyData, sheet);
+            // petType별로 시트 생성 및 데이터 작성
+            groupedByPet.forEach((petType, petData) -> {
+
+                // Sheet 이름 지정 및 생성
+                Sheet sheet = workbook.createSheet(companyName + "_" + petType.toString());
+
+                // 엑셀 Header 생성
+                createHeaderRow(sheet, companyData);
+
+                // 헤더 아래에 들어갈 내용을 그림
+                createInsurancesBody(companyData, sheet);
+            });
+
         });
 
         // workbook(엑셀 파일) 다운로드 및 outputStream 종료

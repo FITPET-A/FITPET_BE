@@ -1,5 +1,7 @@
 package FITPET.dev.common.enums;
 
+import FITPET.dev.common.basecode.ErrorStatus;
+import FITPET.dev.common.exception.GeneralException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -12,11 +14,13 @@ public enum CoverageRatio {
     private final String label;
 
     public static CoverageRatio getCoverageRatio(String label) {
-        if (label.equals("70%"))
+        if (label.contains("70"))
             return SEVENTY_PERCENT ;
-        else if (label.equals("80%"))
+        else if (label.contains("80"))
             return EIGHTY_PERCENT;
-        else
+        else if (label.contains("90"))
             return NINETY_PERCENT;
+        else
+            throw new GeneralException(ErrorStatus.INVALID_COVERAGE_RATIO_VALUE);
     }
 }

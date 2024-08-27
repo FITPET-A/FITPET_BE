@@ -1,5 +1,7 @@
 package FITPET.dev.common.enums;
 
+import FITPET.dev.common.basecode.ErrorStatus;
+import FITPET.dev.common.exception.GeneralException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -15,8 +17,10 @@ public enum RenewalCycle {
     public static RenewalCycle getRenewalCycle(String label) {
         if (label.equals("3년"))
             return THREE_YEARS ;
-        else
+        else if (label.equals("5년"))
             return FIVE_YEARS;
+        else
+            throw new GeneralException(ErrorStatus.INVALID_RENEWAL_CYCLE_VALUE);
     }
 }
 
