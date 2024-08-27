@@ -46,4 +46,11 @@ public class AdminController {
         adminService.downloadPetInfos(servletResponse);
     }
 
+    @GetMapping("/petinfo")
+    public ApiResponse getPetInfos(
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page
+    ){
+        return ApiResponse.SuccessResponse(SuccessStatus.GET_PETINFO_TABLE, adminService.getPetInfos(page));
+    }
+
 }
