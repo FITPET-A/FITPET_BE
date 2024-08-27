@@ -16,9 +16,7 @@ public class InsuranceResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class InsuranceListDto {
-        private List<InsuranceDto> seventyInsuranceDtoList;
-        private List<InsuranceDto> eightyInsuranceDtoList;
-        private List<InsuranceDto> ninetyInsuranceDtoList;
+        private List<InsuranceDto> insuranceDtoList;
     }
 
     @Data

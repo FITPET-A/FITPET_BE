@@ -50,25 +50,12 @@ public class InsuranceConverter {
     }
 
     public static InsuranceResponse.InsuranceListDto toInsuranceListDto(List<Insurance> insuranceList){
-        List<InsuranceResponse.InsuranceDto> seventyInsuranceDtoList = insuranceList.stream()
-                .filter(insurance -> "70%".equals(insurance.getCoverageRatio().getLabel()))
-                .map(InsuranceConverter::toInsuranceDto)
-                .toList();
-
-        List<InsuranceResponse.InsuranceDto> eightyInsuranceDtoList = insuranceList.stream()
-                .filter(insurance -> "80%".equals(insurance.getCoverageRatio().getLabel()))
-                .map(InsuranceConverter::toInsuranceDto)
-                .toList();
-
-        List<InsuranceResponse.InsuranceDto> ninetyInsuranceDtoList = insuranceList.stream()
-                .filter(insurance -> "90%".equals(insurance.getCoverageRatio().getLabel()))
+        List<InsuranceResponse.InsuranceDto> insuranceDtoList = insuranceList.stream()
                 .map(InsuranceConverter::toInsuranceDto)
                 .toList();
 
         return InsuranceResponse.InsuranceListDto.builder()
-                .seventyInsuranceDtoList(seventyInsuranceDtoList)
-                .eightyInsuranceDtoList(eightyInsuranceDtoList)
-                .ninetyInsuranceDtoList(ninetyInsuranceDtoList)
+                .insuranceDtoList(insuranceDtoList)
                 .build();
     }
 

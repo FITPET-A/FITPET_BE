@@ -52,9 +52,10 @@ public class PetInfoService {
         int age = petInfo.getAge();
         String renewalCycle = "3년";
         String deductible = "1만원";
+        String coverageRatio = "70";
         String compensation = "15만";
 
-        return insuranceService.getInsurancePremium(detailType, age, renewalCycle, deductible, compensation);
+        return insuranceService.getInsurancePremium(detailType, age, renewalCycle, coverageRatio, deductible, compensation);
     }
 
     // 전화번호 유효성 검사
