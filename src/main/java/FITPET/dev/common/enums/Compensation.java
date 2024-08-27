@@ -1,5 +1,7 @@
 package FITPET.dev.common.enums;
 
+import FITPET.dev.common.basecode.ErrorStatus;
+import FITPET.dev.common.exception.GeneralException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -14,7 +16,9 @@ public enum Compensation {
     public static Compensation getCompensation(String label) {
         if (label.equals("15만"))
             return FIFTEEN ;
-        else
+        else if (label.equals("30만"))
             return THIRTY;
+        else
+            throw new GeneralException(ErrorStatus.INVALID_COMPENSATION_VALUE);
     }
 }

@@ -1,5 +1,7 @@
 package FITPET.dev.common.enums;
 
+import FITPET.dev.common.basecode.ErrorStatus;
+import FITPET.dev.common.exception.GeneralException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +20,7 @@ public enum PetType {
             return DOG;
         else if (petType.equals("CAT"))
             return CAT;
-        else return null;
+        else
+            throw new GeneralException(ErrorStatus.INVALID_PET_TYPE);
     }
 }

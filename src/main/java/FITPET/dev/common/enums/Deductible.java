@@ -1,5 +1,7 @@
 package FITPET.dev.common.enums;
 
+import FITPET.dev.common.basecode.ErrorStatus;
+import FITPET.dev.common.exception.GeneralException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +18,9 @@ public enum Deductible {
             return ONE ;
         else if (label.contains("3만"))
             return THREE;
-        else
+        else if (label.contains("5만"))
             return FIVE;
+        else
+            throw new GeneralException(ErrorStatus.INVALID_DEDUCTIBLE_VALUE);
     }
 }

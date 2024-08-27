@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static FITPET.dev.service.PetInfoService.MAX_AGE;
+
 @Service
 @RequiredArgsConstructor
 public class InsuranceService {
@@ -24,11 +26,15 @@ public class InsuranceService {
     // 회사별 월 보험료 조회
     public InsuranceResponse.InsuranceListDto getInsurancePremium(String detailType, int age, String renewalCycle,
                                                                   String coverageRatio, String deductible, String compensation){
+
         // 품종 분류
         Pet pet = findPetByDetailType(detailType);
 
+        // validate age parameter
+        validateAge(age);
+
         // 1차 insurance list 조회
-        List<Insurance> insuranceList = findInsurance(pet, age, renewalCycle, coverageRatio, deductible, compensation);
+        List<Insurance> insuranceList = findInsurancePremiumList(pet, age, renewalCycle, coverageRatio+"%", deductible, compensation);
         if (pet.getPetType() == PetType.CAT)
             return InsuranceConverter.toInsuranceListDto(insuranceList);
 
@@ -49,10 +55,23 @@ public class InsuranceService {
                 .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_PET));
     }
 
-    private List<Insurance> findInsurance(Pet pet, int age, String renewalCycle, String coverageRatio, String deductible, String compensation){
-        return insuranceRepository.findInsuranceList(
-                pet.getPetType(), age, RenewalCycle.getRenewalCycle(renewalCycle),
-                CoverageRatio.getCoverageRatio(coverageRatio), Deductible.getDeductible(deductible),
+    private List<Insurance> findInsurancePremiumList(Pet pet, int age, String renewalCycle,
+                                           String coverageRatio, String deductible, String compensation){
+
+        return insuranceRepository.findInsuranceList(pet.getPetType(), age,
+                RenewalCycle.getRenewalCycle(renewalCycle),
+                CoverageRatio.getCoverageRatio(coverageRatio),
+                Deductible.getDeductible(deductible),
                 Compensation.getCompensation(compensation));
     }
+
+    // 나이 유효성 검사
+    private void validateAge(int age) {
+        if (age < 0) {
+            throw new GeneralException(ErrorStatus.INVALID_AGE);
+        } else if (age > MAX_AGE) {
+            throw new GeneralException(ErrorStatus.INVALID_AGE_OVER_10);
+        }
+    }
+
 }

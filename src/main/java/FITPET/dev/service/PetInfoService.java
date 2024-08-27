@@ -22,7 +22,7 @@ public class PetInfoService {
     private final InsuranceService insuranceService;
 
     private static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile("^010\\d{8}$"); //  전화번호 정규식(010+숫자 8자리)
-    private static final int MAX_AGE = 100;
+    static final int MAX_AGE = 10;
 
 
     // PetInfo 생성 및 저장 후 보험료 조회
@@ -67,8 +67,10 @@ public class PetInfoService {
 
     // 나이 유효성 검사
     private void validateAge(int age) {
-        if (age < 0 || age > MAX_AGE) {
+        if (age < 0) {
             throw new GeneralException(ErrorStatus.INVALID_AGE);
+        } else if (age > MAX_AGE) {
+            throw new GeneralException(ErrorStatus.INVALID_AGE_OVER_10);
         }
     }
 
