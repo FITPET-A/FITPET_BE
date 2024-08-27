@@ -56,17 +56,11 @@ public class AdminController {
     @GetMapping("/petinfo")
     public ApiResponse getPetInfos(
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
-            @RequestParam(name = "size", required = false, defaultValue = "20") int size,
-            @RequestParam(name = "sort", required = false, defaultValue = "createdAt") String sort,
-            @RequestParam(name = "direction", required = false, defaultValue = "desc") String direction
-    ) {
-        // Sort 생성
-        Sort.Direction sortDirection = Sort.Direction.fromString(direction);
-        Sort sortBy = Sort.by(sortDirection, sort);
-        Pageable pageable = PageRequest.of(page, size, sortBy);
-
-        Page<PetInfoExcelDto> petInfoPage = adminService.getPetInfos(pageable);
-        return ApiResponse.SuccessResponse(SuccessStatus.GET_PETINFO_TABLE, petInfoPage);
+            @RequestParam(name = "startDate", required = false) String startDate,
+            @RequestParam(name = "endDate", required = false) String endDate,
+            @RequestParam(name = "sort", required = false, defaultValue = "desc") String sort
+    ){
+        return ApiResponse.SuccessResponse(SuccessStatus.GET_PETINFO_TABLE, adminService.getPetInfos(startDate, endDate, page, sort));
     }
 
 }

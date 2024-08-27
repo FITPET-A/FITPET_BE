@@ -13,10 +13,14 @@ import FITPET.dev.entity.PetInfo;
 import FITPET.dev.repository.InsuranceRepository;
 import FITPET.dev.repository.PetInfoRepository;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -136,10 +140,30 @@ public class AdminService {
 
     /*
      * PetInfo를 조회
-     * @param page, size, sort, direction
+     * @param page, size, sort, startDate, endDate
      */
-    public Page<PetInfoResponse.PetInfoExcelDto> getPetInfos(Pageable pageable) {
-        Page<PetInfo> petInfoPage = petInfoRepository.findAll(pageable);
+    public Page<PetInfoResponse.PetInfoExcelDto> getPetInfos(String startDate, String endDate, int page, String sort) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        LocalDateTime start = null;
+        LocalDateTime end = null;
+
+        try {
+            if (startDate != null) {
+                start = LocalDateTime.parse(startDate + " 00:00:00", formatter);
+            }
+            if (endDate != null) {
+                end = LocalDateTime.parse(endDate + " 23:59:59", formatter);
+            }
+        } catch (DateTimeParseException e) {
+            throw new GeneralException(ErrorStatus.INVALID_DATE_FORMAT);
+        }
+
+        Sort sortOption = sort.equalsIgnoreCase("asc") ? Sort.by("createdAt").ascending() : Sort.by("createdAt").descending();
+        Pageable pageable = PageRequest.of(page, 20, sortOption);
+
+        Page<PetInfo> petInfoPage = petInfoRepository.findAllByCreatedAtBetweenAndSort(start, end, pageable);
+
         return petInfoPage.map(PetInfoConverter::toPetInfoExcelDto);
     }
 }
