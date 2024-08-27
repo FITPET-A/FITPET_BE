@@ -1,15 +1,13 @@
 package FITPET.dev.controller;
 
 import FITPET.dev.common.basecode.SuccessStatus;
+import FITPET.dev.common.enums.Status;
 import FITPET.dev.common.response.ApiResponse;
 import FITPET.dev.service.AdminService;
 import FITPET.dev.service.InitService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
@@ -44,6 +42,14 @@ public class AdminController {
     @GetMapping("/petinfo/downloads")
     public void downloadPetInfos(HttpServletResponse servletResponse){
         adminService.downloadPetInfos(servletResponse);
+    }
+
+    @PatchMapping("/petinfo/status/{petInfoId}")
+    public ApiResponse patchPetInfoStatus(
+            @PathVariable(value = "petInfoId") Long petInfoId,
+            @RequestParam(name = "status") Status status
+            ){
+        return ApiResponse.SuccessResponse(SuccessStatus.PATCH_PET_INFO_STATUS, adminService.patchPetInfoStatus(petInfoId, status));
     }
 
 }

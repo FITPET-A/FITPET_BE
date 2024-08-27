@@ -25,6 +25,9 @@ public enum ErrorStatus {
     // pet
     INVALID_PET_TYPE(400, "잘못된 품종 정보입니다."),
 
+    // petinfo
+    INVALID_PATCH_PERIOR_STATUS(400, "이전 상태로 상태를 변경할 수 없습니다."),
+
     // insurance
     INVALID_COMPANY(400, "잘못된 회사명입니다."),
 
