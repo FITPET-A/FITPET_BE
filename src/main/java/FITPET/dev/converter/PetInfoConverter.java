@@ -1,6 +1,7 @@
 package FITPET.dev.converter;
 
 import FITPET.dev.dto.request.PetInfoRequest;
+import FITPET.dev.dto.response.PetInfoResponse;
 import FITPET.dev.entity.Pet;
 import FITPET.dev.entity.PetInfo;
 import java.time.LocalDateTime;
@@ -15,4 +16,19 @@ public class PetInfoConverter {
                 .createdAt(LocalDateTime.now())
                 .build();
     }
+
+    public static PetInfoResponse.PetInfoExcelDto toPetInfoExcelDto(PetInfo petInfo) {
+        Pet pet = petInfo.getPet();
+
+        return PetInfoResponse.PetInfoExcelDto.builder()
+                .petInfoId(petInfo.getPetInfoId())
+                .name(petInfo.getName())
+                .age(petInfo.getAge())
+                .phoneNum(petInfo.getPhoneNum())
+                .createdAt(petInfo.getCreatedAt())
+                .petType(pet.getPetType().toString())
+                .detailType(pet.getDetailType())
+                .build();
+    }
+
 }

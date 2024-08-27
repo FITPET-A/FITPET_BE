@@ -38,7 +38,12 @@ public class AdminController {
             HttpServletResponse servletResponse,
             @RequestParam(name = "company", required = false, defaultValue = "all") String company
     ){
-        adminService.downloadsInsurances(servletResponse, company);
+        adminService.downloadInsurances(servletResponse, company);
+    }
+
+    @GetMapping("/petinfo/downloads")
+    public void downloadPetInfos(HttpServletResponse servletResponse){
+        adminService.downloadPetInfos(servletResponse);
     }
 
 }
