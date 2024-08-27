@@ -14,7 +14,10 @@ public enum SuccessStatus {
     DOWNLOADS_INSURANCE_TABLE(200, "회사별 보험 테이블 다운로드에 성공했습니다."),
 
     // pet
-    GET_DETAILTYPE_LIST(200, "상세품종명 리스트 조회에 성공했습니다.");
+    GET_DETAILTYPE_LIST(200, "상세품종명 리스트 조회에 성공했습니다."),
+
+    // petinfo
+    PATCH_PET_INFO_STATUS(200, "견적서 상태 변경에 성공했습니다.");
 
     private final int code;
     private final String message;

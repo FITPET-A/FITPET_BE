@@ -35,7 +35,12 @@ public class PetInfo {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
+
+    public void updateStatus(Status status){
+        this.status = status;
+    }
 
 }
