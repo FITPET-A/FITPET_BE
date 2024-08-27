@@ -135,12 +135,10 @@ public class AdminService {
     }
 
     /*
-     * PetInfo를 20개씩 조회
-     * @param page
-     * @return 페이징된 PetInfo 리스트
+     * PetInfo를 조회
+     * @param page, size, sort, direction
      */
-    public Page<PetInfoResponse.PetInfoExcelDto> getPetInfos(int page) {
-        Pageable pageable = PageRequest.of(page, 20); // 20개씩 페이지네이션
+    public Page<PetInfoResponse.PetInfoExcelDto> getPetInfos(Pageable pageable) {
         Page<PetInfo> petInfoPage = petInfoRepository.findAll(pageable);
         return petInfoPage.map(PetInfoConverter::toPetInfoExcelDto);
     }
