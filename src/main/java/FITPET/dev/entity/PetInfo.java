@@ -1,5 +1,6 @@
 package FITPET.dev.entity;
 
+import FITPET.dev.common.enums.Status;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -33,5 +34,8 @@ public class PetInfo {
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    @Column(nullable = false)
+    private Status status;
 
 }

@@ -1,5 +1,6 @@
 package FITPET.dev.converter;
 
+import FITPET.dev.common.enums.Status;
 import FITPET.dev.dto.request.PetInfoRequest;
 import FITPET.dev.dto.response.PetInfoResponse;
 import FITPET.dev.entity.Pet;
@@ -14,6 +15,7 @@ public class PetInfoConverter {
                 .phoneNum(request.getPhoneNum())
                 .pet(pet)
                 .createdAt(LocalDateTime.now())
+                .status(Status.PENDING)
                 .build();
     }
 
@@ -21,6 +23,7 @@ public class PetInfoConverter {
         Pet pet = petInfo.getPet();
 
         return PetInfoResponse.PetInfoExcelDto.builder()
+                .status(petInfo.getStatus())
                 .petInfoId(petInfo.getPetInfoId())
                 .name(petInfo.getName())
                 .age(petInfo.getAge())
