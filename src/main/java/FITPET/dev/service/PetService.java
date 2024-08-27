@@ -15,7 +15,12 @@ import java.util.List;
 public class PetService {
     private final PetRepository petRepository;
 
-    // 상세 품종 이름 조회
+    /*
+     * 파라미터로 들어오는 문자열을 포함하는 상세 품종 명을 가진 Pet 객체 리스트를 반환
+     * @param petTypeStr
+     * @param detailType
+     * @return
+     */
     public PetResponse.PetDetailTypeListDto getPetDetailTypeList(String petTypeStr, String detailType){
         // 품종 조회
         PetType petType = PetType.getPetType(petTypeStr);

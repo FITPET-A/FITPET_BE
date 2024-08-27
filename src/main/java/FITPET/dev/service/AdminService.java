@@ -30,7 +30,12 @@ public class AdminService {
     private final PetInfoRepository petInfoRepository;
     private final ExcelUtils excelUtils;
 
-    // 회사별 보험 테이블 조회
+    /*
+     * 회사별 보험 테이블 조회
+     * @param page
+     * @param companyStr
+     * @return
+     */
     public InsuranceResponse.InsuranceDetailPageDto getInsurances(int page, String companyStr){
 
         // 페이지 크기, 페이지 번호 정보를 Pageable 객체에 설정
@@ -44,7 +49,11 @@ public class AdminService {
     }
 
 
-    // 회사별 보험 테이블 엑셀 다운로드
+    /*
+     * 회사별 보험 테이블 엑셀 다운로드
+     * @param servletResponse
+     * @param companyStr
+     */
     public void downloadInsurances(HttpServletResponse servletResponse, String companyStr) {
 
         // company 문자열에 따라 회사별 Insurance 정보를 List로 반환
@@ -58,7 +67,10 @@ public class AdminService {
     }
 
 
-    // 견적서 일괄 엑셀 다운로드
+    /*
+     * 견적서 일괄 엑셀 다운로드
+     * @param servletResponse
+     */
     public void downloadPetInfos(HttpServletResponse servletResponse){
 
         // 견적서 일괄 조회

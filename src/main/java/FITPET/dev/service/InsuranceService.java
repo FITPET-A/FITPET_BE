@@ -27,7 +27,16 @@ public class InsuranceService {
     private final InsuranceRepository insuranceRepository;
     private final PetRepository petRepository;
 
-    // 회사별 월 보험료 조회
+    /*
+     * 회사별 월 보험료 리스트를 조회
+     * @param detailType
+     * @param age
+     * @param renewalCycle
+     * @param coverageRatio
+     * @param deductible
+     * @param compensation
+     * @return
+     */
     public InsuranceResponse.InsuranceListDto getInsurancePremium(
             String detailType, int age, String renewalCycle, String coverageRatio, String deductible, String compensation){
 
@@ -54,11 +63,28 @@ public class InsuranceService {
         return InsuranceConverter.toInsuranceListDto(dogBreedInsuranceList);
     }
 
+
+    /*
+     * 상세 품종명으로 Pet 객체를 찾아 반환
+     * @param detailType
+     * @return
+     */
     private Pet findPetByDetailType(String detailType){
         return petRepository.findByDetailType(detailType)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_PET));
     }
 
+
+    /*
+     * 필드 정보들을 만족하는 insurance 객체들을 찾아 리스트로 반환
+     * @param pet
+     * @param age
+     * @param renewalCycle
+     * @param coverageRatio
+     * @param deductible
+     * @param compensation
+     * @return
+     */
     private List<Insurance> findInsurancePremiumList(Pet pet, int age, String renewalCycle,
                                            String coverageRatio, String deductible, String compensation){
 
@@ -69,7 +95,11 @@ public class InsuranceService {
                 getCompensation(compensation));
     }
 
-    // 나이 유효성 검사
+
+    /*
+     * 나이 유효성 검사
+     * @param age
+     */
     private void validateAge(int age) {
         if (age < 0) {
             throw new GeneralException(ErrorStatus.INVALID_AGE);

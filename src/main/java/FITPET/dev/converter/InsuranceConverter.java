@@ -39,10 +39,10 @@ public class InsuranceConverter {
         // 회사별 할인율을 매핑
         Map<Company, Double> discountRates = Map.of(
                 Company.SAMSUNG, 0.95,
-                Company.DB, 0.92,
-                Company.KB, 0.92,
+                Company.DB, 0.98,
+                Company.KB, 0.98,
                 Company.HYUNDAE, 0.95,
-                Company.MERITZ, 0.92
+                Company.MERITZ, 0.98
         );
 
         // 해당 회사의 할인률을 적용하고 외의 경우에는 원금 반환
