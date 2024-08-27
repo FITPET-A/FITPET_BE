@@ -5,9 +5,13 @@ import FITPET.dev.common.enums.Company;
 import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.common.utils.ExcelUtils;
 import FITPET.dev.converter.InsuranceConverter;
+import FITPET.dev.converter.PetInfoConverter;
 import FITPET.dev.dto.response.InsuranceResponse;
+import FITPET.dev.dto.response.PetInfoResponse;
 import FITPET.dev.entity.Insurance;
+import FITPET.dev.entity.PetInfo;
 import FITPET.dev.repository.InsuranceRepository;
+import FITPET.dev.repository.PetInfoRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,6 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AdminService {
     private final InsuranceRepository insuranceRepository;
+    private final PetInfoRepository petInfoRepository;
     private final ExcelUtils excelUtils;
 
     // 회사별 보험 테이블 조회
@@ -40,16 +45,30 @@ public class AdminService {
 
 
     // 회사별 보험 테이블 엑셀 다운로드
-    public void downloadsInsurances(HttpServletResponse servletResponse, String companyStr) {
+    public void downloadInsurances(HttpServletResponse servletResponse, String companyStr) {
 
         // company 문자열에 따라 회사별 Insurance 정보를 List로 반환
         List<Insurance> insuranceList = getInsuranceListByCompany(companyStr);
 
         // excelDto로 타입 변경
-        List<InsuranceResponse.InsuranceDetailExcelDto> insuranceExcelDtoList = convertToExcelDtoList(insuranceList);
+        List<InsuranceResponse.InsuranceExcelDto> insuranceExcelDtoList = convertToInsuranceExcelDtoList(insuranceList);
 
         // excel 파일 다운로드
         excelUtils.downloadInsurances(servletResponse, insuranceExcelDtoList);
+    }
+
+
+    // 견적서 일괄 엑셀 다운로드
+    public void downloadPetInfos(HttpServletResponse servletResponse){
+
+        // 견적서 일괄 조회
+        List<PetInfo> petInfoList = petInfoRepository.findAll();
+
+        // excelDto로 타입 변경
+        List<PetInfoResponse.PetInfoExcelDto> petInfoExcelDtoList = convertToPetInfoExcelDtoList(petInfoList);
+
+        // excel 파일 다운로드
+        excelUtils.downloadPetInfos(servletResponse, petInfoExcelDtoList);
     }
 
 
@@ -79,9 +98,16 @@ public class AdminService {
     }
 
 
-    private List<InsuranceResponse.InsuranceDetailExcelDto> convertToExcelDtoList(List<Insurance> insuranceList) {
+    private List<InsuranceResponse.InsuranceExcelDto> convertToInsuranceExcelDtoList(List<Insurance> insuranceList) {
         return insuranceList.stream()
-                .map(InsuranceConverter::toInsuranceDetailExcelDto)
+                .map(InsuranceConverter::toInsuranceExcelDto)
+                .toList();
+    }
+
+
+    private List<PetInfoResponse.PetInfoExcelDto> convertToPetInfoExcelDtoList(List<PetInfo> petInfoList) {
+        return petInfoList.stream()
+                .map(PetInfoConverter::toPetInfoExcelDto)
                 .toList();
     }
 

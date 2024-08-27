@@ -4,6 +4,7 @@ import FITPET.dev.common.annotation.ExcelColumn;
 import FITPET.dev.common.basecode.ErrorStatus;
 import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.dto.response.InsuranceResponse;
+import FITPET.dev.dto.response.PetInfoResponse;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -27,17 +28,16 @@ import java.util.stream.Collectors;
 @Component
 public class ExcelUtils implements ExcelUtilFactory {
     @Override
-    public void downloadInsurances(HttpServletResponse response, List<InsuranceResponse.InsuranceDetailExcelDto> data) {
+    public void downloadInsurances(HttpServletResponse response, List<InsuranceResponse.InsuranceExcelDto> data) {
 
-        final String sheetName = "회사별 보험 정보";
         final String fileName = "SC_회사별_보험_정보";
 
         // 엑셀파일(Workbook) 객체 생성
         Workbook workbook = getXSSFWorkBook();
 
         // 데이터를 회사별로 그룹화
-        Map<String, List<InsuranceResponse.InsuranceDetailExcelDto>> groupedByCompany = data.stream()
-                .collect(Collectors.groupingBy(InsuranceResponse.InsuranceDetailExcelDto::getCompany));
+        Map<String, List<InsuranceResponse.InsuranceExcelDto>> groupedByCompany = data.stream()
+                .collect(Collectors.groupingBy(InsuranceResponse.InsuranceExcelDto::getCompany));
 
         // 회사별로 시트 생성 및 데이터 작성
         groupedByCompany.forEach((companyName, companyData) -> {
@@ -50,27 +50,29 @@ public class ExcelUtils implements ExcelUtilFactory {
             createInsurancesBody(companyData, sheet);
         });
 
-        // 파일 다운로드를 위해 파일 형식 지정
-        response.setContentType("ms-vnd/excel");
-        response.setCharacterEncoding("UTF-8");
+        // workbook(엑셀 파일) 다운로드 및 outputStream 종료
+        downloadWorkBook(response, fileName, workbook);
+    }
 
-        // 파일 이름 지정
-        String encodedFileName = encodeExcelFileName(fileName);
-        response.setHeader("Content-Disposition", "attachment; filename*=UTF-8''" + encodedFileName + ".xlsx");
 
-        try {
-            ServletOutputStream outputStream = response.getOutputStream();
+    @Override
+    public void downloadPetInfos(HttpServletResponse response, List<PetInfoResponse.PetInfoExcelDto> data) {
 
-            // 엑셀 파일을 다운로드
-            workbook.write(outputStream);
+        final String fileName = "SC_견적_요청_정보";
 
-            // 입출력 스트림을 닫음
-            outputStream.flush();
-            outputStream.close();
+        // 엑셀파일(Workbook) 객체 생성
+        Workbook workbook = getXSSFWorkBook();
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Sheet sheet = workbook.createSheet("sheet1");
+
+        // 엑셀 Header 생성
+        createHeaderRow(sheet, data);
+
+        // 헤더 아래에 들어갈 내용을 그림
+        createInsurancesBody(data, sheet);
+
+        // workbook(엑셀 파일) 다운로드 및 outputStream 종료
+        downloadWorkBook(response, fileName, workbook);
     }
 
 
@@ -79,7 +81,7 @@ public class ExcelUtils implements ExcelUtilFactory {
      * @param sheet
      * @param data
      */
-    private void createHeaderRow(Sheet sheet, List<InsuranceResponse.InsuranceDetailExcelDto> data) {
+    private void createHeaderRow(Sheet sheet, List<?> data) {
         // 엑셀의 Header에 들어갈 내용 추출
         List<String> excelHeaderList = getHeaderName(getClass(data));
 
@@ -105,15 +107,15 @@ public class ExcelUtils implements ExcelUtilFactory {
      * @param row
      * @param cell
      */
-    private void createInsurancesBody(List<InsuranceResponse.InsuranceDetailExcelDto> data, Sheet sheet) {
+    private void createInsurancesBody(List<?> data, Sheet sheet) {
 
         // 시작 행 인덱스 지정
         int rowIndex = 1;
 
-        for (InsuranceResponse.InsuranceDetailExcelDto insurance : data) {
+        for (Object obj : data) {
 
-            // insurance data의 필드값들을 List로 반환
-            List<Object> fields = getFieldValues(getClass(data), insurance);
+            // object data의 필드값들을 List로 반환
+            List<Object> fields = getFieldValues(getClass(data), obj);
 
             // 1번 인덱스부터 행 생성
             Row row = sheet.createRow(rowIndex++);
@@ -195,6 +197,53 @@ public class ExcelUtils implements ExcelUtilFactory {
 
         } catch (Exception e) {
             throw new GeneralException(ErrorStatus.FAILURE_RENDER_EXCEL_BODY);
+        }
+    }
+
+
+    /*
+     * 엑셀 파일을 다운로드하고 outputStream을 종료함
+     * @param response
+     * @param fileName
+     * @param workbook
+     */
+    private void downloadWorkBook(HttpServletResponse response, String fileName, Workbook workbook) {
+        try {
+            // 파일 형식 및 이름을 지정 후 다운로드를 위해 outputStream 반환
+            ServletOutputStream outputStream = setServletOutputStream(response, fileName);
+
+            // 엑셀 파일을 다운로드
+            workbook.write(outputStream);
+
+            // 입출력 스트림을 닫음
+            outputStream.flush();
+            outputStream.close();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    /*
+     * 엑셀 파일 다운로드를 위해 Header, 파일 이름, 파일 형식을 지정함
+     * @param response
+     * @param fileName
+     * @return
+     */
+    private ServletOutputStream setServletOutputStream(HttpServletResponse response, String fileName){
+        try {
+            // 파일 다운로드를 위해 파일 형식 지정
+            response.setContentType("ms-vnd/excel");
+            response.setCharacterEncoding("UTF-8");
+
+            // 파일 이름 지정
+            String encodedFileName = encodeExcelFileName(fileName);
+            response.setHeader("Content-Disposition", "attachment; filename*=UTF-8''" + encodedFileName + ".xlsx");
+
+            return response.getOutputStream();
+        } catch (IOException e){
+            throw new RuntimeException(e);
         }
     }
 

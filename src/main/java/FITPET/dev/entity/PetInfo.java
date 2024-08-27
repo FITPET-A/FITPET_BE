@@ -34,6 +34,4 @@ public class PetInfo {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-
-
 }
