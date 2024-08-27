@@ -18,7 +18,7 @@ public interface InsuranceRepository extends JpaRepository<Insurance, Long> {
     List<Insurance> findInsuranceList(@Param("petType") PetType petType,
                                       @Param("age") int age,
                                       @Param("renewalCycle") RenewalCycle renewalCycle,
-                                      @Param("coverageRatio") CoverageRatio coverageRatio,
+                                      @Param(("coverageRatio")) CoverageRatio coverageRatio,
                                       @Param("deductible") Deductible deductible,
                                       @Param("compensation") Compensation compensation);
 

@@ -26,6 +26,7 @@ public class InsuranceResponse {
     public static class InsuranceDto {
         private String company;
         private int premium;
+        private int discountedPremium;
     }
 
     @Data

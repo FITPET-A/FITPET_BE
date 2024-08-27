@@ -6,6 +6,7 @@ import FITPET.dev.entity.Insurance;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Map;
 
 public class InsuranceConverter {
     public static Insurance toInsurance(Company company, PetType petType, int age, String dogBreedRank,
@@ -25,10 +26,27 @@ public class InsuranceConverter {
     }
 
     public static InsuranceResponse.InsuranceDto toInsuranceDto(Insurance insurance){
+        int discountedPremium = getDiscountedPremium(insurance.getCompany(), insurance.getPremium());
+
         return InsuranceResponse.InsuranceDto.builder()
                 .company(insurance.getCompany().getLabel())
                 .premium(insurance.getPremium())
+                .discountedPremium(discountedPremium)
                 .build();
+    }
+
+    private static int getDiscountedPremium(Company company, int premium){
+        // 회사별 할인율을 매핑
+        Map<Company, Double> discountRates = Map.of(
+                Company.SAMSUNG, 0.95,
+                Company.DB, 0.98,
+                Company.KB, 0.98,
+                Company.HYUNDAE, 0.95,
+                Company.MERITZ, 0.98
+        );
+
+        // 해당 회사의 할인률을 적용하고 외의 경우에는 원금 반환
+        return (int) (premium * discountRates.getOrDefault(company, 1.0));
     }
 
     public static InsuranceResponse.InsuranceListDto toInsuranceListDto(List<Insurance> insuranceList){
