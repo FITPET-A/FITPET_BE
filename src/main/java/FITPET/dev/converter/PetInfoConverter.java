@@ -5,8 +5,15 @@ import FITPET.dev.dto.response.PetInfoResponse;
 import FITPET.dev.entity.Pet;
 import FITPET.dev.entity.PetInfo;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class PetInfoConverter {
+
+    public static String formatDateTime(LocalDateTime dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return dateTime.format(formatter);
+    }
+
     public static PetInfo toPetInfo(PetInfoRequest request, Pet pet) {
         return PetInfo.builder()
                 .name(request.getName())
@@ -25,10 +32,12 @@ public class PetInfoConverter {
                 .name(petInfo.getName())
                 .age(petInfo.getAge())
                 .phoneNum(petInfo.getPhoneNum())
-                .createdAt(petInfo.getCreatedAt())
+                .createdAt(formatDateTime(petInfo.getCreatedAt()))
                 .petType(pet.getPetType().toString())
                 .detailType(pet.getDetailType())
                 .build();
     }
+
+
 
 }

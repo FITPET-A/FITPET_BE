@@ -20,7 +20,7 @@ public class PetInfoResponse {
         @ExcelColumn(headerName = "견적서Id")
         private Long petInfoId;
         @ExcelColumn(headerName = "견적 요청 일시")
-        private LocalDateTime createdAt;
+        private String createdAt;
         @ExcelColumn(headerName = "품종")
         private String petType;
         @ExcelColumn(headerName = "상세 품종")
