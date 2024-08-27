@@ -43,6 +43,7 @@ public class InsuranceConverter {
 
     public static InsuranceResponse.InsuranceDetailDto toInsuranceDetailDto(Insurance insurance) {
         return InsuranceResponse.InsuranceDetailDto.builder()
+                .insuranceId(insurance.getInsuranceId())
                 .petType(insurance.getPetType())
                 .age(insurance.getAge())
                 .dogBreedRank(insurance.getDogBreedRank())
@@ -65,6 +66,21 @@ public class InsuranceConverter {
                 .pageSize(page.getSize())
                 .totalNumber(page.getNumberOfElements())
                 .totalPage(page.getTotalPages())
+                .build();
+    }
+
+    public static InsuranceResponse.InsuranceDetailExcelDto toInsuranceDetailExcelDto(Insurance insurance){
+        return InsuranceResponse.InsuranceDetailExcelDto.builder()
+                .company(insurance.getCompany().getLabel())
+                .insuranceId(insurance.getInsuranceId())
+                .petType(insurance.getPetType())
+                .age(insurance.getAge())
+                .dogBreedRank(insurance.getDogBreedRank())
+                .renewalCycle(insurance.getRenewalCycle().getLabel())
+                .coverageRatio(insurance.getCoverageRatio().getLabel())
+                .deductible(insurance.getDeductible().getLabel())
+                .compensation(insurance.getCompensation().getLabel())
+                .premium(insurance.getPremium())
                 .build();
     }
 

@@ -31,9 +31,21 @@ public interface InsuranceRepository extends JpaRepository<Insurance, Long> {
     Page<Insurance> findByCompany(@Param(("company")) Company company,
                                   Pageable pageable);
 
+    @Query("SELECT i FROM Insurance i " +
+            "WHERE i.company = :company " +
+            "ORDER BY " +
+            "CASE WHEN i.premium > 0 THEN 0 ELSE 1 END ASC, " +
+            "i.premium ASC")
+    List<Insurance> findByCompany(@Param(("company")) Company company);
+
     @Query("SELECT i FROM Insurance i ORDER BY " +
             "CASE WHEN i.premium > 0 THEN 0 ELSE 1 END ASC, " +
             "i.premium ASC")
     Page<Insurance> findAll(Pageable pageable);
+
+    @Query("SELECT i FROM Insurance i ORDER BY " +
+            "CASE WHEN i.premium > 0 THEN 0 ELSE 1 END ASC, " +
+            "i.premium ASC")
+    List<Insurance> findAll();
 }
 
