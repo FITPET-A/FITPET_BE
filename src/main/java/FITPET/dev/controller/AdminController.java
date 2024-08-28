@@ -43,20 +43,22 @@ public class AdminController {
     }
 
     @GetMapping("/petinfo/downloads")
-    public void downloadPetInfos(HttpServletResponse servletResponse) {
-        adminService.downloadPetInfos(servletResponse);
+    public void downloadPetInfos(HttpServletResponse servletResponse,
+                                 @RequestParam(name = "startDate") String startDate,
+                                 @RequestParam(name = "endDate") String endDate,
+                                 @RequestParam(name = "status", required = false, defaultValue = "PENDING") Status status) {
+        adminService.downloadPetInfos(servletResponse, startDate, endDate, status);
     }
 
     // petinfo 조회
     @GetMapping("/petinfo")
     public ApiResponse getPetInfos(
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
-            @RequestParam(name = "startDate", required = false) String startDate,
-            @RequestParam(name = "endDate", required = false) String endDate,
-            @RequestParam(name = "sort", required = false, defaultValue = "desc") String sort,
-            @RequestParam(name = "status", required = false) Status status
+            @RequestParam(name = "startDate") String startDate,
+            @RequestParam(name = "endDate") String endDate,
+            @RequestParam(name = "status", required = false, defaultValue = "PENDING") Status status
     ) {
-        return ApiResponse.SuccessResponse(SuccessStatus.GET_PETINFO_TABLE, adminService.getPetInfos(startDate, endDate, page, sort, status));
+        return ApiResponse.SuccessResponse(SuccessStatus.GET_PETINFO_TABLE, adminService.getPetInfos(startDate, endDate, page, status));
     }
 
     @PatchMapping("/petinfo/status/{petInfoId}")

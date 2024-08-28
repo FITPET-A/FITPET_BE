@@ -15,6 +15,14 @@ public interface PetInfoRepository extends JpaRepository<PetInfo, Long> {
     @Query("SELECT p FROM PetInfo p " +
             "WHERE (:startDate IS NULL OR p.createdAt >= :startDate) " +
             "AND (:endDate IS NULL OR p.createdAt <= :endDate) " +
-            "AND (:status IS NULL OR p.status = :status)")
-    Page<PetInfo> findAllByCreatedAtBetweenAndStatus(LocalDateTime startDate, LocalDateTime endDate, Status status, Pageable pageable);
+            "AND (:status IS NULL OR p.status = :status) " +
+            "ORDER BY p.createdAt DESC ")
+    Page<PetInfo> findByCreatedAtBetweenAndStatus(LocalDateTime startDate, LocalDateTime endDate, Status status, Pageable pageable);
+
+    @Query("SELECT p FROM PetInfo p " +
+            "WHERE (:startDate IS NULL OR p.createdAt >= :startDate) " +
+            "AND (:endDate IS NULL OR p.createdAt <= :endDate) " +
+            "AND (:status IS NULL OR p.status = :status) " +
+            "ORDER BY p.createdAt DESC ")
+    List<PetInfo> findByCreatedAtBetweenAndStatus(LocalDateTime startDate, LocalDateTime endDate, Status status);
 }
