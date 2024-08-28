@@ -23,7 +23,7 @@ public class InquiryService {
      * 1:1 문의 전송
      * @param inquiryDto
      */
-    public void postInquiry(InquiryRequest.InquiryDto inquiryDto){
+    public Inquiry postInquiry(InquiryRequest.InquiryDto inquiryDto){
 
         // 패턴 및 유효성 검사
         validateEmail(inquiryDto.getEmail());
@@ -32,7 +32,8 @@ public class InquiryService {
         // inquiry 객체 생성 및 저장
         Inquiry inquiry = InquiryConverter.toInquiry(inquiryDto.getName(), inquiryDto.getEmail(),
                 inquiryDto.getPhoneNum(), inquiryDto.getComment());
-        inquiryRepository.save(inquiry);
+
+        return inquiryRepository.save(inquiry);
     }
 
     // 이메일 유효성 검사
@@ -40,7 +41,6 @@ public class InquiryService {
         if (!EMAIL_PATTERN.matcher(email).matches()){
             throw new GeneralException(ErrorStatus.INVALID_EMAIL);
         }
-
     }
 
     // 전화번호 유효성 검사
