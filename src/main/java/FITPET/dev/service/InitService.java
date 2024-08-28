@@ -15,9 +15,7 @@ import FITPET.dev.repository.DogBreedDetailRepository;
 import FITPET.dev.repository.InsuranceRepository;
 import FITPET.dev.repository.PetRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -64,13 +62,14 @@ public class InitService {
 
     private void parseInsuranceSheet(Workbook workbook, Company company, int sheetNum, PetType petType) {
         Sheet sheet = readExcelSheet(workbook, sheetNum);
+        System.out.println("lastRowNum : "+sheet.getLastRowNum());
 
         int startIndex = (PetType.isDog(petType) || company == Company.MERITZ) ? 6 : 4;
         for (int i = startIndex; i <= sheet.getLastRowNum(); i++) {
 
             // read row data
             Row row = sheet.getRow(i);
-            if (row == null) continue;
+            if (row == null || isRowEmpty(row)) continue;
 
             // read cell data
             int age = parseNumericCellValue(row, 0);
@@ -239,4 +238,18 @@ public class InitService {
             put(10, Company.KB);
         }};
     }
+
+    public boolean isRowEmpty(Row row) {
+        if (row == null)
+            return true;
+
+        for (int cellNum = row.getFirstCellNum(); cellNum < row.getLastCellNum(); cellNum++) {
+            Cell cell = row.getCell(cellNum);
+            if (cell != null && cell.getCellType() != CellType.BLANK) {
+                return false; // Row is not empty
+            }
+        }
+        return true; // Row is empty
+    }
+
 }
