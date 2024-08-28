@@ -3,10 +3,13 @@ package FITPET.dev.controller;
 import FITPET.dev.common.status.SuccessStatus;
 import FITPET.dev.common.enums.Status;
 import FITPET.dev.common.response.ApiResponse;
+import FITPET.dev.dto.response.InsuranceHistoryResponse;
 import FITPET.dev.service.AdminService;
 import FITPET.dev.service.InitService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "관리자 페이지 API")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/admin")
@@ -93,6 +97,7 @@ public class AdminController {
 
     // 전화번호와 펫 이름으로 PetInfo 검색
     @GetMapping("/petinfo/search")
+    @Operation(summary = "견적서 검색 API", description = "전화번호와 펫 이름으로 견적서 검색")
     public ApiResponse searchPetInfos(
             @RequestParam(name = "content", required = false) String content,
             @RequestParam(name = "page", required = false, defaultValue = "0") int page
@@ -102,6 +107,7 @@ public class AdminController {
 
     //보험료 수정
     @PatchMapping("/insurance/{insuranceId}")
+    @Operation(summary = "보험료 수정 API", description = "특정 보험id의 보험료를 수정")
     public ApiResponse updateInsurance(
             @PathVariable(value = "insuranceId") Long insuranceId,
             @RequestParam(name = "premium") int premium
@@ -109,4 +115,17 @@ public class AdminController {
         adminService.updateInsurance(insuranceId, premium);
         return ApiResponse.SuccessResponse(SuccessStatus.UPDATE_INSURANCE_SUCCESS);
     }
+
+    //보험료 히스토리 조회
+    @GetMapping("/insurance/premium/{insuranceId}")
+    @Operation(summary = "보험료 수정 내역 조회 API", description = "특정 보험id의 보험료 수정 내역을 조회")
+    public ApiResponse getPremiumHistory(
+            @PathVariable(name = "insuranceId") Long insuranceId
+    ) {
+        List<InsuranceHistoryResponse> response = adminService.getPremiumHistory(insuranceId);
+        return ApiResponse.SuccessResponse(SuccessStatus.GET_INSURANCE_PREMIUM_HISTORY, response);
+    }
+
+
+
 }
