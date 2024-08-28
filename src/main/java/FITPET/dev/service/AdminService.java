@@ -7,6 +7,7 @@ import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.common.utils.ExcelUtils;
 import FITPET.dev.converter.InquiryConverter;
 import FITPET.dev.converter.InsuranceConverter;
+import FITPET.dev.converter.InsuranceHistoryConverter;
 import FITPET.dev.converter.PetInfoConverter;
 import FITPET.dev.converter.ProposalConverter;
 import FITPET.dev.dto.response.InquiryResponse;
@@ -15,9 +16,11 @@ import FITPET.dev.dto.response.PetInfoResponse;
 import FITPET.dev.dto.response.ProposalResponse;
 import FITPET.dev.entity.Inquiry;
 import FITPET.dev.entity.Insurance;
+import FITPET.dev.entity.InsuranceHistory;
 import FITPET.dev.entity.PetInfo;
 import FITPET.dev.entity.Proposal;
 import FITPET.dev.repository.InquiryRepository;
+import FITPET.dev.repository.InsuranceHistoryRepository;
 import FITPET.dev.repository.InsuranceRepository;
 import FITPET.dev.repository.PetInfoRepository;
 import FITPET.dev.repository.ProposalRepository;
@@ -45,6 +48,7 @@ public class AdminService {
     private final PetInfoRepository petInfoRepository;
     private final InquiryRepository inquiryRepository;
     private final ProposalRepository proposalRepository;
+    private final InsuranceHistoryRepository insuranceHistoryRepository;
     private final ExcelUtils excelUtils;
 
     /*
@@ -228,10 +232,8 @@ public class AdminService {
                 .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_PET_INFO));
     }
 
-    /*
-     * PetInfo 검색
-     * @param phoneNum, petName, page
-     */
+
+    //전화번호와 펫 이름으로 PetInfo 검색
     public PetInfoResponse.PetInfoDetailPageDto searchPetInfos(String content, int page) {
         int size = 20;
         Pageable pageable = PageRequest.of(page, size);
@@ -242,6 +244,21 @@ public class AdminService {
 
 
         return PetInfoConverter.toPetInfoDetailPageDto(petInfoPage);
+    }
+
+
+    //보험료 수정
+    public void updateInsurance(Long insuranceId, int premium){
+        Insurance insurance = insuranceRepository.findByInsuranceId(insuranceId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_INSURANCE));
+
+        int oldPremium = insurance.getPremium();
+        insurance.updatepremium(premium);
+
+        InsuranceHistory history = InsuranceHistoryConverter.createHistory(insurance, oldPremium, premium);
+
+        insuranceRepository.save(insurance);
+        insuranceHistoryRepository.save(history);
     }
 
 

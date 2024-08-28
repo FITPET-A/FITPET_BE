@@ -85,4 +85,14 @@ public class AdminController {
     ) {
         return ApiResponse.SuccessResponse(SuccessStatus.SEARCH_PET_INFO, adminService.searchPetInfos(content, page));
     }
+
+    //보험료 수정
+    @PatchMapping("/insurance/{insuranceId}")
+    public ApiResponse updateInsurance(
+            @PathVariable(value = "insuranceId") Long insuranceId,
+            @RequestParam(name = "premium") int premium
+    ) {
+        adminService.updateInsurance(insuranceId, premium);
+        return ApiResponse.SuccessResponse(SuccessStatus.UPDATE_INSURANCE_SUCCESS);
+    }
 }
