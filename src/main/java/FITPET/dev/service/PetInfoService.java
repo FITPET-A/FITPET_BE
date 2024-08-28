@@ -21,7 +21,7 @@ public class PetInfoService {
     private final PetRepository petRepository;
     private final InsuranceService insuranceService;
 
-    private static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile("^010\\d{8}$"); //  전화번호 정규식(010+숫자 8자리)
+    private static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile("^010-\\d{4}-\\d{4}$");
     static final int MAX_AGE = 10;
 
 

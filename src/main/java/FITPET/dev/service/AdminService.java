@@ -14,10 +14,14 @@ import FITPET.dev.entity.PetInfo;
 import FITPET.dev.repository.InsuranceRepository;
 import FITPET.dev.repository.PetInfoRepository;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +32,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AdminService {
+
     private final InsuranceRepository insuranceRepository;
     private final PetInfoRepository petInfoRepository;
     private final ExcelUtils excelUtils;
@@ -38,7 +43,7 @@ public class AdminService {
      * @param companyStr
      * @return
      */
-    public InsuranceResponse.InsuranceDetailPageDto getInsurances(int page, String companyStr){
+    public InsuranceResponse.InsuranceDetailPageDto getInsurances(int page, String companyStr) {
 
         // 페이지 크기, 페이지 번호 정보를 Pageable 객체에 설정
         Pageable pageable = PageRequest.of(page, 100);
@@ -62,7 +67,8 @@ public class AdminService {
         List<Insurance> insuranceList = getInsuranceListByCompany(companyStr);
 
         // excelDto로 타입 변경
-        List<InsuranceResponse.InsuranceExcelDto> insuranceExcelDtoList = convertToInsuranceExcelDtoList(insuranceList);
+        List<InsuranceResponse.InsuranceExcelDto> insuranceExcelDtoList = convertToInsuranceExcelDtoList(
+                insuranceList);
 
         // excel 파일 다운로드
         excelUtils.downloadInsurances(servletResponse, insuranceExcelDtoList);
@@ -73,13 +79,14 @@ public class AdminService {
      * 견적서 일괄 엑셀 다운로드
      * @param servletResponse
      */
-    public void downloadPetInfos(HttpServletResponse servletResponse){
+    public void downloadPetInfos(HttpServletResponse servletResponse) {
 
         // 견적서 일괄 조회
         List<PetInfo> petInfoList = petInfoRepository.findAll();
 
         // excelDto로 타입 변경
-        List<PetInfoResponse.PetInfoExcelDto> petInfoExcelDtoList = convertToPetInfoExcelDtoList(petInfoList);
+        List<PetInfoResponse.PetInfoExcelDto> petInfoExcelDtoList = convertToPetInfoExcelDtoList(
+                petInfoList);
 
         // excel 파일 다운로드
         excelUtils.downloadPetInfos(servletResponse, petInfoExcelDtoList);
@@ -111,7 +118,7 @@ public class AdminService {
 
     private Page<Insurance> getInsurancePageByCompany(String companyStr, Pageable pageable) {
 
-        if (companyStr.equals("all")){
+        if (companyStr.equals("all")) {
             // 전체 insurance Page 반환
             return insuranceRepository.findAll(pageable);
         } else {
@@ -135,14 +142,16 @@ public class AdminService {
     }
 
 
-    private List<InsuranceResponse.InsuranceExcelDto> convertToInsuranceExcelDtoList(List<Insurance> insuranceList) {
+    private List<InsuranceResponse.InsuranceExcelDto> convertToInsuranceExcelDtoList(
+            List<Insurance> insuranceList) {
         return insuranceList.stream()
                 .map(InsuranceConverter::toInsuranceExcelDto)
                 .toList();
     }
 
 
-    private List<PetInfoResponse.PetInfoExcelDto> convertToPetInfoExcelDtoList(List<PetInfo> petInfoList) {
+    private List<PetInfoResponse.PetInfoExcelDto> convertToPetInfoExcelDtoList(
+            List<PetInfo> petInfoList) {
         return petInfoList.stream()
                 .map(PetInfoConverter::toPetInfoExcelDto)
                 .toList();
@@ -154,9 +163,42 @@ public class AdminService {
                 .orElseThrow(() -> new GeneralException(ErrorStatus.INVALID_COMPANY));
     }
 
+
+    /*
+     * PetInfo를 조회
+     * @param page, size, sort, startDate, endDate
+     */
+    public PetInfoResponse.PetInfoDetailPageDto getPetInfos(String startDate, String endDate, int page, String sort) {
+        LocalDateTime start = parseDate(startDate, " 00:00:00");
+        LocalDateTime end = parseDate(endDate, " 23:59:59");
+
+        Sort sortOption = sort.equalsIgnoreCase("asc") ? Sort.by("createdAt").ascending() : Sort.by("createdAt").descending();
+        int size = 20;
+        Pageable pageable = PageRequest.of(page, size, sortOption);
+
+        Page<PetInfo> petInfoPage = petInfoRepository.findAllByCreatedAtBetweenAndSort(start, end, pageable);
+
+        return PetInfoConverter.toPetInfoDetailPageDto(petInfoPage);
+    }
+
+    private LocalDateTime parseDate(String date, String timeSuffix) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        try {
+            return LocalDateTime.parse(date + timeSuffix, formatter);
+        } catch (DateTimeParseException e) {
+            throw new GeneralException(ErrorStatus.INVALID_DATE_FORMAT);
+        }
+    }
+
+
+
+
+}
+
     private PetInfo findPetInfoById(Long petInfoId){
         return petInfoRepository.findById(petInfoId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_PET_INFO));
     }
 
 }
+

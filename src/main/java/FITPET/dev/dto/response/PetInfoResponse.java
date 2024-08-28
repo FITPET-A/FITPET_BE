@@ -2,6 +2,7 @@ package FITPET.dev.dto.response;
 
 import FITPET.dev.common.annotation.ExcelColumn;
 import FITPET.dev.common.annotation.ExcelFile;
+import java.util.List;
 import FITPET.dev.common.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +23,7 @@ public class PetInfoResponse {
         @ExcelColumn(headerName = "견적서Id")
         private Long petInfoId;
         @ExcelColumn(headerName = "견적 요청 일시")
-        private LocalDateTime createdAt;
+        private String createdAt;
         @ExcelColumn(headerName = "품종")
         private String petType;
         @ExcelColumn(headerName = "상세 품종")
@@ -35,5 +36,30 @@ public class PetInfoResponse {
         private String phoneNum;
     }
 
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PetInfoResponseDto {
+        private Long petInfoId;
+        private String createdAt;
+        private String petType;
+        private String detailType;
+        private String name;
+        private int age;
+        private String phoneNum;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PetInfoDetailPageDto {
+        private List<PetInfoResponseDto> content;
+        private int currentPage; // 현재 페이지 번호
+        private int pageSize; // 페이지 크기
+        private int totalNumber; // 전체 content 개수
+        private int totalPage; // 전체 페이지 개수
+    }
 
 }
