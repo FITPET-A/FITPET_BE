@@ -2,7 +2,6 @@ package FITPET.dev.controller;
 
 import FITPET.dev.common.basecode.SuccessStatus;
 import FITPET.dev.common.response.ApiResponse;
-import FITPET.dev.dto.request.InquiryRequest;
 import FITPET.dev.dto.request.ProposalRequest;
 import FITPET.dev.service.ProposalService;
 import lombok.AllArgsConstructor;

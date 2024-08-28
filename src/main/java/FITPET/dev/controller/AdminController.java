@@ -57,4 +57,8 @@ public class AdminController {
         return ApiResponse.SuccessResponse(SuccessStatus.GET_INQUIRY, adminService.getInquiries());
     }
 
+    @GetMapping("/proposal")
+    public ApiResponse getProposals(){
+        return ApiResponse.SuccessResponse(SuccessStatus.GET_PROPOSAL, adminService.getProposals());
+    }
 }

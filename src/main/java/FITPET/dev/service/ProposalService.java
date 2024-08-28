@@ -2,7 +2,6 @@ package FITPET.dev.service;
 
 import FITPET.dev.common.basecode.ErrorStatus;
 import FITPET.dev.common.exception.GeneralException;
-import FITPET.dev.converter.InquiryConverter;
 import FITPET.dev.converter.ProposalConverter;
 import FITPET.dev.dto.request.ProposalRequest;
 import FITPET.dev.entity.Proposal;
