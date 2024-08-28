@@ -228,6 +228,21 @@ public class AdminService {
                 .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_PET_INFO));
     }
 
+    /*
+     * PetInfo 검색
+     * @param phoneNum, petName, page
+     */
+    public PetInfoResponse.PetInfoDetailPageDto searchPetInfos(String phoneNum, String petName, int page) {
+        int size = 20;
+        Pageable pageable = PageRequest.of(page, size);
+
+        // 전화번호에서 '-' 제거
+        String normalizedPhoneNum = phoneNum != null ? phoneNum.replaceAll("-", "") : null;
+        Page<PetInfo> petInfoPage = petInfoRepository.findAllByPhoneNumAndPetName(normalizedPhoneNum, petName, pageable);
+
+        return PetInfoConverter.toPetInfoDetailPageDto(petInfoPage);
+    }
+
 
 }
 
