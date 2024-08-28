@@ -5,9 +5,11 @@ import FITPET.dev.common.response.ApiResponse;
 import FITPET.dev.dto.request.PetInfoRequest;
 import FITPET.dev.service.PetInfoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "견적서 API")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/petinfo")

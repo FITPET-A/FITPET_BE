@@ -5,9 +5,11 @@ import FITPET.dev.common.response.ApiResponse;
 import FITPET.dev.dto.request.InquiryRequest;
 import FITPET.dev.service.InquiryService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "1:1 문의 전송 API")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/inquiry")
