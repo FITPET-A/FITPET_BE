@@ -233,7 +233,11 @@ public class AdminService {
     }
 
 
-    //전화번호와 펫 이름으로 PetInfo 검색
+
+    /*
+     * 전화번호와 펫 이름으로 PetInfo 검색
+     * @param content
+     */
     public PetInfoResponse.PetInfoDetailPageDto searchPetInfos(String content, int page) {
         int size = 20;
         Pageable pageable = PageRequest.of(page, size);
@@ -247,7 +251,12 @@ public class AdminService {
     }
 
 
-    //보험료 수정
+
+    /*
+     * 보험료 수정
+     * @param insuracneId
+     * @param premium
+     */
     public void updateInsurance(Long insuranceId, int premium){
         Insurance insurance = insuranceRepository.findByInsuranceId(insuranceId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_INSURANCE));
