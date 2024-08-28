@@ -19,7 +19,8 @@ public enum SuccessStatus {
     PATCH_PET_INFO_STATUS(200, "견적서 상태 변경에 성공했습니다."),
 
     // inquiry
-    POST_INQUIRY(200, "제휴제안 전송에 성공했습니다.");
+    POST_INQUIRY(200, "1:1 문의 전송에 성공했습니다."),
+    GET_INQUIRY(200, "1:1 문의 내역 조회에 성공했습니다.");
 
     private final int code;
     private final String message;
