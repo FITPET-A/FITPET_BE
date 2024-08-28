@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import org.springframework.data.repository.query.Param;
 
 public interface PetInfoRepository extends JpaRepository<PetInfo, Long> {
 
@@ -17,4 +18,8 @@ public interface PetInfoRepository extends JpaRepository<PetInfo, Long> {
             "AND (:endDate IS NULL OR p.createdAt <= :endDate) " +
             "AND (:status IS NULL OR p.status = :status)")
     Page<PetInfo> findAllByCreatedAtBetweenAndStatus(LocalDateTime startDate, LocalDateTime endDate, Status status, Pageable pageable);
+
+    @Query("SELECT p FROM PetInfo p WHERE REPLACE(p.phoneNum, '-', '') LIKE %?1% OR p.name LIKE %?1%")
+    Page<PetInfo> findAllByPhoneNumOrPetName(String content, Pageable pageable);
+
 }
