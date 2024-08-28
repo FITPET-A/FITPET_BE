@@ -3,7 +3,6 @@ package FITPET.dev.converter;
 import FITPET.dev.common.enums.Status;
 import FITPET.dev.dto.request.PetInfoRequest;
 import FITPET.dev.dto.response.PetInfoResponse;
-import FITPET.dev.dto.response.PetInfoResponse.PetInfoResponseDto;
 import FITPET.dev.entity.Pet;
 import FITPET.dev.entity.PetInfo;
 import java.time.LocalDateTime;
@@ -24,7 +23,6 @@ public class PetInfoConverter {
                 .age(request.getAge())
                 .phoneNum(request.getPhoneNum())
                 .pet(pet)
-                .createdAt(LocalDateTime.now())
                 .status(Status.PENDING)
                 .build();
     }
@@ -38,22 +36,22 @@ public class PetInfoConverter {
                 .name(petInfo.getName())
                 .age(petInfo.getAge())
                 .phoneNum(petInfo.getPhoneNum())
-                .createdAt(formatDateTime(petInfo.getCreatedAt()))
+                .createdAt(formatDateTime(petInfo.getCreated_at()))
                 .petType(pet.getPetType().toString())
                 .detailType(pet.getDetailType())
                 .build();
     }
 
 
-    public static PetInfoResponse.PetInfoResponseDto toPetInfoResponseDto(PetInfo petInfo) {
+    public static PetInfoResponse.PetInfoDetailDto toPetInfoDetailDto(PetInfo petInfo) {
         Pet pet = petInfo.getPet();
 
-        return PetInfoResponse.PetInfoResponseDto.builder()
+        return PetInfoResponse.PetInfoDetailDto.builder()
                 .petInfoId(petInfo.getPetInfoId())
                 .name(petInfo.getName())
                 .age(petInfo.getAge())
                 .phoneNum(petInfo.getPhoneNum())
-                .createdAt(formatDateTime(petInfo.getCreatedAt()))
+                .createdAt(formatDateTime(petInfo.getCreated_at()))
                 .petType(pet.getPetType().toString())
                 .detailType(pet.getDetailType())
                 .build();
@@ -62,12 +60,12 @@ public class PetInfoConverter {
     public static PetInfoResponse.PetInfoDetailPageDto toPetInfoDetailPageDto(
             Page<PetInfo> petInfoPage) {
 
-        List<PetInfoResponseDto> petInfoDtoList = petInfoPage.getContent().stream()
-                .map(PetInfoConverter::toPetInfoResponseDto)
+        List<PetInfoResponse.PetInfoDetailDto> petInfoDetailDtoList = petInfoPage.getContent().stream()
+                .map(PetInfoConverter::toPetInfoDetailDto)
                 .toList();
 
         return PetInfoResponse.PetInfoDetailPageDto.builder()
-                .content(petInfoDtoList)
+                .content(petInfoDetailDtoList)
                 .currentPage(petInfoPage.getNumber())
                 .pageSize(petInfoPage.getSize())
                 .totalNumber((int) petInfoPage.getTotalElements())

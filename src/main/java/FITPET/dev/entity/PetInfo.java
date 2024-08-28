@@ -1,5 +1,6 @@
 package FITPET.dev.entity;
 
+import FITPET.dev.common.base.BaseEntity;
 import FITPET.dev.common.enums.Status;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PetInfo {
+public class PetInfo extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -31,9 +32,6 @@ public class PetInfo {
 
     @Column(nullable = false, length = 20)
     private String phoneNum;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

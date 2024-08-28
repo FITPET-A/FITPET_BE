@@ -40,7 +40,7 @@ public class PetInfoResponse {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class PetInfoResponseDto {
+    public static class PetInfoDetailDto {
         private Long petInfoId;
         private String createdAt;
         private String petType;
@@ -55,7 +55,7 @@ public class PetInfoResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class PetInfoDetailPageDto {
-        private List<PetInfoResponseDto> content;
+        private List<PetInfoDetailDto> content;
         private int currentPage; // 현재 페이지 번호
         private int pageSize; // 페이지 크기
         private int totalNumber; // 전체 content 개수
