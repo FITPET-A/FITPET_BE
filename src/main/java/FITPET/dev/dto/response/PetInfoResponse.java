@@ -34,6 +34,8 @@ public class PetInfoResponse {
         private int age;
         @ExcelColumn(headerName = "보호자 연락처")
         private String phoneNum;
+        @ExcelColumn(headerName = "비고")
+        private String comment;
     }
 
     @Data
@@ -48,6 +50,8 @@ public class PetInfoResponse {
         private String name;
         private int age;
         private String phoneNum;
+        private String comment;
+        private String status;
     }
 
     @Data

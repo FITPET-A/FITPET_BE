@@ -16,4 +16,5 @@ public class PetInfoRequest {
     private String phoneNum;
     private PetType petType;
     private String detailType;
+    private String comment;
 }

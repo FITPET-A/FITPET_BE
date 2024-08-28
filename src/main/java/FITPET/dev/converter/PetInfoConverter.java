@@ -26,6 +26,7 @@ public class PetInfoConverter {
                 .pet(pet)
                 .createdAt(LocalDateTime.now())
                 .status(Status.PENDING)
+                .comment(request.getComment())
                 .build();
     }
 
@@ -41,6 +42,7 @@ public class PetInfoConverter {
                 .createdAt(formatDateTime(petInfo.getCreatedAt()))
                 .petType(pet.getPetType().toString())
                 .detailType(pet.getDetailType())
+                .comment(petInfo.getComment())
                 .build();
     }
 
@@ -56,6 +58,8 @@ public class PetInfoConverter {
                 .createdAt(formatDateTime(petInfo.getCreatedAt()))
                 .petType(pet.getPetType().toString())
                 .detailType(pet.getDetailType())
+                .comment(petInfo.getComment())
+                .status(petInfo.getStatus().toString())
                 .build();
     }
 
