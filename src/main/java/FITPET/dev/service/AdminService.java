@@ -11,6 +11,7 @@ import FITPET.dev.converter.InsuranceHistoryConverter;
 import FITPET.dev.converter.PetInfoConverter;
 import FITPET.dev.converter.ProposalConverter;
 import FITPET.dev.dto.response.InquiryResponse;
+import FITPET.dev.dto.response.InsuranceHistoryResponse;
 import FITPET.dev.dto.response.InsuranceResponse;
 import FITPET.dev.dto.response.PetInfoResponse;
 import FITPET.dev.dto.response.ProposalResponse;
@@ -258,7 +259,6 @@ public class AdminService {
     }
 
 
-
     /*
      * 보험료 수정
      * @param insuracneId
@@ -277,6 +277,15 @@ public class AdminService {
         insuranceHistoryRepository.save(history);
     }
 
+    /*
+     * 보험료 히스토리 조회
+     * @param insuranceId
+     */
+    public List<InsuranceHistoryResponse> getPremiumHistory(Long insuranceId) {
+        List<InsuranceHistory> histories = insuranceHistoryRepository
+                .findByInsurance_InsuranceIdOrderByCreatedAtDesc(insuranceId);
+        return InsuranceHistoryConverter.toResponseList(histories);
+    }
 
 }
 
