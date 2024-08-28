@@ -203,16 +203,14 @@ public class AdminService {
      * PetInfo를 조회
      * @param page, size, sort, startDate, endDate
      */
-    public PetInfoResponse.PetInfoDetailPageDto getPetInfos(String startDate, String endDate, int page, String sort) {
+    public PetInfoResponse.PetInfoDetailPageDto getPetInfos(String startDate, String endDate, int page, String sort, Status status) {
         LocalDateTime start = parseDate(startDate, " 00:00:00");
         LocalDateTime end = parseDate(endDate, " 23:59:59");
-
         Sort sortOption = sort.equalsIgnoreCase("asc") ? Sort.by("createdAt").ascending() : Sort.by("createdAt").descending();
         int size = 20;
         Pageable pageable = PageRequest.of(page, size, sortOption);
 
-        Page<PetInfo> petInfoPage = petInfoRepository.findAllByCreatedAtBetweenAndSort(start, end, pageable);
-
+        Page<PetInfo> petInfoPage = petInfoRepository.findAllByCreatedAtBetweenAndStatus(start, end, status, pageable);
         return PetInfoConverter.toPetInfoDetailPageDto(petInfoPage);
     }
 
