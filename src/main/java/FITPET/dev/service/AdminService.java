@@ -56,7 +56,7 @@ public class AdminService {
     public InsuranceResponse.InsuranceDetailPageDto getInsurances(int page, String companyStr) {
 
         // 페이지 크기, 페이지 번호 정보를 Pageable 객체에 설정
-        Pageable pageable = PageRequest.of(page, 100);
+        Pageable pageable = PageRequest.of(page, 20);
 
         // company 문자열에 따라 회사별 Insurance 정보를 페이징 객체로 반환
         Page<Insurance> insurancePage = getInsurancePageByCompany(companyStr, pageable);
@@ -86,13 +86,35 @@ public class AdminService {
 
 
     /*
-     * 견적서 일괄 엑셀 다운로드
+     * 견적 요청 내역 조회 (최신순)
+     * @param page, size, startDate, endDate
+     */
+    public PetInfoResponse.PetInfoDetailPageDto getPetInfos(String startDate, String endDate, int page, Status status) {
+
+        // 날짜 형식 변경
+        LocalDateTime start = parseDate(startDate, " 00:00:00");
+        LocalDateTime end = parseDate(endDate, " 23:59:59");
+
+        // 견적 요청 리스트를 페이지 단위로 조회
+        Pageable pageable = PageRequest.of(page, 20);
+        Page<PetInfo> petInfoPage = petInfoRepository.findByCreatedAtBetweenAndStatus(start, end, status, pageable);
+
+        return PetInfoConverter.toPetInfoDetailPageDto(petInfoPage);
+    }
+
+
+    /*
+     * 견적 요청 내역 엑셀 다운로드
      * @param servletResponse
      */
-    public void downloadPetInfos(HttpServletResponse servletResponse) {
+    public void downloadPetInfos(HttpServletResponse servletResponse,
+                                 String startDate, String endDate, Status status) {
+        // 날짜 형식 변경
+        LocalDateTime start = parseDate(startDate, " 00:00:00");
+        LocalDateTime end = parseDate(endDate, " 23:59:59");
 
-        // 견적서 일괄 조회
-        List<PetInfo> petInfoList = petInfoRepository.findAll();
+        // 견적서 요청 리스트 조회
+        List<PetInfo> petInfoList = petInfoRepository.findByCreatedAtBetweenAndStatus(start, end, status);
 
         // excelDto로 타입 변경
         List<PetInfoResponse.PetInfoExcelDto> petInfoExcelDtoList = convertToPetInfoExcelDtoList(
@@ -132,7 +154,7 @@ public class AdminService {
      */
     public InquiryResponse.InquiryListDto getInquiries(){
         // 전체 1:1 문의 내역 조회
-        List<Inquiry> inquiryList = inquiryRepository.findAllByOrderByCreatedAtAsc();
+        List<Inquiry> inquiryList = inquiryRepository.findAllByOrderByCreatedAtDesc();
 
         return InquiryConverter.toInquiryListDto(inquiryList);
     }
@@ -145,7 +167,7 @@ public class AdminService {
     public ProposalResponse.ProposalListDto getProposals(){
 
         // 전체 제휴문의 내역 조회
-        List<Proposal> proposalList = proposalRepository.findAllByOrderByCreatedAtAsc();
+        List<Proposal> proposalList = proposalRepository.findAllByOrderByCreatedAtDesc();
 
         return ProposalConverter.toProposalListDto(proposalList);
     }
@@ -199,21 +221,6 @@ public class AdminService {
     }
 
 
-    /*
-     * PetInfo를 조회
-     * @param page, size, sort, startDate, endDate
-     */
-    public PetInfoResponse.PetInfoDetailPageDto getPetInfos(String startDate, String endDate, int page, String sort, Status status) {
-        LocalDateTime start = parseDate(startDate, " 00:00:00");
-        LocalDateTime end = parseDate(endDate, " 23:59:59");
-        Sort sortOption = sort.equalsIgnoreCase("asc") ? Sort.by("createdAt").ascending() : Sort.by("createdAt").descending();
-        int size = 20;
-        Pageable pageable = PageRequest.of(page, size, sortOption);
-
-        Page<PetInfo> petInfoPage = petInfoRepository.findAllByCreatedAtBetweenAndStatus(start, end, status, pageable);
-        return PetInfoConverter.toPetInfoDetailPageDto(petInfoPage);
-    }
-
     private LocalDateTime parseDate(String date, String timeSuffix) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try {
@@ -223,10 +230,12 @@ public class AdminService {
         }
     }
 
+
     private PetInfo findPetInfoById(Long petInfoId){
         return petInfoRepository.findById(petInfoId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_PET_INFO));
     }
+
 
     /*
      * PetInfo 검색
@@ -246,8 +255,5 @@ public class AdminService {
 
 
 }
-
-
-
 
 
