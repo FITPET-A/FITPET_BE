@@ -29,6 +29,7 @@ public class InsuranceConverter {
         int discountedPremium = getDiscountedPremium(insurance.getCompany(), insurance.getPremium());
 
         return InsuranceResponse.InsuranceDto.builder()
+                .insuranceId(insurance.getInsuranceId())
                 .company(insurance.getCompany().getLabel())
                 .premium(insurance.getPremium())
                 .discountedPremium(discountedPremium)
@@ -61,6 +62,7 @@ public class InsuranceConverter {
 
     public static InsuranceResponse.InsuranceDetailDto toInsuranceDetailDto(Insurance insurance) {
         return InsuranceResponse.InsuranceDetailDto.builder()
+
                 .insuranceId(insurance.getInsuranceId())
                 .petType(insurance.getPetType())
                 .age(insurance.getAge())

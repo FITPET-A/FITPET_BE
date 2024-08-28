@@ -24,6 +24,7 @@ public class InsuranceResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class InsuranceDto {
+        private Long insuranceId;
         private String company;
         private int premium;
         private int discountedPremium;
