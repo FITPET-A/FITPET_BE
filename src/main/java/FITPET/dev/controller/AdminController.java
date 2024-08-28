@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "관리자 페이지", description = "관리자 페이지 API")
+@Tag(name = "관리자 페이지 API")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/admin")
@@ -97,6 +97,7 @@ public class AdminController {
 
     // 전화번호와 펫 이름으로 PetInfo 검색
     @GetMapping("/petinfo/search")
+    @Operation(summary = "견적서 검색 API", description = "전화번호와 펫 이름으로 견적서 검색")
     public ApiResponse searchPetInfos(
             @RequestParam(name = "content", required = false) String content,
             @RequestParam(name = "page", required = false, defaultValue = "0") int page
@@ -106,6 +107,7 @@ public class AdminController {
 
     //보험료 수정
     @PatchMapping("/insurance/{insuranceId}")
+    @Operation(summary = "보험료 수정 API", description = "특정 보험id의 보험료를 수정")
     public ApiResponse updateInsurance(
             @PathVariable(value = "insuranceId") Long insuranceId,
             @RequestParam(name = "premium") int premium
