@@ -59,6 +59,7 @@ public class PetInfoConverter {
                 .petType(pet.getPetType().toString())
                 .detailType(pet.getDetailType())
                 .comment(petInfo.getComment())
+                .status(petInfo.getStatus().toString())
                 .build();
     }
 

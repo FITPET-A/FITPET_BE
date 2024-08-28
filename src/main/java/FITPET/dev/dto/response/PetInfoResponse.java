@@ -51,6 +51,7 @@ public class PetInfoResponse {
         private int age;
         private String phoneNum;
         private String comment;
+        private String status;
     }
 
     @Data
