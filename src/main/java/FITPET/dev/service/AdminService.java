@@ -232,13 +232,14 @@ public class AdminService {
      * PetInfo 검색
      * @param phoneNum, petName, page
      */
-    public PetInfoResponse.PetInfoDetailPageDto searchPetInfos(String phoneNum, String petName, int page) {
+    public PetInfoResponse.PetInfoDetailPageDto searchPetInfos(String content, int page) {
         int size = 20;
         Pageable pageable = PageRequest.of(page, size);
 
-        // 전화번호에서 '-' 제거
-        String normalizedPhoneNum = phoneNum != null ? phoneNum.replaceAll("-", "") : null;
-        Page<PetInfo> petInfoPage = petInfoRepository.findAllByPhoneNumAndPetName(normalizedPhoneNum, petName, pageable);
+        // '-' 제거
+        String chagnedContent = content != null ? content.replaceAll("-", "") : null;
+        Page<PetInfo> petInfoPage = petInfoRepository.findAllByPhoneNumOrPetName(chagnedContent, pageable);
+
 
         return PetInfoConverter.toPetInfoDetailPageDto(petInfoPage);
     }

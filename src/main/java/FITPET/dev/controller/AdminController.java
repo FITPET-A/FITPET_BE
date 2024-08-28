@@ -80,10 +80,9 @@ public class AdminController {
     // 전화번호와 펫 이름으로 PetInfo 검색
     @GetMapping("/petinfo/search")
     public ApiResponse searchPetInfos(
-            @RequestParam(name = "phoneNum", required = false) String phoneNum,
-            @RequestParam(name = "petName", required = false) String petName,
+            @RequestParam(name = "content", required = false) String content,
             @RequestParam(name = "page", required = false, defaultValue = "0") int page
     ) {
-        return ApiResponse.SuccessResponse(SuccessStatus.SEARCH_PET_INFO, adminService.searchPetInfos(phoneNum, petName, page));
+        return ApiResponse.SuccessResponse(SuccessStatus.SEARCH_PET_INFO, adminService.searchPetInfos(content, page));
     }
 }
