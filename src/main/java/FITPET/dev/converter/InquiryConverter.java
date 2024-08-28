@@ -25,7 +25,7 @@ public class InquiryConverter {
 
     public static InquiryResponse.InquiryDto toInquiryDto(Inquiry inquiry){
         return InquiryResponse.InquiryDto.builder()
-                .createdAt(formatDateTime(inquiry.getCreated_at()))
+                .createdAt(formatDateTime(inquiry.getCreatedAt()))
                 .inquiryId(inquiry.getInquiryId())
                 .name(inquiry.getName())
                 .email(inquiry.getEmail())

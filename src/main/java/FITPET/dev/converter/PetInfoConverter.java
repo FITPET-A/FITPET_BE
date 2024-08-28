@@ -36,7 +36,7 @@ public class PetInfoConverter {
                 .name(petInfo.getName())
                 .age(petInfo.getAge())
                 .phoneNum(petInfo.getPhoneNum())
-                .createdAt(formatDateTime(petInfo.getCreated_at()))
+                .createdAt(formatDateTime(petInfo.getCreatedAt()))
                 .petType(pet.getPetType().toString())
                 .detailType(pet.getDetailType())
                 .build();
@@ -51,7 +51,7 @@ public class PetInfoConverter {
                 .name(petInfo.getName())
                 .age(petInfo.getAge())
                 .phoneNum(petInfo.getPhoneNum())
-                .createdAt(formatDateTime(petInfo.getCreated_at()))
+                .createdAt(formatDateTime(petInfo.getCreatedAt()))
                 .petType(pet.getPetType().toString())
                 .detailType(pet.getDetailType())
                 .build();

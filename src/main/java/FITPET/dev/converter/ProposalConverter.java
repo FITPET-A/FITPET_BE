@@ -24,7 +24,7 @@ public class ProposalConverter {
     public static ProposalResponse.ProposalDto toProposalDto(Proposal proposal){
         return ProposalResponse.ProposalDto.builder()
                 .proposalId(proposal.getProposalId())
-                .createdAt(formatDateTime(proposal.getCreated_at()))
+                .createdAt(formatDateTime(proposal.getCreatedAt()))
                 .name(proposal.getName())
                 .email(proposal.getEmail())
                 .phoneNum(proposal.getPhoneNum())

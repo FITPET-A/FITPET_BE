@@ -31,6 +31,10 @@ public class PetInfoService {
         validateAge(petInfoRequest.getAge());
         Pet pet = findPetByDetailType(petInfoRequest.getDetailType());
 
+        // pet의 품종과 request의 품종이 다를 시 exception 반환
+        if (pet.getPetType() != petInfoRequest.getPetType())
+            throw new GeneralException(ErrorStatus.INVALID_PETTYPE_WITH_DETAILTYPE);
+
         // PetInfo 생성하고 저장
         PetInfo petInfo = PetInfoConverter.toPetInfo(petInfoRequest, pet);
         petInfo = petInfoRepository.save(petInfo);
