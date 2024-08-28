@@ -57,6 +57,7 @@ public enum ErrorStatus {
 
     // insurance
     NOT_EXIST_INSURANCE(404, "존재하지 않는 보험 정보입니다."),
+    NOT_EXIST_PREMIUM_HISTORY(404, "존재하지 않는 보험료 히스토리 정보입니다."),
 
     /**
      * 500
