@@ -19,7 +19,6 @@ public class PetInfoResponse {
     @AllArgsConstructor
     @ExcelFile
     public static class PetInfoExcelDto {
-        private Status status;
         @ExcelColumn(headerName = "견적서Id")
         private Long petInfoId;
         @ExcelColumn(headerName = "견적 요청 일시")
@@ -36,6 +35,8 @@ public class PetInfoResponse {
         private String phoneNum;
         @ExcelColumn(headerName = "비고")
         private String comment;
+        @ExcelColumn(headerName = "상태")
+        private Status status;
     }
 
     @Data
