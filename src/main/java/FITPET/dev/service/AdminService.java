@@ -5,12 +5,16 @@ import FITPET.dev.common.enums.Company;
 import FITPET.dev.common.enums.Status;
 import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.common.utils.ExcelUtils;
+import FITPET.dev.converter.InquiryConverter;
 import FITPET.dev.converter.InsuranceConverter;
 import FITPET.dev.converter.PetInfoConverter;
+import FITPET.dev.dto.response.InquiryResponse;
 import FITPET.dev.dto.response.InsuranceResponse;
 import FITPET.dev.dto.response.PetInfoResponse;
+import FITPET.dev.entity.Inquiry;
 import FITPET.dev.entity.Insurance;
 import FITPET.dev.entity.PetInfo;
+import FITPET.dev.repository.InquiryRepository;
 import FITPET.dev.repository.InsuranceRepository;
 import FITPET.dev.repository.PetInfoRepository;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,6 +39,7 @@ public class AdminService {
 
     private final InsuranceRepository insuranceRepository;
     private final PetInfoRepository petInfoRepository;
+    private final InquiryRepository inquiryRepository;
     private final ExcelUtils excelUtils;
 
     /*
@@ -113,6 +118,18 @@ public class AdminService {
         // patch status
         petInfo.updateStatus(status);
         return petInfo.getStatus().getLabel();
+    }
+
+
+    /*
+     * 1:1 문의 내역 전체 조회
+     * @return
+     */
+    public InquiryResponse.InquiryListDto getInquiries(){
+        // 전체 1:1 문의 내역 조회
+        List<Inquiry> inquiryList = inquiryRepository.findAll();
+
+        return InquiryConverter.toInquiryListDto(inquiryList);
     }
 
 

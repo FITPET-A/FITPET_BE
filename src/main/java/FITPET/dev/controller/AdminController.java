@@ -72,4 +72,9 @@ public class AdminController {
         return ApiResponse.SuccessResponse(SuccessStatus.PATCH_PET_INFO_STATUS, adminService.patchPetInfoStatus(petInfoId, status));
     }
 
+    @GetMapping("/inquiry")
+    public ApiResponse getInquiries(){
+        return ApiResponse.SuccessResponse(SuccessStatus.GET_INQUIRY, adminService.getInquiries());
+    }
+
 }

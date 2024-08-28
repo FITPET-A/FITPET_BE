@@ -33,6 +33,7 @@ public enum ErrorStatus {
 
     // validation
     INVALID_PHONE_NUMBER(400,"유효하지 않은 전화번호 형식입니다."),
+    INVALID_EMAIL(400,"유효하지 않은 이메일 형식입니다."),
     INVALID_AGE(400,"유효하지 않은 나이 값입니다."),
     INVALID_AGE_OVER_10(400, "현재 펫보험은 만 10살 초과된 아이는 가입이 어렵습니다."),
     INVALID_DATE_FORMAT(400, "유효하지 않은 날짜 형식입니다."),
