@@ -58,10 +58,9 @@ public class AdminController {
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "startDate", required = false) String startDate,
             @RequestParam(name = "endDate", required = false) String endDate,
-            @RequestParam(name = "sort", required = false, defaultValue = "desc") String sort,
-            @RequestParam(name = "size", required = false, defaultValue = "20") int size
+            @RequestParam(name = "sort", required = false, defaultValue = "desc") String sort
     ){
-        return ApiResponse.SuccessResponse(SuccessStatus.GET_PETINFO_TABLE, adminService.getPetInfos(startDate, endDate, page, sort, size));
+        return ApiResponse.SuccessResponse(SuccessStatus.GET_PETINFO_TABLE, adminService.getPetInfos(startDate, endDate, page, sort));
     }
 
 }

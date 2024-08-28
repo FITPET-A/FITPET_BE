@@ -142,28 +142,29 @@ public class AdminService {
      * PetInfo를 조회
      * @param page, size, sort, startDate, endDate
      */
-    public Page<PetInfoResponse.PetInfoExcelDto> getPetInfos(String startDate, String endDate, int page, String sort, int size) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        LocalDateTime start = null;
-        LocalDateTime end = null;
-
-        try {
-            if (startDate != null) {
-                start = LocalDateTime.parse(startDate + " 00:00:00", formatter);
-            }
-            if (endDate != null) {
-                end = LocalDateTime.parse(endDate + " 23:59:59", formatter);
-            }
-        } catch (DateTimeParseException e) {
-            throw new GeneralException(ErrorStatus.INVALID_DATE_FORMAT);
-        }
+    public PetInfoResponse.PetInfoDetailPageDto getPetInfos(String startDate, String endDate, int page, String sort) {
+        LocalDateTime start = parseDate(startDate, " 00:00:00");
+        LocalDateTime end = parseDate(endDate, " 23:59:59");
 
         Sort sortOption = sort.equalsIgnoreCase("asc") ? Sort.by("createdAt").ascending() : Sort.by("createdAt").descending();
+        int size = 20;
         Pageable pageable = PageRequest.of(page, size, sortOption);
 
         Page<PetInfo> petInfoPage = petInfoRepository.findAllByCreatedAtBetweenAndSort(start, end, pageable);
 
-        return petInfoPage.map(PetInfoConverter::toPetInfoExcelDto);
+        return PetInfoConverter.toPetInfoDetailPageDto(petInfoPage);
     }
+
+    private LocalDateTime parseDate(String date, String timeSuffix) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        try {
+            return LocalDateTime.parse(date + timeSuffix, formatter);
+        } catch (DateTimeParseException e) {
+            throw new GeneralException(ErrorStatus.INVALID_DATE_FORMAT);
+        }
+    }
+
+
+
+
 }
