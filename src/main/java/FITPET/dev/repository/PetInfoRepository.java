@@ -27,4 +27,7 @@ public interface PetInfoRepository extends JpaRepository<PetInfo, Long> {
             "ORDER BY p.createdAt DESC ")
     List<PetInfo> findByCreatedAtBetweenAndStatus(LocalDateTime startDate, LocalDateTime endDate, Status status);
 
+    @Query("SELECT p FROM PetInfo p WHERE REPLACE(p.phoneNum, '-', '') LIKE %?1% OR p.name LIKE %?1%")
+    Page<PetInfo> findAllByPhoneNumOrPetName(String content, Pageable pageable);
+
 }
