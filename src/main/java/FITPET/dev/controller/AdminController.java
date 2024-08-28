@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
-
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/admin")
@@ -29,8 +28,7 @@ public class AdminController {
 
     // excel file DB에 저장
     @GetMapping("/init")
-    public ApiResponse initDatabase(){
-//        initService.initDatabase();
+    public ApiResponse initDatabase() {
         return ApiResponse.SuccessResponse(SuccessStatus.SUCCESS);
     }
 
@@ -38,7 +36,7 @@ public class AdminController {
     public ApiResponse getInsurances(
             @RequestParam(name = "company", required = false, defaultValue = "all") String company,
             @RequestParam(name = "page", required = false, defaultValue = "0") int page
-    ){
+    ) {
         return ApiResponse.SuccessResponse(SuccessStatus.GET_INSURANCE_TABLE, adminService.getInsurances(page, company));
     }
 
@@ -46,33 +44,32 @@ public class AdminController {
     public void downloadInsurances(
             HttpServletResponse servletResponse,
             @RequestParam(name = "company", required = false, defaultValue = "all") String company
-    ){
+    ) {
         adminService.downloadInsurances(servletResponse, company);
     }
 
     @GetMapping("/petinfo/downloads")
-    public void downloadPetInfos(HttpServletResponse servletResponse){
+    public void downloadPetInfos(HttpServletResponse servletResponse) {
         adminService.downloadPetInfos(servletResponse);
     }
 
-
-    //petinfo 조회
+    // petinfo 조회
     @GetMapping("/petinfo")
     public ApiResponse getPetInfos(
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "startDate", required = false) String startDate,
             @RequestParam(name = "endDate", required = false) String endDate,
             @RequestParam(name = "sort", required = false, defaultValue = "desc") String sort
-    ){
+    ) {
         return ApiResponse.SuccessResponse(SuccessStatus.GET_PETINFO_TABLE, adminService.getPetInfos(startDate, endDate, page, sort));
+    }
 
     @PatchMapping("/petinfo/status/{petInfoId}")
     public ApiResponse patchPetInfoStatus(
             @PathVariable(value = "petInfoId") Long petInfoId,
             @RequestParam(name = "status") Status status
-            ){
+    ) {
         return ApiResponse.SuccessResponse(SuccessStatus.PATCH_PET_INFO_STATUS, adminService.patchPetInfoStatus(petInfoId, status));
-
     }
 
 }
