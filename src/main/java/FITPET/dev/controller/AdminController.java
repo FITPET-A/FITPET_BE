@@ -5,6 +5,7 @@ import FITPET.dev.common.enums.Status;
 import FITPET.dev.common.response.ApiResponse;
 import FITPET.dev.service.AdminService;
 import FITPET.dev.service.InitService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,9 @@ public class AdminController {
         return ApiResponse.SuccessResponse(SuccessStatus.SUCCESS);
     }
 
+
     @GetMapping("/insurance")
+    @Operation(summary = "회사별 보험 정보 조회 API", description = "회사명을 Parameter으로 받아 각 회사의 보험 정보를 조회")
     public ApiResponse getInsurances(
             @RequestParam(name = "company", required = false, defaultValue = "all") String company,
             @RequestParam(name = "page", required = false, defaultValue = "0") int page
@@ -34,7 +37,9 @@ public class AdminController {
         return ApiResponse.SuccessResponse(SuccessStatus.GET_INSURANCE_TABLE, adminService.getInsurances(page, company));
     }
 
+
     @GetMapping("/insurance/downloads")
+    @Operation(summary = "회사별 보험 정보 엑셀 다운로드 API", description = "회사명을 Parameter으로 받아 각 회사의 보험 정보를 가진 엑셀을 다운로드")
     public void downloadInsurances(
             HttpServletResponse servletResponse,
             @RequestParam(name = "company", required = false, defaultValue = "all") String company
@@ -42,16 +47,9 @@ public class AdminController {
         adminService.downloadInsurances(servletResponse, company);
     }
 
-    @GetMapping("/petinfo/downloads")
-    public void downloadPetInfos(HttpServletResponse servletResponse,
-                                 @RequestParam(name = "startDate") String startDate,
-                                 @RequestParam(name = "endDate") String endDate,
-                                 @RequestParam(name = "status", required = false, defaultValue = "PENDING") Status status) {
-        adminService.downloadPetInfos(servletResponse, startDate, endDate, status);
-    }
 
-    // petinfo 조회
     @GetMapping("/petinfo")
+    @Operation(summary = "견적 요청 리스트 조회 API", description = "시작 날짜, 마지막 날짜, 상태값을 Parameter으로 받아 특정 기간 동안 생성된 견적 요청 정보를 조회")
     public ApiResponse getPetInfos(
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "startDate") String startDate,
@@ -61,7 +59,19 @@ public class AdminController {
         return ApiResponse.SuccessResponse(SuccessStatus.GET_PETINFO_TABLE, adminService.getPetInfos(startDate, endDate, page, status));
     }
 
+
+    @GetMapping("/petinfo/downloads")
+    @Operation(summary = "견적 요청 리스트 엑셀 다운로드 API", description = "시작 날짜, 마지막 날짜, 상태값을 Parameter으로 받아 특정 기간 동안 생성된 견적 요청 정보를 가진 엑셀을 다운로드")
+    public void downloadPetInfos(HttpServletResponse servletResponse,
+                                 @RequestParam(name = "startDate") String startDate,
+                                 @RequestParam(name = "endDate") String endDate,
+                                 @RequestParam(name = "status", required = false, defaultValue = "PENDING") Status status) {
+        adminService.downloadPetInfos(servletResponse, startDate, endDate, status);
+    }
+
+
     @PatchMapping("/petinfo/status/{petInfoId}")
+    @Operation(summary = "견적 요청 상태 변경 API", description = "특정 견적 요청 정보의 상태값을 변경")
     public ApiResponse patchPetInfoStatus(
             @PathVariable(value = "petInfoId") Long petInfoId,
             @RequestParam(name = "status") Status status
@@ -70,11 +80,13 @@ public class AdminController {
     }
 
     @GetMapping("/inquiry")
+    @Operation(summary = "1:1 문의 내역 전체 조회 API", description = "1:1 문의 내역 전체 조회")
     public ApiResponse getInquiries(){
         return ApiResponse.SuccessResponse(SuccessStatus.GET_INQUIRY, adminService.getInquiries());
     }
 
     @GetMapping("/proposal")
+    @Operation(summary = "제휴 제안 내역 전체 조회 API", description = "제휴 제안 내역 전체 조회")
     public ApiResponse getProposals(){
         return ApiResponse.SuccessResponse(SuccessStatus.GET_PROPOSAL, adminService.getProposals());
     }
