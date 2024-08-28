@@ -39,6 +39,9 @@ public class PetInfo {
     @Column(nullable = false)
     private Status status;
 
+    @Column(nullable = true, length = 500)
+    private String comment;
+
     public void updateStatus(Status status){
         this.status = status;
     }
