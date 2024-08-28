@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -35,6 +36,9 @@ public class InquiryControllerTest {
     @MockBean
     private InquiryService inquiryService;
 
+    @MockBean
+    private JpaMetamodelMappingContext jpaMappingContext;
+
     @Test
     @DisplayName("/inquiry 로 이름, 이메일, 전화번호, 문의 내역 정보를 보내 Inquiry 객체를 생성 후 저장한다.")
     public void createInquiry() throws Exception {
@@ -47,18 +51,18 @@ public class InquiryControllerTest {
                         "010-1234-1234", "1:1 문의 생성 테스트"));
 
         // when & then
-        mockMvc.perform(post("/inquiry")
+        mockMvc.perform(post("/api/v1/inquiry")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(header().string("location", "/inquiry"))
+                .andExpect(jsonPath("$.result").value("SUCCESS"))
                 .andExpect(jsonPath("$.statusCode").value("200"))
                 .andExpect(jsonPath("$.message").value("1:1 문의 전송에 성공했습니다."))
-                .andExpect(jsonPath("$.result.inquiryId").value(1))
-                .andExpect(jsonPath("$.result.name").value("견적 문의"))
-                .andExpect(jsonPath("$.result.email").value("test@naver.com"))
-                .andExpect(jsonPath("$.result.phoneNum").value("010-1234-1234"))
-                .andExpect(jsonPath("$.result.comment").value("1:1 문의 생성 테스트"))
+                .andExpect(jsonPath("$.data.inquiryId").value(1))
+                .andExpect(jsonPath("$.data.name").value("견적 문의"))
+                .andExpect(jsonPath("$.data.email").value("test@naver.com"))
+                .andExpect(jsonPath("$.data.phoneNum").value("010-1234-1234"))
+                .andExpect(jsonPath("$.data.comment").value("1:1 문의 생성 테스트"))
                 .andDo(document("post-inquiry",
                         requestFields(
                                 fieldWithPath("name").description("문의자 성명"),
@@ -67,15 +71,17 @@ public class InquiryControllerTest {
                                 fieldWithPath("comment").description("문의 내용")
                         ),
                         responseFields(
+                                fieldWithPath("result").description("결과 성공 여부"),
                                 fieldWithPath("statusCode").description("상태 코드"),
                                 fieldWithPath("message").description("결과 메시지"),
-                                fieldWithPath("result.inquiryId").description("생성된 문의의 ID"),
-                                fieldWithPath("result.name").description("생성된 문의의 문의자 이름"),
-                                fieldWithPath("result.email").description("생성된 문의의 답변을 받을 이메일 주소"),
-                                fieldWithPath("result.phoneNum").description("생성된 문의의 문의자 전화번호"),
-                                fieldWithPath("result.comment").description("생성된 문의의 문의 내용")
+                                fieldWithPath("data.createdAt").description("생성 시간"),
+                                fieldWithPath("data.updatedAt").description("변경 시간"),
+                                fieldWithPath("data.inquiryId").description("생성된 문의의 ID"),
+                                fieldWithPath("data.name").description("생성된 문의의 문의자 이름"),
+                                fieldWithPath("data.email").description("생성된 문의의 답변을 받을 이메일 주소"),
+                                fieldWithPath("data.phoneNum").description("생성된 문의의 문의자 전화번호"),
+                                fieldWithPath("data.comment").description("생성된 문의의 문의 내용")
                         )
                 ));
     }
 }
-      
