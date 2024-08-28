@@ -22,7 +22,11 @@ public enum SuccessStatus {
 
     // inquiry
     POST_INQUIRY(200, "1:1 문의 전송에 성공했습니다."),
-    GET_INQUIRY(200, "1:1 문의 내역 조회에 성공했습니다.");
+    GET_INQUIRY(200, "1:1 문의 내역 조회에 성공했습니다."),
+
+    // proposal
+    POST_PROPOSAL(200, "제휴제안 전송에 성공했습니다."),
+    GET_PROPOSAL(200, "제휴제안 내역 조회에 성공했습니다."),;
 
     private final int code;
     private final String message;

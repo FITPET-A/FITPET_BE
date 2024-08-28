@@ -8,15 +8,19 @@ import FITPET.dev.common.utils.ExcelUtils;
 import FITPET.dev.converter.InquiryConverter;
 import FITPET.dev.converter.InsuranceConverter;
 import FITPET.dev.converter.PetInfoConverter;
+import FITPET.dev.converter.ProposalConverter;
 import FITPET.dev.dto.response.InquiryResponse;
 import FITPET.dev.dto.response.InsuranceResponse;
 import FITPET.dev.dto.response.PetInfoResponse;
+import FITPET.dev.dto.response.ProposalResponse;
 import FITPET.dev.entity.Inquiry;
 import FITPET.dev.entity.Insurance;
 import FITPET.dev.entity.PetInfo;
+import FITPET.dev.entity.Proposal;
 import FITPET.dev.repository.InquiryRepository;
 import FITPET.dev.repository.InsuranceRepository;
 import FITPET.dev.repository.PetInfoRepository;
+import FITPET.dev.repository.ProposalRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -40,6 +44,7 @@ public class AdminService {
     private final InsuranceRepository insuranceRepository;
     private final PetInfoRepository petInfoRepository;
     private final InquiryRepository inquiryRepository;
+    private final ProposalRepository proposalRepository;
     private final ExcelUtils excelUtils;
 
     /*
@@ -130,6 +135,19 @@ public class AdminService {
         List<Inquiry> inquiryList = inquiryRepository.findAll();
 
         return InquiryConverter.toInquiryListDto(inquiryList);
+    }
+
+
+    /*
+     * 제휴문의 내역 전체 조회
+     * @return
+     */
+    public ProposalResponse.ProposalListDto getProposals(){
+
+        // 전체 제휴문의 내역 조회
+        List<Proposal> proposalList = proposalRepository.findAll();
+
+        return ProposalConverter.toProposalListDto(proposalList);
     }
 
 
