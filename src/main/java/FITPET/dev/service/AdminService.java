@@ -236,4 +236,24 @@ public class AdminService {
                 .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_PET_INFO));
     }
 
+
+    /*
+     * PetInfo 검색
+     * @param phoneNum, petName, page
+     */
+    public PetInfoResponse.PetInfoDetailPageDto searchPetInfos(String content, int page) {
+        int size = 20;
+        Pageable pageable = PageRequest.of(page, size);
+
+        // '-' 제거
+        String chagnedContent = content != null ? content.replaceAll("-", "") : null;
+        Page<PetInfo> petInfoPage = petInfoRepository.findAllByPhoneNumOrPetName(chagnedContent, pageable);
+
+
+        return PetInfoConverter.toPetInfoDetailPageDto(petInfoPage);
+    }
+
+
 }
+
+

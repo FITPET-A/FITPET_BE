@@ -90,4 +90,13 @@ public class AdminController {
     public ApiResponse getProposals(){
         return ApiResponse.SuccessResponse(SuccessStatus.GET_PROPOSAL, adminService.getProposals());
     }
+
+    // 전화번호와 펫 이름으로 PetInfo 검색
+    @GetMapping("/petinfo/search")
+    public ApiResponse searchPetInfos(
+            @RequestParam(name = "content", required = false) String content,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page
+    ) {
+        return ApiResponse.SuccessResponse(SuccessStatus.SEARCH_PET_INFO, adminService.searchPetInfos(content, page));
+    }
 }

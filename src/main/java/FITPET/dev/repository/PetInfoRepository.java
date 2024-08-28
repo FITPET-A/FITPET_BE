@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import org.springframework.data.repository.query.Param;
 
 public interface PetInfoRepository extends JpaRepository<PetInfo, Long> {
 
@@ -25,4 +26,5 @@ public interface PetInfoRepository extends JpaRepository<PetInfo, Long> {
             "AND (:status IS NULL OR p.status = :status) " +
             "ORDER BY p.createdAt DESC ")
     List<PetInfo> findByCreatedAtBetweenAndStatus(LocalDateTime startDate, LocalDateTime endDate, Status status);
+
 }
