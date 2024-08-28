@@ -1,7 +1,7 @@
 package FITPET.dev.common.utils;
 
 import FITPET.dev.common.annotation.ExcelColumn;
-import FITPET.dev.common.basecode.ErrorStatus;
+import FITPET.dev.common.status.ErrorStatus;
 import FITPET.dev.common.enums.PetType;
 import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.dto.response.InsuranceResponse;
@@ -54,10 +54,10 @@ public class ExcelUtils implements ExcelUtilFactory {
                 Sheet sheet = workbook.createSheet(companyName + "_" + petType.toString());
 
                 // 엑셀 Header 생성
-                createHeaderRow(sheet, companyData);
+                createHeaderRow(sheet, petData);
 
                 // 헤더 아래에 들어갈 내용을 그림
-                createInsurancesBody(companyData, sheet);
+                createInsurancesBody(petData, sheet);
             });
 
         });

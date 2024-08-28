@@ -1,6 +1,6 @@
 package FITPET.dev.common.exception;
 
-import FITPET.dev.common.basecode.ErrorStatus;
+import FITPET.dev.common.status.ErrorStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

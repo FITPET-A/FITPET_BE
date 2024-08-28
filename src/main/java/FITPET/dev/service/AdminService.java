@@ -1,6 +1,6 @@
 package FITPET.dev.service;
 
-import FITPET.dev.common.basecode.ErrorStatus;
+import FITPET.dev.common.status.ErrorStatus;
 import FITPET.dev.common.enums.Company;
 import FITPET.dev.common.enums.Status;
 import FITPET.dev.common.exception.GeneralException;
@@ -132,7 +132,7 @@ public class AdminService {
      */
     public InquiryResponse.InquiryListDto getInquiries(){
         // 전체 1:1 문의 내역 조회
-        List<Inquiry> inquiryList = inquiryRepository.findAll();
+        List<Inquiry> inquiryList = inquiryRepository.findAllByOrderByCreatedAtAsc();
 
         return InquiryConverter.toInquiryListDto(inquiryList);
     }
@@ -145,7 +145,7 @@ public class AdminService {
     public ProposalResponse.ProposalListDto getProposals(){
 
         // 전체 제휴문의 내역 조회
-        List<Proposal> proposalList = proposalRepository.findAll();
+        List<Proposal> proposalList = proposalRepository.findAllByOrderByCreatedAtAsc();
 
         return ProposalConverter.toProposalListDto(proposalList);
     }

@@ -14,6 +14,7 @@ public class ProposalResponse {
     @AllArgsConstructor
     public static class ProposalDto {
         private Long proposalId;
+        private String createdAt;
         private String name;
         private String email;
         private String phoneNum;

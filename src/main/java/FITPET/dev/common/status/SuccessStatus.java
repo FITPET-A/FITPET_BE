@@ -1,4 +1,4 @@
-package FITPET.dev.common.basecode;
+package FITPET.dev.common.status;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,8 +14,7 @@ public enum SuccessStatus {
 
     // pet
     GET_DETAILTYPE_LIST(200, "상세품종명 리스트 조회에 성공했습니다."),
-    GET_PETINFO_TABLE(200, "펫 정보 조회에 성공했습니다."),
-
+    GET_PETINFO_TABLE(200, "견적서 요청 내역 조회에 성공했습니다."),
 
     // petinfo
     PATCH_PET_INFO_STATUS(200, "견적서 상태 변경에 성공했습니다."),

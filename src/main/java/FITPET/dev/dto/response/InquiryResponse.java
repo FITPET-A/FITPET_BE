@@ -14,6 +14,7 @@ public class InquiryResponse {
     @AllArgsConstructor
     public static class InquiryDto {
         private Long inquiryId;
+        private String createdAt;
         private String name;
         private String email;
         private String phoneNum;

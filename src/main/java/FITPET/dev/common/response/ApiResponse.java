@@ -1,7 +1,7 @@
 package FITPET.dev.common.response;
 
-import FITPET.dev.common.basecode.ErrorStatus;
-import FITPET.dev.common.basecode.SuccessStatus;
+import FITPET.dev.common.status.ErrorStatus;
+import FITPET.dev.common.status.SuccessStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;

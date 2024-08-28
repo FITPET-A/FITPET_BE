@@ -1,6 +1,6 @@
 package FITPET.dev.controller;
 
-import FITPET.dev.common.basecode.SuccessStatus;
+import FITPET.dev.common.status.SuccessStatus;
 import FITPET.dev.common.response.ApiResponse;
 import FITPET.dev.service.InsuranceService;
 import lombok.AllArgsConstructor;
