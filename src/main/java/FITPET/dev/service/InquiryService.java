@@ -1,6 +1,6 @@
 package FITPET.dev.service;
 
-import FITPET.dev.common.basecode.ErrorStatus;
+import FITPET.dev.common.status.ErrorStatus;
 import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.converter.InquiryConverter;
 import FITPET.dev.dto.request.InquiryRequest;

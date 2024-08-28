@@ -1,4 +1,4 @@
-package FITPET.dev.common.basecode;
+package FITPET.dev.common.status;
 
 
 import lombok.AllArgsConstructor;

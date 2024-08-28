@@ -1,7 +1,7 @@
 package FITPET.dev.common.utils;
 
 import FITPET.dev.common.annotation.ExcelColumn;
-import FITPET.dev.common.basecode.ErrorStatus;
+import FITPET.dev.common.status.ErrorStatus;
 import FITPET.dev.common.enums.PetType;
 import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.dto.response.InsuranceResponse;

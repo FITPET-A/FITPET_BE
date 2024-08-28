@@ -1,6 +1,6 @@
 package FITPET.dev.common.enums;
 
-import FITPET.dev.common.basecode.ErrorStatus;
+import FITPET.dev.common.status.ErrorStatus;
 import FITPET.dev.common.exception.GeneralException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

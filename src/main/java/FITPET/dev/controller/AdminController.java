@@ -1,18 +1,12 @@
 package FITPET.dev.controller;
 
-import FITPET.dev.common.basecode.SuccessStatus;
+import FITPET.dev.common.status.SuccessStatus;
 import FITPET.dev.common.enums.Status;
 import FITPET.dev.common.response.ApiResponse;
-import FITPET.dev.dto.response.PetInfoResponse;
-import FITPET.dev.dto.response.PetInfoResponse.PetInfoExcelDto;
 import FITPET.dev.service.AdminService;
 import FITPET.dev.service.InitService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

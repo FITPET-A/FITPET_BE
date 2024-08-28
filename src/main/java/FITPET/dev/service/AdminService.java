@@ -1,6 +1,6 @@
 package FITPET.dev.service;
 
-import FITPET.dev.common.basecode.ErrorStatus;
+import FITPET.dev.common.status.ErrorStatus;
 import FITPET.dev.common.enums.Company;
 import FITPET.dev.common.enums.Status;
 import FITPET.dev.common.exception.GeneralException;
