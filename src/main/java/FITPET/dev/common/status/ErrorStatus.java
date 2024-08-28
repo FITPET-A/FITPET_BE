@@ -32,6 +32,7 @@ public enum ErrorStatus {
     // insurance
     INVALID_COMPANY(400, "잘못된 회사명입니다."),
 
+
     // validation
     INVALID_PHONE_NUMBER(400,"유효하지 않은 전화번호 형식입니다."),
     INVALID_EMAIL(400,"유효하지 않은 이메일 형식입니다."),
@@ -53,6 +54,9 @@ public enum ErrorStatus {
     // pet
     NOT_EXIST_PET(404, "존재하지 않는 품종입니다."),
     NOT_EXIST_PET_INFO(404, "존재하지 않는 펫 정보입니다."),
+
+    // insurance
+    NOT_EXIST_INSURANCE(404, "존재하지 않는 보험 정보입니다."),
 
     /**
      * 500

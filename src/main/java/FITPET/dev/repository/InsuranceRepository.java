@@ -2,6 +2,7 @@ package FITPET.dev.repository;
 
 import FITPET.dev.common.enums.*;
 import FITPET.dev.entity.Insurance;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -47,5 +48,9 @@ public interface InsuranceRepository extends JpaRepository<Insurance, Long> {
             "CASE WHEN i.premium > 0 THEN 0 ELSE 1 END ASC, " +
             "i.premium ASC")
     List<Insurance> findAll();
+
+    Optional<Insurance> findByInsuranceId(Long insuranceId);
+
+
 }
 

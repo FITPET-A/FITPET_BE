@@ -1,6 +1,8 @@
 package FITPET.dev.entity;
 
+import FITPET.dev.common.base.BaseEntity;
 import FITPET.dev.common.enums.*;
+import com.fasterxml.jackson.databind.ser.Serializers.Base;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,7 +11,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Insurance {
+public class Insurance extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,5 +63,9 @@ public class Insurance {
                 +"/deductible="+deductible
                 +"/compensation="+compensation
                 +"/premium="+premium;
+    }
+
+    public void updatepremium(int premium){
+        this.premium = premium;
     }
 }
