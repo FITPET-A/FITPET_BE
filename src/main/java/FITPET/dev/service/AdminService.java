@@ -2,6 +2,7 @@ package FITPET.dev.service;
 
 import FITPET.dev.common.basecode.ErrorStatus;
 import FITPET.dev.common.enums.Company;
+import FITPET.dev.common.enums.Status;
 import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.common.utils.ExcelUtils;
 import FITPET.dev.converter.InsuranceConverter;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -91,6 +93,29 @@ public class AdminService {
     }
 
 
+    /*
+     * 견적 요청 상태 변경
+     * @param petInfoId
+     * @param status
+     * @return
+     */
+    @Transactional
+    public String patchPetInfoStatus(Long petInfoId, Status status){
+
+        // 견적서 단일 조회
+        PetInfo petInfo = findPetInfoById(petInfoId);
+
+        // validate status
+        Status currentStatus = petInfo.getStatus();
+        if (currentStatus.getIndex() > status.getIndex())
+            throw new GeneralException(ErrorStatus.INVALID_PATCH_PERIOR_STATUS);
+
+        // patch status
+        petInfo.updateStatus(status);
+        return petInfo.getStatus().getLabel();
+    }
+
+
     private Page<Insurance> getInsurancePageByCompany(String companyStr, Pageable pageable) {
 
         if (companyStr.equals("all")) {
@@ -138,6 +163,7 @@ public class AdminService {
                 .orElseThrow(() -> new GeneralException(ErrorStatus.INVALID_COMPANY));
     }
 
+
     /*
      * PetInfo를 조회
      * @param page, size, sort, startDate, endDate
@@ -168,3 +194,11 @@ public class AdminService {
 
 
 }
+
+    private PetInfo findPetInfoById(Long petInfoId){
+        return petInfoRepository.findById(petInfoId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_PET_INFO));
+    }
+
+}
+

@@ -3,6 +3,7 @@ package FITPET.dev.dto.response;
 import FITPET.dev.common.annotation.ExcelColumn;
 import FITPET.dev.common.annotation.ExcelFile;
 import java.util.List;
+import FITPET.dev.common.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +19,7 @@ public class PetInfoResponse {
     @AllArgsConstructor
     @ExcelFile
     public static class PetInfoExcelDto {
+        private Status status;
         @ExcelColumn(headerName = "견적서Id")
         private Long petInfoId;
         @ExcelColumn(headerName = "견적 요청 일시")

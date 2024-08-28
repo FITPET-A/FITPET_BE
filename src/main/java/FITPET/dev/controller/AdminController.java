@@ -1,6 +1,7 @@
 package FITPET.dev.controller;
 
 import FITPET.dev.common.basecode.SuccessStatus;
+import FITPET.dev.common.enums.Status;
 import FITPET.dev.common.response.ApiResponse;
 import FITPET.dev.dto.response.PetInfoResponse;
 import FITPET.dev.dto.response.PetInfoResponse.PetInfoExcelDto;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @AllArgsConstructor
@@ -52,6 +55,7 @@ public class AdminController {
         adminService.downloadPetInfos(servletResponse);
     }
 
+
     //petinfo 조회
     @GetMapping("/petinfo")
     public ApiResponse getPetInfos(
@@ -61,6 +65,14 @@ public class AdminController {
             @RequestParam(name = "sort", required = false, defaultValue = "desc") String sort
     ){
         return ApiResponse.SuccessResponse(SuccessStatus.GET_PETINFO_TABLE, adminService.getPetInfos(startDate, endDate, page, sort));
+
+    @PatchMapping("/petinfo/status/{petInfoId}")
+    public ApiResponse patchPetInfoStatus(
+            @PathVariable(value = "petInfoId") Long petInfoId,
+            @RequestParam(name = "status") Status status
+            ){
+        return ApiResponse.SuccessResponse(SuccessStatus.PATCH_PET_INFO_STATUS, adminService.patchPetInfoStatus(petInfoId, status));
+
     }
 
 }
