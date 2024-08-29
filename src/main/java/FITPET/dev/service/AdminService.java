@@ -185,6 +185,7 @@ public class AdminService {
      * @param inquiryStatus
      * @return
      */
+    @Transactional
     public InquiryResponse.InquiryDto patchInquiryStatus(Long inquiryId, InquiryStatus inquiryStatus) {
 
         // 1:1 문의 단일 조회
@@ -317,18 +318,34 @@ public class AdminService {
      * @param insuracneId
      * @param premium
      */
-    public void updateInsurance(Long insuranceId, int premium){
-        Insurance insurance = insuranceRepository.findByInsuranceId(insuranceId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_INSURANCE));
+    @Transactional
+    public InsuranceResponse.InsuranceDetailDto updateInsurancePremium(Long insuranceId, int premium){
+        // 보험 객체 조회
+        Insurance insurance = findInsuranceById(insuranceId);
 
+        // 기존 보험료 저장
         int oldPremium = insurance.getPremium();
+
+        // 보험료 업데이트
         insurance.updatepremium(premium);
 
-        InsuranceHistory history = InsuranceHistoryConverter.createHistory(insurance, oldPremium, premium);
+        // 보험 정보 수정 이력 저장
+        saveInsuranceHistory(insurance, oldPremium, premium);
 
-        insuranceRepository.save(insurance);
+        return InsuranceConverter.toInsuranceDetailDto(insurance);
+    }
+
+    private void saveInsuranceHistory(Insurance insurance, int oldPremium, int newPremium) {
+        // 보험 수정 이력 저장
+        InsuranceHistory history = InsuranceHistoryConverter.createHistory(insurance, oldPremium, newPremium);
         insuranceHistoryRepository.save(history);
     }
+
+    private Insurance findInsuranceById(Long insuranceId){
+        return insuranceRepository.findByInsuranceId(insuranceId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_INSURANCE));
+    }
+
 
     /*
      * 보험료 히스토리 조회
