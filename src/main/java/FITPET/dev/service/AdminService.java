@@ -54,6 +54,10 @@ public class AdminService {
     private final InsuranceHistoryRepository insuranceHistoryRepository;
     private final ExcelUtils excelUtils;
 
+    // 최소, 최대 조회 기간
+    private final LocalDateTime minDateTime = LocalDateTime.of(2000, 1, 1, 0, 0);
+    private final LocalDateTime maxDateTime = LocalDateTime.of(3999, 12, 31, 23, 59, 59);
+
     /*
      * 회사별 보험 테이블 조회
      * @param page
@@ -121,8 +125,8 @@ public class AdminService {
     public void downloadPetInfos(HttpServletResponse servletResponse,
                                  String startDate, String endDate, PetInfoStatus petInfoStatus) {
         // 날짜 형식 변경
-        LocalDateTime start = parseDate(startDate, " 00:00:00");
-        LocalDateTime end = parseDate(endDate, " 23:59:59");
+        LocalDateTime start = (startDate != null) ? parseDate(startDate, " 00:00:00") : minDateTime;
+        LocalDateTime end = (endDate != null) ? parseDate(endDate, " 23:59:59") : maxDateTime;
 
         // 견적서 요청 리스트 조회
         List<PetInfo> petInfoList = petInfoRepository.findByCreatedAtBetweenAndStatus(start, end, petInfoStatus);
@@ -167,9 +171,6 @@ public class AdminService {
      * @return
      */
     public InquiryResponse.InquiryListDto getInquiries(String startDate, String endDate, InquiryStatus inquiryStatus){
-        // 최소, 최대 조회 기간
-        LocalDateTime minDateTime = LocalDateTime.of(2000, 1, 1, 0, 0);
-        LocalDateTime maxDateTime = LocalDateTime.of(3999, 12, 31, 23, 59, 59);
 
         // 날짜 형식 변경
         LocalDateTime start = (startDate != null) ? parseDate(startDate, " 00:00:00") : minDateTime;
