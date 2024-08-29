@@ -32,13 +32,6 @@ public interface InsuranceRepository extends JpaRepository<Insurance, Long> {
     Page<Insurance> findByCompany(@Param(("company")) Company company,
                                   Pageable pageable);
 
-    @Query("SELECT i FROM Insurance i " +
-            "WHERE i.company = :company " +
-            "ORDER BY " +
-            "CASE WHEN i.premium > 0 THEN 0 ELSE 1 END ASC, " +
-            "i.premium ASC")
-    List<Insurance> findByCompany(@Param(("company")) Company company);
-
     @Query("SELECT i FROM Insurance i ORDER BY " +
             "CASE WHEN i.premium > 0 THEN 0 ELSE 1 END ASC, " +
             "i.premium ASC")
@@ -52,5 +45,22 @@ public interface InsuranceRepository extends JpaRepository<Insurance, Long> {
     Optional<Insurance> findByInsuranceId(Long insuranceId);
 
 
+    @Query("SELECT i FROM Insurance i " +
+            "WHERE i.petType = :petType " +
+            "ORDER BY " +
+            "CASE WHEN i.premium > 0 THEN 0 ELSE 1 END ASC, " +
+            "i.premium ASC")
+    Page<Insurance> findByPetType(@Param(value = "petType") PetType petType,
+                                  Pageable pageable);
+
+    @Query("SELECT i FROM Insurance i " +
+            "WHERE i.company = :company " +
+            "AND i.petType = :petType " +
+            "ORDER BY " +
+            "CASE WHEN i.premium > 0 THEN 0 ELSE 1 END ASC, " +
+            "i.premium ASC")
+    Page<Insurance> findByCompanyAndPetType(@Param(value = "company") Company company,
+                                            @Param(value = "petType") PetType petType,
+                                            Pageable pageable);
 }
 
