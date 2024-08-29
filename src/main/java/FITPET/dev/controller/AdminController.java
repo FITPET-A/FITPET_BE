@@ -82,6 +82,14 @@ public class AdminController {
         return ApiResponse.SuccessResponse(SuccessStatus.ADD_INSURANCE_SUCCESS, adminService.addInsurance(request));
     }
 
+    // 보험 정보 삭제 API
+    @GetMapping("/insurance/delete/{insuranceId}")
+    @Operation(summary = "보험 정보 삭제 API", description = "해당 보험 id의 보험 정보를 삭제")
+    public ApiResponse deleteInsurance(@PathVariable Long insuranceId) {
+        adminService.deleteInsurance(insuranceId);
+        return ApiResponse.SuccessResponse(SuccessStatus.DELETE_INSURANCE_SUCCESS, null);
+    }
+
 
     /*
      * PetInfo

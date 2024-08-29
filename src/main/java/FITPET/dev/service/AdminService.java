@@ -353,6 +353,17 @@ public class AdminService {
         insuranceRepository.save(insurance);
         return InsuranceConverter.toInsuranceDetailDto(insurance);
     }
+
+    /*
+     * 보험 정보 삭제
+     * @param insuranceId
+     */
+    public void deleteInsurance(Long insuranceId) {
+        Insurance insurance = insuranceRepository.findByInsuranceId(insuranceId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_INSURANCE));
+        insurance.setDeletedAt();
+        insuranceRepository.save(insurance);
+    }
 }
 
 
