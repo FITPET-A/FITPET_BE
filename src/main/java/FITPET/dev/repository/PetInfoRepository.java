@@ -15,16 +15,16 @@ public interface PetInfoRepository extends JpaRepository<PetInfo, Long> {
     @Query("SELECT p FROM PetInfo p " +
             "WHERE (:startDate IS NULL OR p.createdAt >= :startDate) " +
             "AND (:endDate IS NULL OR p.createdAt <= :endDate) " +
-            "AND (:status IS NULL OR p.petInfoStatus = :status) " +
+            "AND (:status IS NULL OR p.status = :status) " +
             "ORDER BY p.createdAt DESC ")
-    Page<PetInfo> findByCreatedAtBetweenAndStatus(LocalDateTime startDate, LocalDateTime endDate, PetInfoStatus petInfoStatus, Pageable pageable);
+    Page<PetInfo> findByCreatedAtBetweenAndStatus(LocalDateTime startDate, LocalDateTime endDate, PetInfoStatus status, Pageable pageable);
 
     @Query("SELECT p FROM PetInfo p " +
             "WHERE (:startDate IS NULL OR p.createdAt >= :startDate) " +
             "AND (:endDate IS NULL OR p.createdAt <= :endDate) " +
-            "AND (:status IS NULL OR p.petInfoStatus = :status) " +
+            "AND (:status IS NULL OR p.status = :status) " +
             "ORDER BY p.createdAt DESC ")
-    List<PetInfo> findByCreatedAtBetweenAndStatus(LocalDateTime startDate, LocalDateTime endDate, PetInfoStatus petInfoStatus);
+    List<PetInfo> findByCreatedAtBetweenAndStatus(LocalDateTime startDate, LocalDateTime endDate, PetInfoStatus status);
 
     @Query("SELECT p FROM PetInfo p WHERE REPLACE(p.phoneNum, '-', '') LIKE %?1% OR p.name LIKE %?1%")
     Page<PetInfo> findAllByPhoneNumOrPetName(String content, Pageable pageable);
