@@ -1,6 +1,7 @@
 package FITPET.dev.entity;
 
 import FITPET.dev.common.base.BaseEntity;
+import FITPET.dev.common.enums.InquiryStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,4 +30,8 @@ public class Inquiry extends BaseEntity {
 
     @Column(nullable = false, length = 500)
     private String comment;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private InquiryStatus inquiryStatus;
 }

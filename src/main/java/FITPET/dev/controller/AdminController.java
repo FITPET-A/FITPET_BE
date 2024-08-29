@@ -1,7 +1,8 @@
 package FITPET.dev.controller;
 
+import FITPET.dev.common.enums.InquiryStatus;
 import FITPET.dev.common.status.SuccessStatus;
-import FITPET.dev.common.enums.Status;
+import FITPET.dev.common.enums.PetInfoStatus;
 import FITPET.dev.common.response.ApiResponse;
 import FITPET.dev.dto.response.InsuranceHistoryResponse;
 import FITPET.dev.service.AdminService;
@@ -58,9 +59,9 @@ public class AdminController {
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "startDate") String startDate,
             @RequestParam(name = "endDate") String endDate,
-            @RequestParam(name = "status", required = false, defaultValue = "PENDING") Status status
+            @RequestParam(name = "petInfoStatus", required = false, defaultValue = "PENDING") PetInfoStatus petInfoStatus
     ) {
-        return ApiResponse.SuccessResponse(SuccessStatus.GET_PETINFO_TABLE, adminService.getPetInfos(startDate, endDate, page, status));
+        return ApiResponse.SuccessResponse(SuccessStatus.GET_PETINFO_TABLE, adminService.getPetInfos(startDate, endDate, page, petInfoStatus));
     }
 
 
@@ -69,8 +70,8 @@ public class AdminController {
     public void downloadPetInfos(HttpServletResponse servletResponse,
                                  @RequestParam(name = "startDate") String startDate,
                                  @RequestParam(name = "endDate") String endDate,
-                                 @RequestParam(name = "status", required = false, defaultValue = "PENDING") Status status) {
-        adminService.downloadPetInfos(servletResponse, startDate, endDate, status);
+                                 @RequestParam(name = "status", required = false, defaultValue = "PENDING") PetInfoStatus petInfoStatus) {
+        adminService.downloadPetInfos(servletResponse, startDate, endDate, petInfoStatus);
     }
 
 
@@ -78,14 +79,18 @@ public class AdminController {
     @Operation(summary = "견적 요청 상태 변경 API", description = "특정 견적 요청 정보의 상태값을 변경")
     public ApiResponse patchPetInfoStatus(
             @PathVariable(value = "petInfoId") Long petInfoId,
-            @RequestParam(name = "status") Status status
+            @RequestParam(name = "petInfoStatus") PetInfoStatus petInfoStatus
     ) {
-        return ApiResponse.SuccessResponse(SuccessStatus.PATCH_PET_INFO_STATUS, adminService.patchPetInfoStatus(petInfoId, status));
+        return ApiResponse.SuccessResponse(SuccessStatus.PATCH_PET_INFO_STATUS, adminService.patchPetInfoStatus(petInfoId, petInfoStatus));
     }
 
     @GetMapping("/inquiry")
-    @Operation(summary = "1:1 문의 내역 전체 조회 API", description = "1:1 문의 내역 전체 조회")
-    public ApiResponse getInquiries(){
+    @Operation(summary = "1:1 문의 내역 조회 API", description = "시작 날짜, 마지막 날짜, 상태값을 Parameter으로 받아 특정 기간 동안 생성된 1:1 문의 내역 조회")
+    public ApiResponse getInquiries(
+            @RequestParam(name = "startDate") String startDate,
+            @RequestParam(name = "endDate") String endDate,
+            @RequestParam(name = "status", required = false, defaultValue = "all") InquiryStatus inquiryStatus
+    ){
         return ApiResponse.SuccessResponse(SuccessStatus.GET_INQUIRY, adminService.getInquiries());
     }
 
