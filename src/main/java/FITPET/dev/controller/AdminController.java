@@ -33,6 +33,9 @@ public class AdminController {
     }
 
 
+    /*
+     * Insurance
+     */
     @GetMapping("/insurance")
     @Operation(summary = "회사별 보험 정보 조회 API", description = "회사명을 Parameter으로 받아 각 회사의 보험 정보를 조회")
     public ApiResponse getInsurances(
@@ -52,7 +55,28 @@ public class AdminController {
         adminService.downloadInsurances(servletResponse, company);
     }
 
+    @PatchMapping("/insurance/{insuranceId}")
+    @Operation(summary = "보험료 수정 API", description = "특정 보험id의 보험료를 수정")
+    public ApiResponse updateInsurance(
+            @PathVariable(value = "insuranceId") Long insuranceId,
+            @RequestParam(name = "premium") int premium
+    ) {
+        return ApiResponse.SuccessResponse(SuccessStatus.UPDATE_INSURANCE_SUCCESS, adminService.updateInsurancePremium(insuranceId, premium));
+    }
 
+    @GetMapping("/insurance/premium/{insuranceId}")
+    @Operation(summary = "보험료 수정 내역 조회 API", description = "특정 보험id의 보험료 수정 내역을 조회")
+    public ApiResponse getPremiumHistory(
+            @PathVariable(name = "insuranceId") Long insuranceId
+    ) {
+        List<InsuranceHistoryResponse> response = adminService.getPremiumHistory(insuranceId);
+        return ApiResponse.SuccessResponse(SuccessStatus.GET_INSURANCE_PREMIUM_HISTORY, response);
+    }
+
+
+    /*
+     * PetInfo
+     */
     @GetMapping("/petinfo")
     @Operation(summary = "견적 요청 리스트 조회 API", description = "시작 날짜, 마지막 날짜, 상태값을 Parameter으로 받아 특정 기간 동안 생성된 견적 요청 정보를 조회")
     public ApiResponse getPetInfos(
@@ -84,6 +108,19 @@ public class AdminController {
         return ApiResponse.SuccessResponse(SuccessStatus.PATCH_PET_INFO_STATUS, adminService.patchPetInfoStatus(petInfoId, petInfoStatus));
     }
 
+
+    @GetMapping("/petinfo/search")
+    @Operation(summary = "견적서 검색 API", description = "전화번호와 펫 이름으로 견적서 검색")
+    public ApiResponse searchPetInfos(
+            @RequestParam(name = "content", required = false) String content,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page
+    ) {
+        return ApiResponse.SuccessResponse(SuccessStatus.SEARCH_PET_INFO, adminService.searchPetInfos(content, page));
+    }
+
+    /*
+     * Inquiry
+     */
     @GetMapping("/inquiry")
     @Operation(summary = "1:1 문의 내역 조회 API", description = "시작 날짜, 마지막 날짜, 상태값을 Parameter으로 받아 특정 기간 동안 생성된 1:1 문의 내역 조회")
     public ApiResponse getInquiries(
@@ -105,43 +142,13 @@ public class AdminController {
     }
 
 
+    /*
+     * Proposal
+     */
     @GetMapping("/proposal")
     @Operation(summary = "제휴 제안 내역 전체 조회 API", description = "제휴 제안 내역 전체 조회")
     public ApiResponse getProposals(){
         return ApiResponse.SuccessResponse(SuccessStatus.GET_PROPOSAL, adminService.getProposals());
     }
-
-    // 전화번호와 펫 이름으로 PetInfo 검색
-    @GetMapping("/petinfo/search")
-    @Operation(summary = "견적서 검색 API", description = "전화번호와 펫 이름으로 견적서 검색")
-    public ApiResponse searchPetInfos(
-            @RequestParam(name = "content", required = false) String content,
-            @RequestParam(name = "page", required = false, defaultValue = "0") int page
-    ) {
-        return ApiResponse.SuccessResponse(SuccessStatus.SEARCH_PET_INFO, adminService.searchPetInfos(content, page));
-    }
-
-    //보험료 수정
-    @PatchMapping("/insurance/{insuranceId}")
-    @Operation(summary = "보험료 수정 API", description = "특정 보험id의 보험료를 수정")
-    public ApiResponse updateInsurance(
-            @PathVariable(value = "insuranceId") Long insuranceId,
-            @RequestParam(name = "premium") int premium
-    ) {
-        adminService.updateInsurance(insuranceId, premium);
-        return ApiResponse.SuccessResponse(SuccessStatus.UPDATE_INSURANCE_SUCCESS);
-    }
-
-    //보험료 히스토리 조회
-    @GetMapping("/insurance/premium/{insuranceId}")
-    @Operation(summary = "보험료 수정 내역 조회 API", description = "특정 보험id의 보험료 수정 내역을 조회")
-    public ApiResponse getPremiumHistory(
-            @PathVariable(name = "insuranceId") Long insuranceId
-    ) {
-        List<InsuranceHistoryResponse> response = adminService.getPremiumHistory(insuranceId);
-        return ApiResponse.SuccessResponse(SuccessStatus.GET_INSURANCE_PREMIUM_HISTORY, response);
-    }
-
-
 
 }
