@@ -360,14 +360,13 @@ public class AdminService {
      * 보험 정보 삭제
      * @param insuranceId
      */
+    @Transactional
     public void deleteInsurance(Long insuranceId) {
         Insurance insurance = findInsuranceById(insuranceId);
         if (insurance.getDeletedAt() != null) {
             throw new GeneralException(ErrorStatus.ALREADY_DELETED_INSURANCE);
         }
         insurance.setDeletedAt();
-
-        insuranceRepository.save(insurance);
     }
 
     /*
