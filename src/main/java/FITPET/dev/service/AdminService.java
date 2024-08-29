@@ -362,6 +362,11 @@ public class AdminService {
      */
     public void deleteInsurance(Long insuranceId) {
         Insurance insurance = findInsuranceById(insuranceId);
+        if (insurance.getDeletedAt() != null) {
+            throw new GeneralException(ErrorStatus.ALREADY_DELETED_INSURANCE);
+        }
+        insurance.setDeletedAt();
+
         insuranceRepository.save(insurance);
     }
 
@@ -373,6 +378,8 @@ public class AdminService {
         Page<Insurance> insurancePage = insuranceRepository.findDeleted(pageable);
         return InsuranceConverter.toInsuranceDetailPageDto(insurancePage);
     }
+
+
 }
 
 
