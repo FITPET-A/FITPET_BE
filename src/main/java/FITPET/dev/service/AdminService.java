@@ -1,8 +1,9 @@
 package FITPET.dev.service;
 
+import FITPET.dev.common.enums.InquiryStatus;
 import FITPET.dev.common.status.ErrorStatus;
 import FITPET.dev.common.enums.Company;
-import FITPET.dev.common.enums.Status;
+import FITPET.dev.common.enums.PetInfoStatus;
 import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.common.utils.ExcelUtils;
 import FITPET.dev.converter.InquiryConverter;
@@ -26,6 +27,8 @@ import FITPET.dev.repository.InsuranceRepository;
 import FITPET.dev.repository.PetInfoRepository;
 import FITPET.dev.repository.ProposalRepository;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -33,7 +36,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,6 +53,10 @@ public class AdminService {
     private final ProposalRepository proposalRepository;
     private final InsuranceHistoryRepository insuranceHistoryRepository;
     private final ExcelUtils excelUtils;
+
+    // 최소, 최대 조회 기간
+    private final LocalDateTime minDateTime = LocalDateTime.of(2000, 1, 1, 0, 0);
+    private final LocalDateTime maxDateTime = LocalDateTime.of(3999, 12, 31, 23, 59, 59);
 
     /*
      * 회사별 보험 테이블 조회
@@ -92,9 +98,13 @@ public class AdminService {
 
     /*
      * 견적 요청 내역 조회 (최신순)
-     * @param page, size, startDate, endDate
+     * @param startDate
+     * @param endDate
+     * @param page
+     * @param petInfoStatus
+     * @return
      */
-    public PetInfoResponse.PetInfoDetailPageDto getPetInfos(String startDate, String endDate, int page, Status status) {
+    public PetInfoResponse.PetInfoDetailPageDto getPetInfos(String startDate, String endDate, int page, PetInfoStatus petInfoStatus) {
 
         // 날짜 형식 변경
         LocalDateTime start = parseDate(startDate, " 00:00:00");
@@ -102,7 +112,7 @@ public class AdminService {
 
         // 견적 요청 리스트를 페이지 단위로 조회
         Pageable pageable = PageRequest.of(page, 20);
-        Page<PetInfo> petInfoPage = petInfoRepository.findByCreatedAtBetweenAndStatus(start, end, status, pageable);
+        Page<PetInfo> petInfoPage = petInfoRepository.findByCreatedAtBetweenAndStatus(start, end, petInfoStatus, pageable);
 
         return PetInfoConverter.toPetInfoDetailPageDto(petInfoPage);
     }
@@ -113,13 +123,13 @@ public class AdminService {
      * @param servletResponse
      */
     public void downloadPetInfos(HttpServletResponse servletResponse,
-                                 String startDate, String endDate, Status status) {
+                                 String startDate, String endDate, PetInfoStatus petInfoStatus) {
         // 날짜 형식 변경
-        LocalDateTime start = parseDate(startDate, " 00:00:00");
-        LocalDateTime end = parseDate(endDate, " 23:59:59");
+        LocalDateTime start = (startDate != null) ? parseDate(startDate, " 00:00:00") : minDateTime;
+        LocalDateTime end = (endDate != null) ? parseDate(endDate, " 23:59:59") : maxDateTime;
 
         // 견적서 요청 리스트 조회
-        List<PetInfo> petInfoList = petInfoRepository.findByCreatedAtBetweenAndStatus(start, end, status);
+        List<PetInfo> petInfoList = petInfoRepository.findByCreatedAtBetweenAndStatus(start, end, petInfoStatus);
 
         // excelDto로 타입 변경
         List<PetInfoResponse.PetInfoExcelDto> petInfoExcelDtoList = convertToPetInfoExcelDtoList(
@@ -133,35 +143,66 @@ public class AdminService {
     /*
      * 견적 요청 상태 변경
      * @param petInfoId
-     * @param status
+     * @param petInfoStatus
      * @return
      */
     @Transactional
-    public String patchPetInfoStatus(Long petInfoId, Status status){
+    public PetInfoResponse.PetInfoDetailDto patchPetInfoStatus(Long petInfoId, PetInfoStatus petInfoStatus){
 
         // 견적서 단일 조회
         PetInfo petInfo = findPetInfoById(petInfoId);
 
         // validate status
-        Status currentStatus = petInfo.getStatus();
-        if (currentStatus.getIndex() > status.getIndex())
+        PetInfoStatus currentPetInfoStatus = petInfo.getStatus();
+        if (currentPetInfoStatus.getIndex() > petInfoStatus.getIndex())
             throw new GeneralException(ErrorStatus.INVALID_PATCH_PERIOR_STATUS);
 
         // patch status
-        petInfo.updateStatus(status);
-        return petInfo.getStatus().getLabel();
+        petInfo.updateStatus(petInfoStatus);
+        return PetInfoConverter.toPetInfoDetailDto(petInfo);
     }
 
 
     /*
-     * 1:1 문의 내역 전체 조회
+     * 1:1 문의 내역 조회
+     * @param startDate
+     * @param endDate
+     * @param inquiryStatus
      * @return
      */
-    public InquiryResponse.InquiryListDto getInquiries(){
-        // 전체 1:1 문의 내역 조회
-        List<Inquiry> inquiryList = inquiryRepository.findAllByOrderByCreatedAtDesc();
+    public InquiryResponse.InquiryListDto getInquiries(String startDate, String endDate, InquiryStatus inquiryStatus){
+
+        // 날짜 형식 변경
+        LocalDateTime start = (startDate != null) ? parseDate(startDate, " 00:00:00") : minDateTime;
+        LocalDateTime end = (endDate != null) ? parseDate(endDate, " 23:59:59") : maxDateTime;
+
+        // 문의 내역 조회
+        List<Inquiry> inquiryList = getInquiryListByStatusBetweenDate(start, end, inquiryStatus);
 
         return InquiryConverter.toInquiryListDto(inquiryList);
+    }
+
+
+    /*
+     * 1:1 문의 상태 변경
+     * @param inquiryId
+     * @param inquiryStatus
+     * @return
+     */
+    @Transactional
+    public InquiryResponse.InquiryDto patchInquiryStatus(Long inquiryId, InquiryStatus inquiryStatus) {
+
+        // 1:1 문의 단일 조회
+        Inquiry inquiry = findInquiryById(inquiryId);
+
+        // validate status
+        InquiryStatus currentInquiryStatus = inquiry.getStatus();
+        if (currentInquiryStatus.getIndex() > inquiryStatus.getIndex())
+            throw new GeneralException(ErrorStatus.INVALID_PATCH_PERIOR_STATUS);
+
+        // patch status
+        inquiry.updateStatus(inquiryStatus);
+        return InquiryConverter.toInquiryDto(inquiry);
     }
 
 
@@ -204,6 +245,18 @@ public class AdminService {
     }
 
 
+    private List<Inquiry> getInquiryListByStatusBetweenDate(LocalDateTime start, LocalDateTime end, InquiryStatus inquiryStatus){
+
+        if (inquiryStatus == null){
+            // 특정 기간동안 생성된 inquiry List 최신순 정렬 후 반환
+            return inquiryRepository.findByCreatedAtBetween(start, end);
+        } else {
+            // 특정 기간동안 생성된 status 정보가 일치하는 inquiry List 최신순 정렬 후 반환
+            return inquiryRepository.findByCreatedAtBetweenAndStatus(start, end, inquiryStatus);
+        }
+    }
+
+
     private List<InsuranceResponse.InsuranceExcelDto> convertToInsuranceExcelDtoList(
             List<Insurance> insuranceList) {
         return insuranceList.stream()
@@ -242,6 +295,12 @@ public class AdminService {
     }
 
 
+    private Inquiry findInquiryById(Long inquiryId) {
+        return inquiryRepository.findById(inquiryId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_INQUIRY));
+    }
+
+
     /*
      * 전화번호와 펫 이름으로 PetInfo 검색
      * @param content
@@ -254,7 +313,6 @@ public class AdminService {
         String chagnedContent = content != null ? content.replaceAll("-", "") : null;
         Page<PetInfo> petInfoPage = petInfoRepository.findAllByPhoneNumOrPetName(chagnedContent, pageable);
 
-
         return PetInfoConverter.toPetInfoDetailPageDto(petInfoPage);
     }
 
@@ -264,18 +322,34 @@ public class AdminService {
      * @param insuracneId
      * @param premium
      */
-    public void updateInsurance(Long insuranceId, int premium){
-        Insurance insurance = insuranceRepository.findByInsuranceId(insuranceId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_INSURANCE));
+    @Transactional
+    public InsuranceResponse.InsuranceDetailDto updateInsurancePremium(Long insuranceId, int premium){
+        // 보험 객체 조회
+        Insurance insurance = findInsuranceById(insuranceId);
 
+        // 기존 보험료 저장
         int oldPremium = insurance.getPremium();
+
+        // 보험료 업데이트
         insurance.updatepremium(premium);
 
-        InsuranceHistory history = InsuranceHistoryConverter.createHistory(insurance, oldPremium, premium);
+        // 보험 정보 수정 이력 저장
+        saveInsuranceHistory(insurance, oldPremium, premium);
 
-        insuranceRepository.save(insurance);
+        return InsuranceConverter.toInsuranceDetailDto(insurance);
+    }
+
+    private void saveInsuranceHistory(Insurance insurance, int oldPremium, int newPremium) {
+        // 보험 수정 이력 저장
+        InsuranceHistory history = InsuranceHistoryConverter.createHistory(insurance, oldPremium, newPremium);
         insuranceHistoryRepository.save(history);
     }
+
+    private Insurance findInsuranceById(Long insuranceId){
+        return insuranceRepository.findByInsuranceId(insuranceId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_INSURANCE));
+    }
+
 
     /*
      * 보험료 히스토리 조회
@@ -286,7 +360,6 @@ public class AdminService {
                 .findByInsurance_InsuranceIdOrderByCreatedAtDesc(insuranceId);
         return InsuranceHistoryConverter.toResponseList(histories);
     }
-
 }
 
 

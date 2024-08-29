@@ -4,10 +4,12 @@ import FITPET.dev.common.status.ErrorStatus;
 import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.converter.InquiryConverter;
 import FITPET.dev.dto.request.InquiryRequest;
+import FITPET.dev.dto.response.InquiryResponse;
 import FITPET.dev.entity.Inquiry;
 import FITPET.dev.repository.InquiryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.regex.Pattern;
 
@@ -23,7 +25,8 @@ public class InquiryService {
      * 1:1 문의 전송
      * @param inquiryDto
      */
-    public void postInquiry(InquiryRequest.InquiryDto inquiryDto){
+    @Transactional
+    public InquiryResponse.InquiryDto postInquiry(InquiryRequest.InquiryDto inquiryDto){
 
         // 패턴 및 유효성 검사
         validateEmail(inquiryDto.getEmail());
@@ -32,7 +35,7 @@ public class InquiryService {
         // inquiry 객체 생성 및 저장
         Inquiry inquiry = InquiryConverter.toInquiry(inquiryDto.getName(), inquiryDto.getEmail(),
                 inquiryDto.getPhoneNum(), inquiryDto.getComment());
-        inquiryRepository.save(inquiry);
+        return InquiryConverter.toInquiryDto(inquiryRepository.save(inquiry));
     }
 
     // 이메일 유효성 검사
@@ -40,7 +43,6 @@ public class InquiryService {
         if (!EMAIL_PATTERN.matcher(email).matches()){
             throw new GeneralException(ErrorStatus.INVALID_EMAIL);
         }
-
     }
 
     // 전화번호 유효성 검사

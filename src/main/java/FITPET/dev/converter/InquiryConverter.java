@@ -1,5 +1,6 @@
 package FITPET.dev.converter;
 
+import FITPET.dev.common.enums.InquiryStatus;
 import FITPET.dev.dto.response.InquiryResponse;
 import FITPET.dev.entity.Inquiry;
 
@@ -20,6 +21,7 @@ public class InquiryConverter {
                 .email(email)
                 .phoneNum(phoneNum)
                 .comment(comment)
+                .status(InquiryStatus.PENDING)
                 .build();
     }
 
@@ -31,6 +33,7 @@ public class InquiryConverter {
                 .email(inquiry.getEmail())
                 .phoneNum(inquiry.getPhoneNum())
                 .comment(inquiry.getComment())
+                .status(inquiry.getStatus().getLabel())
                 .build();
     }
 
