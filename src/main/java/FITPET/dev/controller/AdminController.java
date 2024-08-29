@@ -81,9 +81,9 @@ public class AdminController {
     @Operation(summary = "견적 요청 리스트 조회 API", description = "시작 날짜, 마지막 날짜, 상태값을 Parameter으로 받아 특정 기간 동안 생성된 견적 요청 정보를 조회")
     public ApiResponse getPetInfos(
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
-            @RequestParam(name = "startDate") String startDate,
-            @RequestParam(name = "endDate") String endDate,
-            @RequestParam(name = "petInfoStatus", required = false, defaultValue = "PENDING") PetInfoStatus petInfoStatus
+            @RequestParam(name = "startDate", required = false) String startDate,
+            @RequestParam(name = "endDate", required = false) String endDate,
+            @RequestParam(name = "status", required = false, defaultValue = "PENDING") PetInfoStatus petInfoStatus
     ) {
         return ApiResponse.SuccessResponse(SuccessStatus.GET_PETINFO_TABLE, adminService.getPetInfos(startDate, endDate, page, petInfoStatus));
     }
