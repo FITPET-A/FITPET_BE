@@ -1,5 +1,6 @@
 package FITPET.dev.dto.response;
 
+import FITPET.dev.common.enums.InquiryStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class InquiryResponse {
         private String email;
         private String phoneNum;
         private String comment;
+        private String status;
     }
 
     @Data

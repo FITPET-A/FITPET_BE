@@ -1,5 +1,6 @@
 package FITPET.dev.service;
 
+import FITPET.dev.common.enums.InquiryStatus;
 import FITPET.dev.common.status.ErrorStatus;
 import FITPET.dev.common.enums.Company;
 import FITPET.dev.common.enums.PetInfoStatus;
@@ -26,6 +27,8 @@ import FITPET.dev.repository.InsuranceRepository;
 import FITPET.dev.repository.PetInfoRepository;
 import FITPET.dev.repository.ProposalRepository;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -91,7 +94,11 @@ public class AdminService {
 
     /*
      * 견적 요청 내역 조회 (최신순)
-     * @param page, size, startDate, endDate
+     * @param startDate
+     * @param endDate
+     * @param page
+     * @param petInfoStatus
+     * @return
      */
     public PetInfoResponse.PetInfoDetailPageDto getPetInfos(String startDate, String endDate, int page, PetInfoStatus petInfoStatus) {
 
@@ -142,23 +149,31 @@ public class AdminService {
         PetInfo petInfo = findPetInfoById(petInfoId);
 
         // validate status
-        PetInfoStatus currentPetInfoStatus = petInfo.getPetInfoStatus();
+        PetInfoStatus currentPetInfoStatus = petInfo.getStatus();
         if (currentPetInfoStatus.getIndex() > petInfoStatus.getIndex())
             throw new GeneralException(ErrorStatus.INVALID_PATCH_PERIOR_STATUS);
 
         // patch status
         petInfo.updateStatus(petInfoStatus);
-        return petInfo.getPetInfoStatus().getLabel();
+        return petInfo.getStatus().getLabel();
     }
 
 
     /*
-     * 1:1 문의 내역 전체 조회
+     * 1:1 문의 내역 조회
+     * @param startDate
+     * @param endDate
+     * @param inquiryStatus
      * @return
      */
-    public InquiryResponse.InquiryListDto getInquiries(){
-        // 전체 1:1 문의 내역 조회
-        List<Inquiry> inquiryList = inquiryRepository.findAllByOrderByCreatedAtDesc();
+    public InquiryResponse.InquiryListDto getInquiries(String startDate, String endDate, InquiryStatus inquiryStatus){
+
+        // 날짜 형식 변경
+        LocalDateTime start = parseDate(startDate, " 00:00:00");
+        LocalDateTime end = parseDate(endDate, " 23:59:59");
+
+        // 문의 내역 조회
+        List<Inquiry> inquiryList = getInquiryListByStatusBetweenDate(start, end, inquiryStatus);
 
         return InquiryConverter.toInquiryListDto(inquiryList);
     }
@@ -199,6 +214,18 @@ public class AdminService {
             // company 정보가 일치하는 insurance List 반환
             Company company = getCompany(companyStr);
             return insuranceRepository.findByCompany(company);
+        }
+    }
+
+
+    private List<Inquiry> getInquiryListByStatusBetweenDate(LocalDateTime start, LocalDateTime end, InquiryStatus inquiryStatus){
+
+        if (inquiryStatus == null){
+            // 특정 기간동안 생성된 inquiry List 최신순 정렬 후 반환
+            return inquiryRepository.findByCreatedAtBetween(start, end);
+        } else {
+            // 특정 기간동안 생성된 status 정보가 일치하는 inquiry List 최신순 정렬 후 반환
+            return inquiryRepository.findByCreatedAtBetweenAndStatus(start, end, inquiryStatus);
         }
     }
 
@@ -252,7 +279,6 @@ public class AdminService {
         // '-' 제거
         String chagnedContent = content != null ? content.replaceAll("-", "") : null;
         Page<PetInfo> petInfoPage = petInfoRepository.findAllByPhoneNumOrPetName(chagnedContent, pageable);
-
 
         return PetInfoConverter.toPetInfoDetailPageDto(petInfoPage);
     }

@@ -23,7 +23,7 @@ public class PetInfoConverter {
                 .age(request.getAge())
                 .phoneNum(request.getPhoneNum())
                 .pet(pet)
-                .petInfoStatus(PetInfoStatus.PENDING)
+                .status(PetInfoStatus.PENDING)
                 .comment(request.getComment())
                 .build();
     }
@@ -32,7 +32,7 @@ public class PetInfoConverter {
         Pet pet = petInfo.getPet();
 
         return PetInfoResponse.PetInfoExcelDto.builder()
-                .petInfoStatus(petInfo.getPetInfoStatus())
+                .petInfoStatus(petInfo.getStatus())
                 .petInfoId(petInfo.getPetInfoId())
                 .name(petInfo.getName())
                 .age(petInfo.getAge())
@@ -57,7 +57,7 @@ public class PetInfoConverter {
                 .petType(pet.getPetType().toString())
                 .detailType(pet.getDetailType())
                 .comment(petInfo.getComment())
-                .status(petInfo.getPetInfoStatus().toString())
+                .status(petInfo.getStatus().toString())
                 .build();
     }
 

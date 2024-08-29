@@ -89,9 +89,9 @@ public class AdminController {
     public ApiResponse getInquiries(
             @RequestParam(name = "startDate") String startDate,
             @RequestParam(name = "endDate") String endDate,
-            @RequestParam(name = "status", required = false, defaultValue = "all") InquiryStatus inquiryStatus
+            @RequestParam(name = "status", required = false) InquiryStatus inquiryStatus
     ){
-        return ApiResponse.SuccessResponse(SuccessStatus.GET_INQUIRY, adminService.getInquiries());
+        return ApiResponse.SuccessResponse(SuccessStatus.GET_INQUIRY, adminService.getInquiries(startDate, endDate, inquiryStatus));
     }
 
     @GetMapping("/proposal")

@@ -34,13 +34,13 @@ public class PetInfo extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PetInfoStatus petInfoStatus;
+    private PetInfoStatus status;
 
     @Column(nullable = true, length = 500)
     private String comment;
 
-    public void updateStatus(PetInfoStatus petInfoStatus){
-        this.petInfoStatus = petInfoStatus;
+    public void updateStatus(PetInfoStatus status){
+        this.status = status;
     }
 
 }
