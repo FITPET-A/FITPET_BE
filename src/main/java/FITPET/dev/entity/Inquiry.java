@@ -34,4 +34,8 @@ public class Inquiry extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private InquiryStatus status;
+
+    public void updateStatus(InquiryStatus inquiryStatus) {
+        this.status = inquiryStatus;
+    }
 }

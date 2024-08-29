@@ -143,7 +143,7 @@ public class AdminService {
      * @return
      */
     @Transactional
-    public String patchPetInfoStatus(Long petInfoId, PetInfoStatus petInfoStatus){
+    public PetInfoResponse.PetInfoDetailDto patchPetInfoStatus(Long petInfoId, PetInfoStatus petInfoStatus){
 
         // 견적서 단일 조회
         PetInfo petInfo = findPetInfoById(petInfoId);
@@ -155,7 +155,7 @@ public class AdminService {
 
         // patch status
         petInfo.updateStatus(petInfoStatus);
-        return petInfo.getStatus().getLabel();
+        return PetInfoConverter.toPetInfoDetailDto(petInfo);
     }
 
 
@@ -176,6 +176,28 @@ public class AdminService {
         List<Inquiry> inquiryList = getInquiryListByStatusBetweenDate(start, end, inquiryStatus);
 
         return InquiryConverter.toInquiryListDto(inquiryList);
+    }
+
+
+    /*
+     * 1:1 문의 상태 변경
+     * @param inquiryId
+     * @param inquiryStatus
+     * @return
+     */
+    public InquiryResponse.InquiryDto patchInquiryStatus(Long inquiryId, InquiryStatus inquiryStatus) {
+
+        // 1:1 문의 단일 조회
+        Inquiry inquiry = findInquiryById(inquiryId);
+
+        // validate status
+        InquiryStatus currentInquiryStatus = inquiry.getStatus();
+        if (currentInquiryStatus.getIndex() > inquiryStatus.getIndex())
+            throw new GeneralException(ErrorStatus.INVALID_PATCH_PERIOR_STATUS);
+
+        // patch status
+        inquiry.updateStatus(inquiryStatus);
+        return InquiryConverter.toInquiryDto(inquiry);
     }
 
 
@@ -268,6 +290,12 @@ public class AdminService {
     }
 
 
+    private Inquiry findInquiryById(Long inquiryId) {
+        return inquiryRepository.findById(inquiryId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_INQUIRY));
+    }
+
+
     /*
      * 전화번호와 펫 이름으로 PetInfo 검색
      * @param content
@@ -311,7 +339,6 @@ public class AdminService {
                 .findByInsurance_InsuranceIdOrderByCreatedAtDesc(insuranceId);
         return InsuranceHistoryConverter.toResponseList(histories);
     }
-
 }
 
 

@@ -79,7 +79,7 @@ public class AdminController {
     @Operation(summary = "견적 요청 상태 변경 API", description = "특정 견적 요청 정보의 상태값을 변경")
     public ApiResponse patchPetInfoStatus(
             @PathVariable(value = "petInfoId") Long petInfoId,
-            @RequestParam(name = "petInfoStatus") PetInfoStatus petInfoStatus
+            @RequestParam(name = "status") PetInfoStatus petInfoStatus
     ) {
         return ApiResponse.SuccessResponse(SuccessStatus.PATCH_PET_INFO_STATUS, adminService.patchPetInfoStatus(petInfoId, petInfoStatus));
     }
@@ -93,6 +93,17 @@ public class AdminController {
     ){
         return ApiResponse.SuccessResponse(SuccessStatus.GET_INQUIRY, adminService.getInquiries(startDate, endDate, inquiryStatus));
     }
+
+
+    @PatchMapping("/inquiry/status/{inquiryId}")
+    @Operation(summary = "1:1 문의 상태 변경 API", description = "특정 1:1 문의 정보의 상태값을 변경")
+    public ApiResponse patchInquiryStatus(
+            @PathVariable(value = "inquiryId") Long inquiryId,
+            @RequestParam(name = "status") InquiryStatus inquiryStatus
+    ) {
+        return ApiResponse.SuccessResponse(SuccessStatus.PATCH_PET_INFO_STATUS, adminService.patchInquiryStatus(inquiryId, inquiryStatus));
+    }
+
 
     @GetMapping("/proposal")
     @Operation(summary = "제휴 제안 내역 전체 조회 API", description = "제휴 제안 내역 전체 조회")
