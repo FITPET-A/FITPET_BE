@@ -4,6 +4,7 @@ import FITPET.dev.common.base.BaseEntity;
 import FITPET.dev.common.enums.*;
 import com.fasterxml.jackson.databind.ser.Serializers.Base;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.*;
 
 @Entity
@@ -50,6 +51,9 @@ public class Insurance extends BaseEntity {
 
     @Column(nullable = true)
     private int premium; // 보험료
+
+    @Column(nullable = true)
+    private LocalDateTime deletedAt; // 삭제된 날짜
 
 
     @Override
