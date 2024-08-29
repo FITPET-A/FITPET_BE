@@ -20,7 +20,6 @@ public class InquiryController {
     @PostMapping("")
     @Operation(summary = "1:1 문의 전송 API", description = "이름, 이메일, 전화번호, 내용을 Parameter으로 받아 1:1 문의를 전송")
     public ApiResponse postInquiry(@RequestBody InquiryRequest.InquiryDto inquiryDto){
-        inquiryService.postInquiry(inquiryDto);
-        return ApiResponse.SuccessResponse(SuccessStatus.POST_INQUIRY);
+        return ApiResponse.SuccessResponse(SuccessStatus.POST_INQUIRY, inquiryService.postInquiry(inquiryDto));
     }
 }

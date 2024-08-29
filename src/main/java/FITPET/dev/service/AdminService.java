@@ -167,10 +167,13 @@ public class AdminService {
      * @return
      */
     public InquiryResponse.InquiryListDto getInquiries(String startDate, String endDate, InquiryStatus inquiryStatus){
+        // 최소, 최대 조회 기간
+        LocalDateTime minDateTime = LocalDateTime.of(2000, 1, 1, 0, 0);
+        LocalDateTime maxDateTime = LocalDateTime.of(3999, 12, 31, 23, 59, 59);
 
         // 날짜 형식 변경
-        LocalDateTime start = parseDate(startDate, " 00:00:00");
-        LocalDateTime end = parseDate(endDate, " 23:59:59");
+        LocalDateTime start = (startDate != null) ? parseDate(startDate, " 00:00:00") : minDateTime;
+        LocalDateTime end = (endDate != null) ? parseDate(endDate, " 23:59:59") : maxDateTime;
 
         // 문의 내역 조회
         List<Inquiry> inquiryList = getInquiryListByStatusBetweenDate(start, end, inquiryStatus);
