@@ -1,9 +1,8 @@
 package FITPET.dev.entity;
 
 import FITPET.dev.common.base.BaseEntity;
-import FITPET.dev.common.enums.Status;
+import FITPET.dev.common.enums.PetInfoStatus;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,13 +34,13 @@ public class PetInfo extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status;
+    private PetInfoStatus petInfoStatus;
 
     @Column(nullable = true, length = 500)
     private String comment;
 
-    public void updateStatus(Status status){
-        this.status = status;
+    public void updateStatus(PetInfoStatus petInfoStatus){
+        this.petInfoStatus = petInfoStatus;
     }
 
 }
