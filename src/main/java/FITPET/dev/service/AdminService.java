@@ -1,6 +1,7 @@
 package FITPET.dev.service;
 
 import FITPET.dev.common.enums.InquiryStatus;
+import FITPET.dev.common.enums.PetType;
 import FITPET.dev.common.status.ErrorStatus;
 import FITPET.dev.common.enums.Company;
 import FITPET.dev.common.enums.PetInfoStatus;
@@ -28,7 +29,6 @@ import FITPET.dev.repository.PetInfoRepository;
 import FITPET.dev.repository.ProposalRepository;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -40,7 +40,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -58,19 +57,21 @@ public class AdminService {
     private final LocalDateTime minDateTime = LocalDateTime.of(2000, 1, 1, 0, 0);
     private final LocalDateTime maxDateTime = LocalDateTime.of(3999, 12, 31, 23, 59, 59);
 
+
     /*
-     * 회사별 보험 테이블 조회
+     * 회사별, 품종별 보험 테이블 조회
      * @param page
      * @param companyStr
+     * @param petType
      * @return
      */
-    public InsuranceResponse.InsuranceDetailPageDto getInsurances(int page, String companyStr) {
+    public InsuranceResponse.InsuranceDetailPageDto getInsurances(int page, String companyStr, String petType) {
 
         // 페이지 크기, 페이지 번호 정보를 Pageable 객체에 설정
         Pageable pageable = PageRequest.of(page, 20);
 
-        // company 문자열에 따라 회사별 Insurance 정보를 페이징 객체로 반환
-        Page<Insurance> insurancePage = getInsurancePageByCompany(companyStr, pageable);
+        // company 문자열, 품종에 따라 회사별 Insurance 정보를 페이징 객체로 반환
+        Page<Insurance> insurancePage = getInsurancePageByCompanyAndPetType(companyStr, petType, pageable);
 
         // converter을 통해 pageDto로 타입 변경 후 리턴
         return InsuranceConverter.toInsuranceDetailPageDto(insurancePage);
@@ -82,10 +83,10 @@ public class AdminService {
      * @param servletResponse
      * @param companyStr
      */
-    public void downloadInsurances(HttpServletResponse servletResponse, String companyStr) {
+    public void downloadInsurances(HttpServletResponse servletResponse) {
 
-        // company 문자열에 따라 회사별 Insurance 정보를 List로 반환
-        List<Insurance> insuranceList = getInsuranceListByCompany(companyStr);
+        // 전체 보험 정보 List 조회
+        List<Insurance> insuranceList = insuranceRepository.findAll();
 
         // excelDto로 타입 변경
         List<InsuranceResponse.InsuranceExcelDto> insuranceExcelDtoList = convertToInsuranceExcelDtoList(
@@ -219,28 +220,21 @@ public class AdminService {
     }
 
 
-    private Page<Insurance> getInsurancePageByCompany(String companyStr, Pageable pageable) {
+    private Page<Insurance> getInsurancePageByCompanyAndPetType(String companyStr, String petTypeStr, Pageable pageable) {
 
-        if (companyStr.equals("all")) {
+        Company company = (companyStr.equals("all") ? null : Company.getCompany(companyStr));
+        PetType petType = (petTypeStr.equals("all") ? null : PetType.getPetType(petTypeStr));
+
+        if (company == null) {
             // 전체 insurance Page 반환
-            return insuranceRepository.findAll(pageable);
+            return (petType == null) ?
+                    insuranceRepository.findAll(pageable) :
+                    insuranceRepository.findByPetType(petType, pageable);
         } else {
             // company 정보가 일치하는 insurance Page 반환
-            Company company = getCompany(companyStr);
-            return insuranceRepository.findByCompany(company, pageable);
-        }
-    }
-
-
-    private List<Insurance> getInsuranceListByCompany(String companyStr) {
-
-        if ("all".equals(companyStr)) {
-            // 전체 insurance List 반환
-            return insuranceRepository.findAll();
-        } else {
-            // company 정보가 일치하는 insurance List 반환
-            Company company = getCompany(companyStr);
-            return insuranceRepository.findByCompany(company);
+            return (petType == null) ?
+                    insuranceRepository.findByCompany(company, pageable) :
+                    insuranceRepository.findByCompanyAndPetType(company, petType, pageable);
         }
     }
 
@@ -270,12 +264,6 @@ public class AdminService {
         return petInfoList.stream()
                 .map(PetInfoConverter::toPetInfoExcelDto)
                 .toList();
-    }
-
-
-    private Company getCompany(String companyStr) {
-        return Optional.ofNullable(Company.getCompany(companyStr))
-                .orElseThrow(() -> new GeneralException(ErrorStatus.INVALID_COMPANY));
     }
 
 

@@ -40,19 +40,17 @@ public class AdminController {
     @Operation(summary = "회사별 보험 정보 조회 API", description = "회사명을 Parameter으로 받아 각 회사의 보험 정보를 조회")
     public ApiResponse getInsurances(
             @RequestParam(name = "company", required = false, defaultValue = "all") String company,
+            @RequestParam(name = "petType", required = false, defaultValue = "all") String petType,
             @RequestParam(name = "page", required = false, defaultValue = "0") int page
     ) {
-        return ApiResponse.SuccessResponse(SuccessStatus.GET_INSURANCE_TABLE, adminService.getInsurances(page, company));
+        return ApiResponse.SuccessResponse(SuccessStatus.GET_INSURANCE_TABLE, adminService.getInsurances(page, company, petType));
     }
 
 
     @GetMapping("/insurance/downloads")
-    @Operation(summary = "회사별 보험 정보 엑셀 다운로드 API", description = "회사명을 Parameter으로 받아 각 회사의 보험 정보를 가진 엑셀을 다운로드")
-    public void downloadInsurances(
-            HttpServletResponse servletResponse,
-            @RequestParam(name = "company", required = false, defaultValue = "all") String company
-    ) {
-        adminService.downloadInsurances(servletResponse, company);
+    @Operation(summary = "회사별 보험 정보 엑셀 다운로드 API", description = "각 회사의 보험 정보를 가진 엑셀을 다운로드")
+    public void downloadInsurances(HttpServletResponse servletResponse) {
+        adminService.downloadInsurances(servletResponse);
     }
 
     @PatchMapping("/insurance/{insuranceId}")
