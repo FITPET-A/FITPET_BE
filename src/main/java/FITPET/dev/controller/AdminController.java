@@ -90,6 +90,16 @@ public class AdminController {
         return ApiResponse.SuccessResponse(SuccessStatus.DELETE_INSURANCE_SUCCESS, null);
     }
 
+    //삭제된 보험 정보 전체 조회 API
+    @GetMapping("/insurance/deleted")
+    @Operation(summary = "삭제된 보험 정보 전체 조회 API", description = "삭제된 보험 정보 조회")
+    public ApiResponse getDeletedInsurances(
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page)
+            {
+        return ApiResponse.SuccessResponse(SuccessStatus.GET_DELETED_INSURANCES, adminService.getDeletedInsurances(page));
+    }
+
+
 
     /*
      * PetInfo

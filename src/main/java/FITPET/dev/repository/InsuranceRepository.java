@@ -66,5 +66,11 @@ public interface InsuranceRepository extends JpaRepository<Insurance, Long> {
     Page<Insurance> findByCompanyAndPetType(@Param(value = "company") Company company,
                                             @Param(value = "petType") PetType petType,
                                             Pageable pageable);
+
+
+    @Query("SELECT i FROM Insurance i WHERE i.deletedAt IS NOT NULL ORDER BY i.deletedAt DESC")
+    Page<Insurance> findDeleted(Pageable pageable);
+
+
 }
 
