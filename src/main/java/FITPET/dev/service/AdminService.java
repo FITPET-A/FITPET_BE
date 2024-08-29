@@ -12,7 +12,7 @@ import FITPET.dev.converter.InsuranceConverter;
 import FITPET.dev.converter.InsuranceHistoryConverter;
 import FITPET.dev.converter.PetInfoConverter;
 import FITPET.dev.converter.ProposalConverter;
-import FITPET.dev.dto.request.InsuranceRequestDto;
+import FITPET.dev.dto.request.InsuranceRequest;
 import FITPET.dev.dto.response.InquiryResponse;
 import FITPET.dev.dto.response.InsuranceHistoryResponse;
 import FITPET.dev.dto.response.InsuranceResponse;
@@ -348,7 +348,7 @@ public class AdminService {
     /*
      * 보험 정보 추가
      */
-    public InsuranceResponse.InsuranceDetailDto addInsurance(InsuranceRequestDto request) {
+    public InsuranceResponse.InsuranceDetailDto addInsurance(InsuranceRequest request) {
         Insurance insurance = InsuranceConverter.RequestToInsurance(request);
         insuranceRepository.save(insurance);
         return InsuranceConverter.toInsuranceDetailDto(insurance);
