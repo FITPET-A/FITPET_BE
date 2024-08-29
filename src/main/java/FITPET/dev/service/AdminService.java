@@ -12,6 +12,7 @@ import FITPET.dev.converter.InsuranceConverter;
 import FITPET.dev.converter.InsuranceHistoryConverter;
 import FITPET.dev.converter.PetInfoConverter;
 import FITPET.dev.converter.ProposalConverter;
+import FITPET.dev.dto.request.InsuranceRequestDto;
 import FITPET.dev.dto.response.InquiryResponse;
 import FITPET.dev.dto.response.InsuranceHistoryResponse;
 import FITPET.dev.dto.response.InsuranceResponse;
@@ -312,16 +313,11 @@ public class AdminService {
      */
     @Transactional
     public InsuranceResponse.InsuranceDetailDto updateInsurancePremium(Long insuranceId, int premium){
-        // 보험 객체 조회
         Insurance insurance = findInsuranceById(insuranceId);
 
-        // 기존 보험료 저장
         int oldPremium = insurance.getPremium();
-
-        // 보험료 업데이트
         insurance.updatepremium(premium);
 
-        // 보험 정보 수정 이력 저장
         saveInsuranceHistory(insurance, oldPremium, premium);
 
         return InsuranceConverter.toInsuranceDetailDto(insurance);
@@ -347,6 +343,15 @@ public class AdminService {
         List<InsuranceHistory> histories = insuranceHistoryRepository
                 .findByInsurance_InsuranceIdOrderByCreatedAtDesc(insuranceId);
         return InsuranceHistoryConverter.toResponseList(histories);
+    }
+
+    /*
+     * 보험 정보 추가
+     */
+    public InsuranceResponse.InsuranceDetailDto addInsurance(InsuranceRequestDto request) {
+        Insurance insurance = InsuranceConverter.RequestToInsurance(request);
+        insuranceRepository.save(insurance);
+        return InsuranceConverter.toInsuranceDetailDto(insurance);
     }
 }
 

@@ -4,6 +4,7 @@ import FITPET.dev.common.enums.InquiryStatus;
 import FITPET.dev.common.status.SuccessStatus;
 import FITPET.dev.common.enums.PetInfoStatus;
 import FITPET.dev.common.response.ApiResponse;
+import FITPET.dev.dto.request.InsuranceRequestDto;
 import FITPET.dev.dto.response.InsuranceHistoryResponse;
 import FITPET.dev.service.AdminService;
 import FITPET.dev.service.InitService;
@@ -69,6 +70,14 @@ public class AdminController {
     ) {
         List<InsuranceHistoryResponse> response = adminService.getPremiumHistory(insuranceId);
         return ApiResponse.SuccessResponse(SuccessStatus.GET_INSURANCE_PREMIUM_HISTORY, response);
+    }
+
+    @PostMapping("/insurance/add")
+    @Operation(summary = "보험 정보 추가 API", description = "새로운 보험 정보를 추가")
+    public ApiResponse addInsurance(
+            @RequestBody InsuranceRequestDto request
+    ) {
+        return ApiResponse.SuccessResponse(SuccessStatus.ADD_INSURANCE_SUCCESS, adminService.addInsurance(request));
     }
 
 
