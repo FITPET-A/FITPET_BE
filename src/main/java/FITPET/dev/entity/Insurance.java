@@ -72,4 +72,8 @@ public class Insurance extends BaseEntity {
     public void updatepremium(int premium){
         this.premium = premium;
     }
+
+    public void setDeletedAt(){
+        this.deletedAt = LocalDateTime.now();
+    }
 }

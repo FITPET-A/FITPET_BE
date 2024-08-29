@@ -79,6 +79,7 @@ public class AdminService {
     }
 
 
+
     /*
      * 회사별 보험 테이블 엑셀 다운로드
      * @param servletResponse
@@ -240,6 +241,7 @@ public class AdminService {
     }
 
 
+
     private List<Inquiry> getInquiryListByStatusBetweenDate(LocalDateTime start, LocalDateTime end, InquiryStatus inquiryStatus){
 
         if (inquiryStatus == null){
@@ -353,6 +355,30 @@ public class AdminService {
         insuranceRepository.save(insurance);
         return InsuranceConverter.toInsuranceDetailDto(insurance);
     }
+
+    /*
+     * 보험 정보 삭제
+     * @param insuranceId
+     */
+    @Transactional
+    public void deleteInsurance(Long insuranceId) {
+        Insurance insurance = findInsuranceById(insuranceId);
+        if (insurance.getDeletedAt() != null) {
+            throw new GeneralException(ErrorStatus.ALREADY_DELETED_INSURANCE);
+        }
+        insurance.setDeletedAt();
+    }
+
+    /*
+     * 삭제된 보험 정보 조회
+     */
+    public InsuranceResponse.InsuranceDetailPageDto getDeletedInsurances(int page) {
+        Pageable pageable = PageRequest.of(page, 20);
+        Page<Insurance> insurancePage = insuranceRepository.findDeleted(pageable);
+        return InsuranceConverter.toInsuranceDetailPageDto(insurancePage);
+    }
+
+
 }
 
 

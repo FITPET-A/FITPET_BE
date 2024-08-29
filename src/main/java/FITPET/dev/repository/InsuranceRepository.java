@@ -15,7 +15,8 @@ public interface InsuranceRepository extends JpaRepository<Insurance, Long> {
     @Query("SELECT i FROM Insurance i " +
             "WHERE i.petType = :petType AND i.age = :age " +
             "AND i.renewalCycle = :renewalCycle AND i.coverageRatio = :coverageRatio " +
-            "AND i.deductible = :deductible AND i.compensation = :compensation")
+            "AND i.deductible = :deductible AND i.compensation = :compensation " +
+            "AND i.deletedAt IS NULL")
     List<Insurance> findInsuranceList(@Param("petType") PetType petType,
                                       @Param("age") int age,
                                       @Param("renewalCycle") RenewalCycle renewalCycle,
@@ -25,19 +26,21 @@ public interface InsuranceRepository extends JpaRepository<Insurance, Long> {
 
 
     @Query("SELECT i FROM Insurance i " +
-            "WHERE i.company = :company " +
+            "WHERE i.company = :company AND i.deletedAt IS NULL " +
             "ORDER BY " +
             "CASE WHEN i.premium > 0 THEN 0 ELSE 1 END ASC, " +
             "i.premium ASC")
     Page<Insurance> findByCompany(@Param(("company")) Company company,
                                   Pageable pageable);
 
-    @Query("SELECT i FROM Insurance i ORDER BY " +
+    @Query("SELECT i FROM Insurance i WHERE i.deletedAt IS NULL " +
+            "ORDER BY " +
             "CASE WHEN i.premium > 0 THEN 0 ELSE 1 END ASC, " +
             "i.premium ASC")
     Page<Insurance> findAll(Pageable pageable);
 
-    @Query("SELECT i FROM Insurance i ORDER BY " +
+    @Query("SELECT i FROM Insurance i WHERE i.deletedAt IS NULL " +
+            "ORDER BY " +
             "CASE WHEN i.premium > 0 THEN 0 ELSE 1 END ASC, " +
             "i.premium ASC")
     List<Insurance> findAll();
@@ -46,7 +49,7 @@ public interface InsuranceRepository extends JpaRepository<Insurance, Long> {
 
 
     @Query("SELECT i FROM Insurance i " +
-            "WHERE i.petType = :petType " +
+            "WHERE i.petType = :petType AND i.deletedAt IS NULL " +
             "ORDER BY " +
             "CASE WHEN i.premium > 0 THEN 0 ELSE 1 END ASC, " +
             "i.premium ASC")
@@ -56,11 +59,18 @@ public interface InsuranceRepository extends JpaRepository<Insurance, Long> {
     @Query("SELECT i FROM Insurance i " +
             "WHERE i.company = :company " +
             "AND i.petType = :petType " +
+            "AND i.deletedAt IS NULL " +
             "ORDER BY " +
             "CASE WHEN i.premium > 0 THEN 0 ELSE 1 END ASC, " +
             "i.premium ASC")
     Page<Insurance> findByCompanyAndPetType(@Param(value = "company") Company company,
                                             @Param(value = "petType") PetType petType,
                                             Pageable pageable);
+
+
+    @Query("SELECT i FROM Insurance i WHERE i.deletedAt IS NOT NULL ORDER BY i.deletedAt DESC")
+    Page<Insurance> findDeleted(Pageable pageable);
+
+
 }
 

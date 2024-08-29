@@ -82,6 +82,23 @@ public class AdminController {
         return ApiResponse.SuccessResponse(SuccessStatus.ADD_INSURANCE_SUCCESS, adminService.addInsurance(request));
     }
 
+    // 보험 정보 삭제 API
+    @DeleteMapping("/insurance/delete/{insuranceId}")
+    @Operation(summary = "보험 정보 삭제 API", description = "해당 보험 id의 보험 정보를 삭제")
+    public ApiResponse deleteInsurance(@PathVariable Long insuranceId) {
+        adminService.deleteInsurance(insuranceId);
+        return ApiResponse.SuccessResponse(SuccessStatus.DELETE_INSURANCE_SUCCESS);
+    }
+
+    // 삭제된 보험 정보 전체 조회 API
+    @GetMapping("/insurance/deleted")
+    @Operation(summary = "삭제된 보험 정보 전체 조회 API", description = "삭제된 보험 정보 조회")
+    public ApiResponse getDeletedInsurances(
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page) {
+        return ApiResponse.SuccessResponse(SuccessStatus.GET_DELETED_INSURANCES, adminService.getDeletedInsurances(page));
+    }
+
+
 
     /*
      * PetInfo
