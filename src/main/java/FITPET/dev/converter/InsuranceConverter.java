@@ -1,6 +1,7 @@
 package FITPET.dev.converter;
 
 import FITPET.dev.common.enums.*;
+import FITPET.dev.dto.request.InsuranceRequest;
 import FITPET.dev.dto.response.InsuranceResponse;
 import FITPET.dev.entity.Insurance;
 import org.springframework.data.domain.Page;
@@ -101,6 +102,20 @@ public class InsuranceConverter {
                 .deductible(insurance.getDeductible().getLabel())
                 .compensation(insurance.getCompensation().getLabel())
                 .premium(insurance.getPremium())
+                .build();
+    }
+
+    public static Insurance RequestToInsurance(InsuranceRequest request) {
+        return Insurance.builder()
+                .company(Company.getCompany(request.getCompany()))
+                .petType(PetType.getPetType(request.getPetType()))
+                .age(request.getAge())
+                .dogBreedRank(request.getDogBreedRank())
+                .renewalCycle(RenewalCycle.getRenewalCycle(request.getRenewalCycle()))
+                .coverageRatio(CoverageRatio.getCoverageRatio(request.getCoverageRatio()))
+                .deductible(Deductible.getDeductible(request.getDeductible()))
+                .compensation(Compensation.getCompensation(request.getCompensation()))
+                .premium(request.getPremium())
                 .build();
     }
 

@@ -4,14 +4,17 @@ import FITPET.dev.common.enums.InquiryStatus;
 import FITPET.dev.common.status.SuccessStatus;
 import FITPET.dev.common.enums.PetInfoStatus;
 import FITPET.dev.common.response.ApiResponse;
+import FITPET.dev.dto.request.InsuranceRequest;
 import FITPET.dev.dto.response.InsuranceHistoryResponse;
 import FITPET.dev.service.AdminService;
 import FITPET.dev.service.InitService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -69,6 +72,14 @@ public class AdminController {
     ) {
         List<InsuranceHistoryResponse> response = adminService.getPremiumHistory(insuranceId);
         return ApiResponse.SuccessResponse(SuccessStatus.GET_INSURANCE_PREMIUM_HISTORY, response);
+    }
+
+    @PostMapping("/insurance/add")
+    @Operation(summary = "보험 정보 추가 API", description = "새로운 보험 정보를 추가")
+    public ApiResponse addInsurance(
+            @RequestBody InsuranceRequest request
+    ) {
+        return ApiResponse.SuccessResponse(SuccessStatus.ADD_INSURANCE_SUCCESS, adminService.addInsurance(request));
     }
 
 
