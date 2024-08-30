@@ -93,7 +93,7 @@ public class AdminService {
      * @param startDate
      * @param endDate
      * @param page
-     * @param petInfoStatus
+     * @param comparisonStatus
      * @return
      */
     public ComparisonResponse.ComparisonPageDto getComparisons(String startDate, String endDate, int page, ComparisonStatus comparisonStatus) {
@@ -121,20 +121,20 @@ public class AdminService {
         LocalDateTime end = (endDate != null) ? parseDate(endDate, " 23:59:59") : maxDateTime;
 
         // 견적서 요청 리스트 조회
-        List<PetInfo> petInfoList = petInfoRepository.findByCreatedAtBetweenAndStatus(start, end, comparisonStatus);
+        List<Comparison> comparisonList = comparisonRepository.findByCreatedAtBetweenAndStatus(start, end, comparisonStatus);
 
         // excelDto로 타입 변경
-        List<ComparisonResponse.ComparisonExcelDto> comparisonExcelDtoList = convertToComparisonExcelDtoList(petInfoList);
+        List<ComparisonResponse.ComparisonExcelDto> comparisonExcelDtoList = convertToComparisonExcelDtoList(comparisonList);
 
         // excel 파일 다운로드
-        excelUtils.downloadPetInfos(servletResponse, comparisonExcelDtoList);
+        excelUtils.downloadComparisons(servletResponse, comparisonExcelDtoList);
     }
 
 
     /*
      * 견적 요청 상태 변경
-     * @param petInfoId
-     * @param petInfoStatus
+     * @param comparisonId
+     * @param comparisonStatus
      * @return
      */
     @Transactional
@@ -151,10 +151,6 @@ public class AdminService {
         // patch status
         comparison.updateStatus(comparisonStatus);
         return ComparisonConverter.toComparisonDto(comparison);
-    }
-
-    private Comparison findComparisonById(Long comparisonId) {
-
     }
 
 
@@ -281,6 +277,12 @@ public class AdminService {
     private Inquiry findInquiryById(Long inquiryId) {
         return inquiryRepository.findById(inquiryId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_INQUIRY));
+    }
+
+
+    private Comparison findComparisonById(Long comparisonId) {
+        return comparisonRepository.findById(comparisonId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_COMPARISON));
     }
 
 

@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface ExcelUtilFactory {
     void downloadInsurances(HttpServletResponse response, List<InsuranceResponse.InsuranceExcelDto> data);
-    void downloadPetInfos(HttpServletResponse response, List<ComparisonResponse.PetInfoExcelDto> data);
+    void downloadComparisons(HttpServletResponse response, List<ComparisonResponse.ComparisonExcelDto> data);
 }

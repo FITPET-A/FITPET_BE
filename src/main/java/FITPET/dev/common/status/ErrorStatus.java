@@ -63,6 +63,9 @@ public enum ErrorStatus {
     // inquiry
     NOT_EXIST_INQUIRY(404, "존재하지 않는 1:1 문의 정보입니다."),
 
+    // comparison
+    NOT_EXIST_COMPARISON(404, "존재하지 않는 견적 요청입니다."),
+
 
 
     /**

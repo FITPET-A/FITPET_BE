@@ -43,11 +43,6 @@ public class ComparisonService {
         return getInsurancePremiumsByPetInfo(petInfo);
     }
 
-    // petSpecies을 기반으로 Pet 조회
-    private Pet findPetByPetSpecies(String petSpecies) {
-        return petRepository.findByPetSpecies(petSpecies)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_PET));
-    }
 
     // default 값으로 보험료 조회
     public InsuranceResponse.InsuranceListDto getInsurancePremiumsByPetInfo(PetInfo petInfo) {
@@ -60,6 +55,13 @@ public class ComparisonService {
         String compensation = "15만";
 
         return insuranceService.getInsurancePremium(detailType, age, renewalCycle, coverageRatio, deductible, compensation);
+    }
+
+
+    // petSpecies을 기반으로 Pet 조회
+    private Pet findPetByPetSpecies(String petSpecies) {
+        return petRepository.findByPetSpecies(petSpecies)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_PET));
     }
 
     // 전화번호 유효성 검사

@@ -68,13 +68,12 @@ public class ExcelUtils implements ExcelUtilFactory {
 
 
     @Override
-    public void downloadPetInfos(HttpServletResponse response, List<ComparisonResponse.PetInfoExcelDto> data) {
+    public void downloadComparisons(HttpServletResponse response, List<ComparisonResponse.ComparisonExcelDto> data) {
 
         final String fileName = "SC_견적_요청_정보";
 
         // 엑셀파일(Workbook) 객체 생성
         Workbook workbook = getXSSFWorkBook();
-
         Sheet sheet = workbook.createSheet("sheet1");
 
         // 엑셀 Header 생성
