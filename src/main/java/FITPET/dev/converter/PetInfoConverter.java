@@ -1,7 +1,7 @@
 package FITPET.dev.converter;
 
 import FITPET.dev.common.enums.PetInfoStatus;
-import FITPET.dev.dto.request.PetInfoRequest;
+import FITPET.dev.dto.request.ComparisonRequest;
 import FITPET.dev.dto.response.PetInfoResponse;
 import FITPET.dev.entity.Pet;
 import FITPET.dev.entity.PetInfo;
@@ -17,11 +17,11 @@ public class PetInfoConverter {
         return dateTime.format(formatter);
     }
 
-    public static PetInfo toPetInfo(PetInfoRequest request, Pet pet) {
+    public static PetInfo toPetInfo(ComparisonRequest request, Pet pet) {
         return PetInfo.builder()
-                .name(request.getName())
-                .age(request.getAge())
-                .phoneNum(request.getPhoneNum())
+                .name(request.getPetName())
+                .age(request.getPetAge())
+                .phoneNum(request.getPhoneNumber())
                 .pet(pet)
                 .status(PetInfoStatus.PENDING)
                 .comment(request.getComment())
@@ -39,7 +39,7 @@ public class PetInfoConverter {
                 .phoneNum(petInfo.getPhoneNum())
                 .createdAt(formatDateTime(petInfo.getCreatedAt()))
                 .petType(pet.getPetType().toString())
-                .detailType(pet.getDetailType())
+                .detailType(pet.getPetSpecies())
                 .comment(petInfo.getComment())
                 .build();
     }
@@ -55,7 +55,7 @@ public class PetInfoConverter {
                 .phoneNum(petInfo.getPhoneNum())
                 .createdAt(formatDateTime(petInfo.getCreatedAt()))
                 .petType(pet.getPetType().toString())
-                .detailType(pet.getDetailType())
+                .detailType(pet.getPetSpecies())
                 .comment(petInfo.getComment())
                 .status(petInfo.getStatus().getLabel())
                 .build();

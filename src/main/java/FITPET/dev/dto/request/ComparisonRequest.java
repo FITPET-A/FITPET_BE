@@ -10,11 +10,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PetInfoRequest {
-    private String name;
-    private int age;
-    private String phoneNum;
+public class ComparisonRequest {
+    private String petName;
     private PetType petType;
-    private String detailType;
+    private String petSpecies;
+    private int petAge;
+    private String phoneNumber;
     private String comment;
+    private String referSite;
+    private String referUserId;
 }

@@ -20,7 +20,7 @@ public class InsuranceController {
 
     @GetMapping("")
     @Operation(summary = "보험료 조회 API", description = "세부품종, 나이, 갱신주기, 보상비율, 자부담, 1일 보상 금액 정보를 Parameter으로 받아 각 회사의 보험료와 할인 보험료 정보를 조회")
-    public ApiResponse getInsurancePremium(@RequestParam(name = "detailType") String detailType,
+    public ApiResponse getInsurancePremium(@RequestParam(name = "petSpecies") String petSpecies,
                                            @RequestParam(name = "age", defaultValue = "0") int age,
                                            @RequestParam(name = "renewalCycle", defaultValue = "3년", required = false) String renewalCycle,
                                            @RequestParam(name = "coverageRatio", defaultValue = "70", required = false) String coverageRatio,
@@ -28,6 +28,6 @@ public class InsuranceController {
                                            @RequestParam(name = "compensation", defaultValue = "15만", required = false) String compensation
                                            ){
         return ApiResponse.SuccessResponse(SuccessStatus.GET_INSURANCE_PREMIUM,
-                insuranceService.getInsurancePremium(detailType, age, renewalCycle, coverageRatio, deductible, compensation));
+                insuranceService.getInsurancePremium(petSpecies, age, renewalCycle, coverageRatio, deductible, compensation));
     }
 }

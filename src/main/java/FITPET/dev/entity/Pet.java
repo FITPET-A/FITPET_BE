@@ -28,5 +28,5 @@ public class Pet {
     private PetType petType;
 
     @Column(nullable = false, length = 30)
-    private String detailType;
+    private String petSpecies;
 }

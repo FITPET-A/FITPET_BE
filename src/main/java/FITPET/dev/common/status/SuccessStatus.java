@@ -22,9 +22,9 @@ public enum SuccessStatus {
 
 
     // petinfo
-    PATCH_PET_INFO_STATUS(200, "견적서 상태 변경에 성공했습니다."),
-    GET_PETINFO_TABLE(200, "견적서 요청 내역 조회에 성공했습니다."),
-    SEARCH_PET_INFO(200, "견적서 내용 검색에 성공했습니다."),
+    PATCH_COMPARISON_STATUS(200, "견적서 상태 변경에 성공했습니다."),
+    GET_COMPARISON_TABLE(200, "견적서 요청 내역 조회에 성공했습니다."),
+    SEARCH_COMPARISON(200, "견적서 내용 검색에 성공했습니다."),
 
     // inquiry
     POST_INQUIRY(200, "1:1 문의 전송에 성공했습니다."),

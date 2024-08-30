@@ -12,8 +12,8 @@ import java.util.Optional;
 
 public interface PetRepository extends JpaRepository<Pet, Long> {
 
-    @Query("SELECT p FROM Pet p WHERE p.petType = :petType AND p.detailType LIKE %:detailType% ORDER BY p.detailType ASC")
-    List<Pet> findPetListContainingDetailType(@Param("petType") PetType petType, @Param("detailType") String detailType);
+    @Query("SELECT p FROM Pet p WHERE p.petType = :petType AND p.petSpecies LIKE %:petSpecies% ORDER BY p.petSpecies ASC")
+    List<Pet> findPetListContainingDetailType(@Param("petType") PetType petType, @Param("petSpecies") String petSpecies);
 
-    Optional<Pet> findByDetailType(String detailType);
+    Optional<Pet> findByPetSpecies(String petSpecies);
 }

@@ -19,7 +19,7 @@ import static FITPET.dev.common.enums.Compensation.getCompensation;
 import static FITPET.dev.common.enums.CoverageRatio.getCoverageRatio;
 import static FITPET.dev.common.enums.Deductible.getDeductible;
 import static FITPET.dev.common.enums.RenewalCycle.getRenewalCycle;
-import static FITPET.dev.service.PetInfoService.MAX_AGE;
+import static FITPET.dev.service.ComparisonService.MAX_AGE;
 
 @Service
 @RequiredArgsConstructor
@@ -38,10 +38,10 @@ public class InsuranceService {
      * @return
      */
     public InsuranceResponse.InsuranceListDto getInsurancePremium(
-            String detailType, int age, String renewalCycle, String coverageRatio, String deductible, String compensation){
+            String petSpecies, int age, String renewalCycle, String coverageRatio, String deductible, String compensation){
 
         // 품종 분류
-        Pet pet = findPetByDetailType(detailType);
+        Pet pet = findPetByPetSpecies(petSpecies);
 
         // validate age parameter
         validateAge(age);
@@ -69,8 +69,8 @@ public class InsuranceService {
      * @param detailType
      * @return
      */
-    private Pet findPetByDetailType(String detailType){
-        return petRepository.findByDetailType(detailType)
+    private Pet findPetByPetSpecies(String petSpecies){
+        return petRepository.findByPetSpecies(petSpecies)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_PET));
     }
 

@@ -3,7 +3,7 @@ package FITPET.dev.service;
 import FITPET.dev.common.status.ErrorStatus;
 import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.converter.PetInfoConverter;
-import FITPET.dev.dto.request.PetInfoRequest;
+import FITPET.dev.dto.request.ComparisonRequest;
 import FITPET.dev.dto.response.InsuranceResponse;
 import FITPET.dev.entity.Pet;
 import FITPET.dev.entity.PetInfo;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class PetInfoService {
+public class ComparisonService {
 
     private final PetInfoRepository petInfoRepository;
     private final PetRepository petRepository;
@@ -26,33 +26,33 @@ public class PetInfoService {
 
 
     // PetInfo 생성 및 저장 후 보험료 조회
-    public InsuranceResponse.InsuranceListDto createPetInfoAndGetInsurance(PetInfoRequest petInfoRequest) {
-        validatePhoneNumber(petInfoRequest.getPhoneNum());
-        validateAge(petInfoRequest.getAge());
-        Pet pet = findPetByDetailType(petInfoRequest.getDetailType());
+    public InsuranceResponse.InsuranceListDto createPetInfoAndGetInsurance(ComparisonRequest comparisonRequest) {
+        validatePhoneNumber(comparisonRequest.getPhoneNumber());
+        validateAge(comparisonRequest.getPetAge());
+        Pet pet = findPetByPetSpecies(comparisonRequest.getPetSpecies());
 
         // pet의 품종과 request의 품종이 다를 시 exception 반환
-        if (pet.getPetType() != petInfoRequest.getPetType())
+        if (pet.getPetType() != comparisonRequest.getPetType())
             throw new GeneralException(ErrorStatus.INVALID_PETTYPE_WITH_DETAILTYPE);
 
         // PetInfo 생성하고 저장
-        PetInfo petInfo = PetInfoConverter.toPetInfo(petInfoRequest, pet);
+        PetInfo petInfo = PetInfoConverter.toPetInfo(comparisonRequest, pet);
         petInfo = petInfoRepository.save(petInfo);
 
         // 보험료 조회
         return getInsurancePremiumsByPetInfo(petInfo);
     }
 
-    // detail_type을 기반으로 Pet 조회
-    private Pet findPetByDetailType(String detailType) {
-        return petRepository.findByDetailType(detailType)
+    // petSpecies을 기반으로 Pet 조회
+    private Pet findPetByPetSpecies(String petSpecies) {
+        return petRepository.findByPetSpecies(petSpecies)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_PET));
     }
 
     // default 값으로 보험료 조회
     public InsuranceResponse.InsuranceListDto getInsurancePremiumsByPetInfo(PetInfo petInfo) {
 
-        String detailType = petInfo.getPet().getDetailType();
+        String detailType = petInfo.getPet().getPetSpecies();
         int age = petInfo.getAge();
         String renewalCycle = "3년";
         String deductible = "1만원";
