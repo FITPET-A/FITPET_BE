@@ -19,9 +19,9 @@ public class ComparisonController {
 
     @PostMapping("")
     @Operation(summary = "견적서 생성 API", description = "견적서를 생성하고 기본 보험료를 조회")
-    public ApiResponse createPetInfoAndGetInsurance(@RequestBody ComparisonRequest comparisonRequest) {
+    public ApiResponse createComparisonAndGetInsurance(@RequestBody ComparisonRequest comparisonRequest) {
         return ApiResponse.SuccessResponse(SuccessStatus.GET_INSURANCE_PREMIUM,
-                comparisonService.createPetInfoAndGetInsurance(comparisonRequest));
+                comparisonService.createComparisonAndGetInsurance(comparisonRequest));
     }
 
 }

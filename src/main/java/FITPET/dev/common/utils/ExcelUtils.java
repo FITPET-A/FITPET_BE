@@ -5,7 +5,7 @@ import FITPET.dev.common.status.ErrorStatus;
 import FITPET.dev.common.enums.PetType;
 import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.dto.response.InsuranceResponse;
-import FITPET.dev.dto.response.PetInfoResponse;
+import FITPET.dev.dto.response.ComparisonResponse;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -68,7 +68,7 @@ public class ExcelUtils implements ExcelUtilFactory {
 
 
     @Override
-    public void downloadPetInfos(HttpServletResponse response, List<PetInfoResponse.PetInfoExcelDto> data) {
+    public void downloadPetInfos(HttpServletResponse response, List<ComparisonResponse.PetInfoExcelDto> data) {
 
         final String fileName = "SC_견적_요청_정보";
 

@@ -26,7 +26,7 @@ public class ComparisonService {
 
 
     // PetInfo 생성 및 저장 후 보험료 조회
-    public InsuranceResponse.InsuranceListDto createPetInfoAndGetInsurance(ComparisonRequest comparisonRequest) {
+    public InsuranceResponse.InsuranceListDto createComparisonAndGetInsurance(ComparisonRequest comparisonRequest) {
         validatePhoneNumber(comparisonRequest.getPhoneNumber());
         validateAge(comparisonRequest.getPetAge());
         Pet pet = findPetByPetSpecies(comparisonRequest.getPetSpecies());
