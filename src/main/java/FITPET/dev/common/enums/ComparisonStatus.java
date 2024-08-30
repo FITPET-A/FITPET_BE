@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum PetInfoStatus {
+public enum ComparisonStatus {
     PENDING("응대 전", 0),
     SENT("견적서 발송", 1),
     CONSULTING("상담 중", 2),

@@ -13,7 +13,7 @@ public class PetResponse {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class PetDetailTypeListDto {
-        private List<String> detailTypeList;
+    public static class PetSpeciesListDto {
+        private List<String> petSpeciesList;
     }
 }

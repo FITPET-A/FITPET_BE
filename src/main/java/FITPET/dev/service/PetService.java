@@ -21,13 +21,13 @@ public class PetService {
      * @param detailType
      * @return
      */
-    public PetResponse.PetDetailTypeListDto getPetDetailTypeList(String petTypeStr, String detailType){
+    public PetResponse.PetSpeciesListDto getPetSpeciesList(String petTypeStr, String petSpecies){
         // 품종 조회
         PetType petType = PetType.getPetType(petTypeStr);
 
-        // detailType 문자열을 상세 품종 필드에 포함하는 Pet 객체들을 List로 반환
-        List<Pet> petList = petRepository.findPetListContainingDetailType(petType, detailType);
+        // petSpecies 문자열을 상세 품종 필드에 포함하는 Pet 객체들을 List로 반환
+        List<Pet> petList = petRepository.findPetListContainingDetailType(petType, petSpecies);
 
-        return PetConverter.toPetDetailTypeListDto(petList);
+        return PetConverter.toPetSpeciesListDto(petList);
     }
 }

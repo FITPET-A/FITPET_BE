@@ -2,7 +2,7 @@ package FITPET.dev.controller;
 
 import FITPET.dev.common.enums.InquiryStatus;
 import FITPET.dev.common.status.SuccessStatus;
-import FITPET.dev.common.enums.PetInfoStatus;
+import FITPET.dev.common.enums.ComparisonStatus;
 import FITPET.dev.common.response.ApiResponse;
 import FITPET.dev.dto.request.InsuranceRequest;
 import FITPET.dev.dto.response.InsuranceHistoryResponse;
@@ -11,10 +11,9 @@ import FITPET.dev.service.InitService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
+
 import java.util.List;
 import lombok.AllArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -101,47 +100,47 @@ public class AdminController {
 
 
     /*
-     * PetInfo
+     * Comparison
      */
-    @GetMapping("/petinfo")
+    @GetMapping("/comparison")
     @Operation(summary = "견적 요청 리스트 조회 API", description = "시작 날짜, 마지막 날짜, 상태값을 Parameter으로 받아 특정 기간 동안 생성된 견적 요청 정보를 조회")
     public ApiResponse getPetInfos(
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "startDate", required = false) String startDate,
             @RequestParam(name = "endDate", required = false) String endDate,
-            @RequestParam(name = "status", required = false, defaultValue = "PENDING") PetInfoStatus petInfoStatus
+            @RequestParam(name = "status", required = false, defaultValue = "PENDING") ComparisonStatus status
     ) {
-        return ApiResponse.SuccessResponse(SuccessStatus.GET_PETINFO_TABLE, adminService.getPetInfos(startDate, endDate, page, petInfoStatus));
+        return ApiResponse.SuccessResponse(SuccessStatus.GET_COMPARISON_TABLE, adminService.getComparisons(startDate, endDate, page, status));
     }
 
 
-    @GetMapping("/petinfo/downloads")
+    @GetMapping("/comparison/downloads")
     @Operation(summary = "견적 요청 리스트 엑셀 다운로드 API", description = "시작 날짜, 마지막 날짜, 상태값을 Parameter으로 받아 특정 기간 동안 생성된 견적 요청 정보를 가진 엑셀을 다운로드")
     public void downloadPetInfos(HttpServletResponse servletResponse,
                                  @RequestParam(name = "startDate") String startDate,
                                  @RequestParam(name = "endDate") String endDate,
-                                 @RequestParam(name = "status", required = false, defaultValue = "PENDING") PetInfoStatus petInfoStatus) {
-        adminService.downloadPetInfos(servletResponse, startDate, endDate, petInfoStatus);
+                                 @RequestParam(name = "status", required = false, defaultValue = "PENDING") ComparisonStatus status) {
+        adminService.downloadComparisons(servletResponse, startDate, endDate, status);
     }
 
 
-    @PatchMapping("/petinfo/status/{petInfoId}")
+    @PatchMapping("/comparison/status/{comparisonId}")
     @Operation(summary = "견적 요청 상태 변경 API", description = "특정 견적 요청 정보의 상태값을 변경")
     public ApiResponse patchPetInfoStatus(
-            @PathVariable(value = "petInfoId") Long petInfoId,
-            @RequestParam(name = "status") PetInfoStatus petInfoStatus
+            @PathVariable(value = "comparisonId") Long comparisonId,
+            @RequestParam(name = "status") ComparisonStatus status
     ) {
-        return ApiResponse.SuccessResponse(SuccessStatus.PATCH_PET_INFO_STATUS, adminService.patchPetInfoStatus(petInfoId, petInfoStatus));
+        return ApiResponse.SuccessResponse(SuccessStatus.PATCH_COMPARISON_STATUS, adminService.patchComparisonStatus(comparisonId, status));
     }
 
 
-    @GetMapping("/petinfo/search")
+    @GetMapping("/comparison/search")
     @Operation(summary = "견적서 검색 API", description = "전화번호와 펫 이름으로 견적서 검색")
     public ApiResponse searchPetInfos(
             @RequestParam(name = "content", required = false) String content,
             @RequestParam(name = "page", required = false, defaultValue = "0") int page
     ) {
-        return ApiResponse.SuccessResponse(SuccessStatus.SEARCH_PET_INFO, adminService.searchPetInfos(content, page));
+        return ApiResponse.SuccessResponse(SuccessStatus.SEARCH_COMPARISON, adminService.searchComparisons(content, page));
     }
 
     /*
@@ -164,7 +163,7 @@ public class AdminController {
             @PathVariable(value = "inquiryId") Long inquiryId,
             @RequestParam(name = "status") InquiryStatus inquiryStatus
     ) {
-        return ApiResponse.SuccessResponse(SuccessStatus.PATCH_PET_INFO_STATUS, adminService.patchInquiryStatus(inquiryId, inquiryStatus));
+        return ApiResponse.SuccessResponse(SuccessStatus.PATCH_COMPARISON_STATUS, adminService.patchInquiryStatus(inquiryId, inquiryStatus));
     }
 
 

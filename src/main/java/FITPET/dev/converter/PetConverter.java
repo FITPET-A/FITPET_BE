@@ -7,20 +7,20 @@ import FITPET.dev.entity.Pet;
 import java.util.List;
 
 public class PetConverter {
-    public static Pet toPet(PetType petType, String detailType){
+    public static Pet toPet(PetType petType, String petSpecies){
         return Pet.builder()
                 .petType(petType)
-                .detailType(detailType)
+                .petSpecies(petSpecies)
                 .build();
     }
 
-    public static PetResponse.PetDetailTypeListDto toPetDetailTypeListDto(List<Pet> petList){
-        List<String> detailTypeList = petList.stream()
-                .map(Pet::getDetailType)
+    public static PetResponse.PetSpeciesListDto toPetSpeciesListDto(List<Pet> petList){
+        List<String> petSpeciesList = petList.stream()
+                .map(Pet::getPetSpecies)
                 .toList();
 
-        return PetResponse.PetDetailTypeListDto.builder()
-                .detailTypeList(detailTypeList)
+        return PetResponse.PetSpeciesListDto.builder()
+                .petSpeciesList(petSpeciesList)
                 .build();
     }
 }

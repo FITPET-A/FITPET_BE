@@ -4,30 +4,18 @@ import FITPET.dev.common.enums.InquiryStatus;
 import FITPET.dev.common.enums.PetType;
 import FITPET.dev.common.status.ErrorStatus;
 import FITPET.dev.common.enums.Company;
-import FITPET.dev.common.enums.PetInfoStatus;
+import FITPET.dev.common.enums.ComparisonStatus;
 import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.common.utils.ExcelUtils;
-import FITPET.dev.converter.InquiryConverter;
-import FITPET.dev.converter.InsuranceConverter;
-import FITPET.dev.converter.InsuranceHistoryConverter;
-import FITPET.dev.converter.PetInfoConverter;
-import FITPET.dev.converter.ProposalConverter;
+import FITPET.dev.converter.*;
 import FITPET.dev.dto.request.InsuranceRequest;
 import FITPET.dev.dto.response.InquiryResponse;
 import FITPET.dev.dto.response.InsuranceHistoryResponse;
 import FITPET.dev.dto.response.InsuranceResponse;
-import FITPET.dev.dto.response.PetInfoResponse;
+import FITPET.dev.dto.response.ComparisonResponse;
 import FITPET.dev.dto.response.ProposalResponse;
-import FITPET.dev.entity.Inquiry;
-import FITPET.dev.entity.Insurance;
-import FITPET.dev.entity.InsuranceHistory;
-import FITPET.dev.entity.PetInfo;
-import FITPET.dev.entity.Proposal;
-import FITPET.dev.repository.InquiryRepository;
-import FITPET.dev.repository.InsuranceHistoryRepository;
-import FITPET.dev.repository.InsuranceRepository;
-import FITPET.dev.repository.PetInfoRepository;
-import FITPET.dev.repository.ProposalRepository;
+import FITPET.dev.entity.*;
+import FITPET.dev.repository.*;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.time.LocalDateTime;
@@ -52,6 +40,7 @@ public class AdminService {
     private final InquiryRepository inquiryRepository;
     private final ProposalRepository proposalRepository;
     private final InsuranceHistoryRepository insuranceHistoryRepository;
+    private final ComparisonRepository comparisonRepository;
     private final ExcelUtils excelUtils;
 
     // 최소, 최대 조회 기간
@@ -104,10 +93,10 @@ public class AdminService {
      * @param startDate
      * @param endDate
      * @param page
-     * @param petInfoStatus
+     * @param comparisonStatus
      * @return
      */
-    public PetInfoResponse.PetInfoDetailPageDto getPetInfos(String startDate, String endDate, int page, PetInfoStatus petInfoStatus) {
+    public ComparisonResponse.ComparisonPageDto getComparisons(String startDate, String endDate, int page, ComparisonStatus comparisonStatus) {
 
         // 날짜 형식 변경
         LocalDateTime start = parseDate(startDate, " 00:00:00");
@@ -115,9 +104,9 @@ public class AdminService {
 
         // 견적 요청 리스트를 페이지 단위로 조회
         Pageable pageable = PageRequest.of(page, 20);
-        Page<PetInfo> petInfoPage = petInfoRepository.findByCreatedAtBetweenAndStatus(start, end, petInfoStatus, pageable);
+        Page<Comparison> comparisonPage = comparisonRepository.findByCreatedAtBetweenAndStatus(start, end, comparisonStatus, pageable);
 
-        return PetInfoConverter.toPetInfoDetailPageDto(petInfoPage);
+        return ComparisonConverter.toComparisonPageDto(comparisonPage);
     }
 
 
@@ -125,44 +114,43 @@ public class AdminService {
      * 견적 요청 내역 엑셀 다운로드
      * @param servletResponse
      */
-    public void downloadPetInfos(HttpServletResponse servletResponse,
-                                 String startDate, String endDate, PetInfoStatus petInfoStatus) {
+    public void downloadComparisons(HttpServletResponse servletResponse,
+                                 String startDate, String endDate, ComparisonStatus comparisonStatus) {
         // 날짜 형식 변경
         LocalDateTime start = (startDate != null) ? parseDate(startDate, " 00:00:00") : minDateTime;
         LocalDateTime end = (endDate != null) ? parseDate(endDate, " 23:59:59") : maxDateTime;
 
         // 견적서 요청 리스트 조회
-        List<PetInfo> petInfoList = petInfoRepository.findByCreatedAtBetweenAndStatus(start, end, petInfoStatus);
+        List<Comparison> comparisonList = comparisonRepository.findByCreatedAtBetweenAndStatus(start, end, comparisonStatus);
 
         // excelDto로 타입 변경
-        List<PetInfoResponse.PetInfoExcelDto> petInfoExcelDtoList = convertToPetInfoExcelDtoList(
-                petInfoList);
+        List<ComparisonResponse.ComparisonExcelDto> comparisonExcelDtoList = convertToComparisonExcelDtoList(comparisonList);
 
         // excel 파일 다운로드
-        excelUtils.downloadPetInfos(servletResponse, petInfoExcelDtoList);
+        excelUtils.downloadComparisons(servletResponse, comparisonExcelDtoList);
     }
 
 
     /*
      * 견적 요청 상태 변경
-     * @param petInfoId
-     * @param petInfoStatus
+     * @param comparisonId
+     * @param comparisonStatus
      * @return
      */
     @Transactional
-    public PetInfoResponse.PetInfoDetailDto patchPetInfoStatus(Long petInfoId, PetInfoStatus petInfoStatus){
+    public ComparisonResponse.ComparisonDto patchComparisonStatus(Long comparisonId, ComparisonStatus comparisonStatus){
 
         // 견적서 단일 조회
-        PetInfo petInfo = findPetInfoById(petInfoId);
+        Comparison comparison = findComparisonById(comparisonId);
 
         // validate status
-        PetInfoStatus currentPetInfoStatus = petInfo.getStatus();
-        if (currentPetInfoStatus.getIndex() > petInfoStatus.getIndex())
+        ComparisonStatus currentComparisonStatus = comparison.getStatus();
+        if (currentComparisonStatus.getIndex() > comparisonStatus.getIndex())
             throw new GeneralException(ErrorStatus.INVALID_PATCH_PERIOR_STATUS);
 
         // patch status
-        petInfo.updateStatus(petInfoStatus);
-        return PetInfoConverter.toPetInfoDetailDto(petInfo);
+        comparison.updateStatus(comparisonStatus);
+        return ComparisonConverter.toComparisonDto(comparison);
     }
 
 
@@ -262,10 +250,10 @@ public class AdminService {
     }
 
 
-    private List<PetInfoResponse.PetInfoExcelDto> convertToPetInfoExcelDtoList(
-            List<PetInfo> petInfoList) {
-        return petInfoList.stream()
-                .map(PetInfoConverter::toPetInfoExcelDto)
+    private List<ComparisonResponse.ComparisonExcelDto> convertToComparisonExcelDtoList(
+            List<Comparison> comparisonList) {
+        return comparisonList.stream()
+                .map(ComparisonConverter::toComparisonExcelDto)
                 .toList();
     }
 
@@ -292,19 +280,25 @@ public class AdminService {
     }
 
 
+    private Comparison findComparisonById(Long comparisonId) {
+        return comparisonRepository.findById(comparisonId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_COMPARISON));
+    }
+
+
     /*
-     * 전화번호와 펫 이름으로 PetInfo 검색
+     * 전화번호와 펫 이름으로 Comparison 검색
      * @param content
      */
-    public PetInfoResponse.PetInfoDetailPageDto searchPetInfos(String content, int page) {
+    public ComparisonResponse.ComparisonPageDto searchComparisons(String content, int page) {
         int size = 20;
         Pageable pageable = PageRequest.of(page, size);
 
         // '-' 제거
         String chagnedContent = content != null ? content.replaceAll("-", "") : null;
-        Page<PetInfo> petInfoPage = petInfoRepository.findAllByPhoneNumOrPetName(chagnedContent, pageable);
+        Page<Comparison> comparisonPage = comparisonRepository.findAllByPhoneNumOrPetName(chagnedContent, pageable);
 
-        return PetInfoConverter.toPetInfoDetailPageDto(petInfoPage);
+        return ComparisonConverter.toComparisonPageDto(comparisonPage);
     }
 
 
