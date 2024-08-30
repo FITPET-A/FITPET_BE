@@ -2,7 +2,7 @@ package FITPET.dev.controller;
 
 import FITPET.dev.common.enums.InquiryStatus;
 import FITPET.dev.common.status.SuccessStatus;
-import FITPET.dev.common.enums.PetInfoStatus;
+import FITPET.dev.common.enums.ComparisonStatus;
 import FITPET.dev.common.response.ApiResponse;
 import FITPET.dev.dto.request.InsuranceRequest;
 import FITPET.dev.dto.response.InsuranceHistoryResponse;
@@ -11,10 +11,9 @@ import FITPET.dev.service.InitService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
+
 import java.util.List;
 import lombok.AllArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -109,9 +108,9 @@ public class AdminController {
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "startDate", required = false) String startDate,
             @RequestParam(name = "endDate", required = false) String endDate,
-            @RequestParam(name = "status", required = false, defaultValue = "PENDING") PetInfoStatus petInfoStatus
+            @RequestParam(name = "comparisonStatus", required = false, defaultValue = "PENDING") ComparisonStatus comparisonStatus
     ) {
-        return ApiResponse.SuccessResponse(SuccessStatus.GET_PETINFO_TABLE, adminService.getPetInfos(startDate, endDate, page, petInfoStatus));
+        return ApiResponse.SuccessResponse(SuccessStatus.GET_COMPARISON_TABLE, adminService.getPetInfos(startDate, endDate, page, comparisonStatus));
     }
 
 
@@ -120,8 +119,8 @@ public class AdminController {
     public void downloadPetInfos(HttpServletResponse servletResponse,
                                  @RequestParam(name = "startDate") String startDate,
                                  @RequestParam(name = "endDate") String endDate,
-                                 @RequestParam(name = "status", required = false, defaultValue = "PENDING") PetInfoStatus petInfoStatus) {
-        adminService.downloadPetInfos(servletResponse, startDate, endDate, petInfoStatus);
+                                 @RequestParam(name = "comparisonStatus", required = false, defaultValue = "PENDING") ComparisonStatus comparisonStatus) {
+        adminService.downloadPetInfos(servletResponse, startDate, endDate, comparisonStatus);
     }
 
 
@@ -129,9 +128,9 @@ public class AdminController {
     @Operation(summary = "견적 요청 상태 변경 API", description = "특정 견적 요청 정보의 상태값을 변경")
     public ApiResponse patchPetInfoStatus(
             @PathVariable(value = "petInfoId") Long petInfoId,
-            @RequestParam(name = "status") PetInfoStatus petInfoStatus
+            @RequestParam(name = "comparisonStatus") ComparisonStatus comparisonStatus
     ) {
-        return ApiResponse.SuccessResponse(SuccessStatus.PATCH_PET_INFO_STATUS, adminService.patchPetInfoStatus(petInfoId, petInfoStatus));
+        return ApiResponse.SuccessResponse(SuccessStatus.PATCH_COMPARISON_STATUS, adminService.patchPetInfoStatus(petInfoId, comparisonStatus));
     }
 
 
@@ -141,7 +140,7 @@ public class AdminController {
             @RequestParam(name = "content", required = false) String content,
             @RequestParam(name = "page", required = false, defaultValue = "0") int page
     ) {
-        return ApiResponse.SuccessResponse(SuccessStatus.SEARCH_PET_INFO, adminService.searchPetInfos(content, page));
+        return ApiResponse.SuccessResponse(SuccessStatus.SEARCH_COMPARISON, adminService.searchPetInfos(content, page));
     }
 
     /*
@@ -164,7 +163,7 @@ public class AdminController {
             @PathVariable(value = "inquiryId") Long inquiryId,
             @RequestParam(name = "status") InquiryStatus inquiryStatus
     ) {
-        return ApiResponse.SuccessResponse(SuccessStatus.PATCH_PET_INFO_STATUS, adminService.patchInquiryStatus(inquiryId, inquiryStatus));
+        return ApiResponse.SuccessResponse(SuccessStatus.PATCH_COMPARISON_STATUS, adminService.patchInquiryStatus(inquiryId, inquiryStatus));
     }
 
 

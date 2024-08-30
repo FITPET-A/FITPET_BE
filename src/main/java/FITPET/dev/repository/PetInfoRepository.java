@@ -1,6 +1,6 @@
 package FITPET.dev.repository;
 
-import FITPET.dev.common.enums.PetInfoStatus;
+import FITPET.dev.common.enums.ComparisonStatus;
 import FITPET.dev.entity.PetInfo;
 import java.time.LocalDateTime;
 import org.springframework.data.domain.Page;
@@ -20,7 +20,7 @@ public interface PetInfoRepository extends JpaRepository<PetInfo, Long> {
             "ORDER BY p.createdAt DESC ")
     Page<PetInfo> findByCreatedAtBetweenAndStatus(@Param(value = "startDate") LocalDateTime startDate,
                                                   @Param(value = "endDate") LocalDateTime endDate,
-                                                  @Param(value = "status")PetInfoStatus status,
+                                                  @Param(value = "status") ComparisonStatus status,
                                                   Pageable pageable);
 
     @Query("SELECT p FROM PetInfo p " +
@@ -30,7 +30,7 @@ public interface PetInfoRepository extends JpaRepository<PetInfo, Long> {
             "ORDER BY p.createdAt DESC ")
     List<PetInfo> findByCreatedAtBetweenAndStatus(@Param(value = "startDate") LocalDateTime startDate,
                                                   @Param(value = "endDate") LocalDateTime endDate,
-                                                  @Param(value = "status") PetInfoStatus status);
+                                                  @Param(value = "status") ComparisonStatus status);
 
     @Query("SELECT p FROM PetInfo p WHERE REPLACE(p.phoneNum, '-', '') LIKE %?1% OR p.name LIKE %?1%")
     Page<PetInfo> findAllByPhoneNumOrPetName(String content, Pageable pageable);

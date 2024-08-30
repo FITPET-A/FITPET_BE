@@ -4,7 +4,7 @@ import FITPET.dev.common.enums.InquiryStatus;
 import FITPET.dev.common.enums.PetType;
 import FITPET.dev.common.status.ErrorStatus;
 import FITPET.dev.common.enums.Company;
-import FITPET.dev.common.enums.PetInfoStatus;
+import FITPET.dev.common.enums.ComparisonStatus;
 import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.common.utils.ExcelUtils;
 import FITPET.dev.converter.InquiryConverter;
@@ -107,7 +107,7 @@ public class AdminService {
      * @param petInfoStatus
      * @return
      */
-    public PetInfoResponse.PetInfoDetailPageDto getPetInfos(String startDate, String endDate, int page, PetInfoStatus petInfoStatus) {
+    public PetInfoResponse.PetInfoDetailPageDto getPetInfos(String startDate, String endDate, int page, ComparisonStatus comparisonStatus) {
 
         // 날짜 형식 변경
         LocalDateTime start = parseDate(startDate, " 00:00:00");
@@ -115,7 +115,7 @@ public class AdminService {
 
         // 견적 요청 리스트를 페이지 단위로 조회
         Pageable pageable = PageRequest.of(page, 20);
-        Page<PetInfo> petInfoPage = petInfoRepository.findByCreatedAtBetweenAndStatus(start, end, petInfoStatus, pageable);
+        Page<PetInfo> petInfoPage = petInfoRepository.findByCreatedAtBetweenAndStatus(start, end, comparisonStatus, pageable);
 
         return PetInfoConverter.toPetInfoDetailPageDto(petInfoPage);
     }
@@ -126,13 +126,13 @@ public class AdminService {
      * @param servletResponse
      */
     public void downloadPetInfos(HttpServletResponse servletResponse,
-                                 String startDate, String endDate, PetInfoStatus petInfoStatus) {
+                                 String startDate, String endDate, ComparisonStatus comparisonStatus) {
         // 날짜 형식 변경
         LocalDateTime start = (startDate != null) ? parseDate(startDate, " 00:00:00") : minDateTime;
         LocalDateTime end = (endDate != null) ? parseDate(endDate, " 23:59:59") : maxDateTime;
 
         // 견적서 요청 리스트 조회
-        List<PetInfo> petInfoList = petInfoRepository.findByCreatedAtBetweenAndStatus(start, end, petInfoStatus);
+        List<PetInfo> petInfoList = petInfoRepository.findByCreatedAtBetweenAndStatus(start, end, comparisonStatus);
 
         // excelDto로 타입 변경
         List<PetInfoResponse.PetInfoExcelDto> petInfoExcelDtoList = convertToPetInfoExcelDtoList(
@@ -150,18 +150,18 @@ public class AdminService {
      * @return
      */
     @Transactional
-    public PetInfoResponse.PetInfoDetailDto patchPetInfoStatus(Long petInfoId, PetInfoStatus petInfoStatus){
+    public PetInfoResponse.PetInfoDetailDto patchPetInfoStatus(Long petInfoId, ComparisonStatus comparisonStatus){
 
         // 견적서 단일 조회
         PetInfo petInfo = findPetInfoById(petInfoId);
 
         // validate status
-        PetInfoStatus currentPetInfoStatus = petInfo.getStatus();
-        if (currentPetInfoStatus.getIndex() > petInfoStatus.getIndex())
+        ComparisonStatus currentComparisonStatus = petInfo.getStatus();
+        if (currentComparisonStatus.getIndex() > comparisonStatus.getIndex())
             throw new GeneralException(ErrorStatus.INVALID_PATCH_PERIOR_STATUS);
 
         // patch status
-        petInfo.updateStatus(petInfoStatus);
+        petInfo.updateStatus(comparisonStatus);
         return PetInfoConverter.toPetInfoDetailDto(petInfo);
     }
 

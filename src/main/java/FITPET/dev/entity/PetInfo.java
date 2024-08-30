@@ -1,7 +1,6 @@
 package FITPET.dev.entity;
 
 import FITPET.dev.common.base.BaseEntity;
-import FITPET.dev.common.enums.PetInfoStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +22,9 @@ public class PetInfo extends BaseEntity {
     @JoinColumn(name = "pet_id", nullable = true)
     private Pet pet;
 
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "petInfo")
+    private Comparison comparison;
+
     @Column(nullable = false, length = 100)
     private String name;
 
@@ -31,16 +33,4 @@ public class PetInfo extends BaseEntity {
 
     @Column(nullable = false, length = 20)
     private String phoneNum;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private PetInfoStatus status;
-
-    @Column(nullable = true, length = 500)
-    private String comment;
-
-    public void updateStatus(PetInfoStatus status){
-        this.status = status;
-    }
-
 }

@@ -3,7 +3,7 @@ package FITPET.dev.dto.response;
 import FITPET.dev.common.annotation.ExcelColumn;
 import FITPET.dev.common.annotation.ExcelFile;
 import java.util.List;
-import FITPET.dev.common.enums.PetInfoStatus;
+import FITPET.dev.common.enums.ComparisonStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,7 +34,7 @@ public class PetInfoResponse {
         @ExcelColumn(headerName = "비고")
         private String comment;
         @ExcelColumn(headerName = "상태")
-        private PetInfoStatus petInfoStatus;
+        private ComparisonStatus comparisonStatus;
     }
 
     @Data

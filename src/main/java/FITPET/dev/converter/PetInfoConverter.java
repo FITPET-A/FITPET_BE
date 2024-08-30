@@ -1,6 +1,6 @@
 package FITPET.dev.converter;
 
-import FITPET.dev.common.enums.PetInfoStatus;
+import FITPET.dev.common.enums.ComparisonStatus;
 import FITPET.dev.dto.request.ComparisonRequest;
 import FITPET.dev.dto.response.PetInfoResponse;
 import FITPET.dev.entity.Pet;
@@ -23,7 +23,7 @@ public class PetInfoConverter {
                 .age(request.getPetAge())
                 .phoneNum(request.getPhoneNumber())
                 .pet(pet)
-                .status(PetInfoStatus.PENDING)
+                .status(ComparisonStatus.PENDING)
                 .comment(request.getComment())
                 .build();
     }
@@ -32,7 +32,7 @@ public class PetInfoConverter {
         Pet pet = petInfo.getPet();
 
         return PetInfoResponse.PetInfoExcelDto.builder()
-                .petInfoStatus(petInfo.getStatus())
+                .comparisonStatus(petInfo.getStatus())
                 .petInfoId(petInfo.getPetInfoId())
                 .name(petInfo.getName())
                 .age(petInfo.getAge())
