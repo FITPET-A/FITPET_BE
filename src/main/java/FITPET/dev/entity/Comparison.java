@@ -28,7 +28,7 @@ public class Comparison extends BaseEntity {
     private String referSite;
 
     @Column(nullable = true)
-    private String referSiteUserId;
+    private String referUserId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

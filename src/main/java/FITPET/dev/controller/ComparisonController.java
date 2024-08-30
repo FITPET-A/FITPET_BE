@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 @Tag(name = "견적서 API")
 @RestController
@@ -32,7 +34,7 @@ public class ComparisonController {
     }
 
     @GetMapping("")
-    @Operation(summary = "견적 요청 화면을 조회하는 API", description = "사용자의 기본 정보를 파라미터로 넘긴 후, 견적서 생성 화면을 조회한다")
+    @Operation(summary = "견적 요청 화면을 리다이렉트하는 API", description = "사용자의 기본 정보를 파라미터로 넘긴 후, 견적서 생성 화면으로 리다이렉트한다")
     public ResponseEntity<Void> getComparisonView(
             @RequestParam(value = "petName") String petName,
             @RequestParam(value = "petType") String petType,
@@ -44,29 +46,24 @@ public class ComparisonController {
             HttpServletResponse response
     ) throws IOException {
 
-        // redirect할 url 생성
-        String redirectUrl = "/api/v1/comparison/form";
+        Map<String, String> params = new HashMap<>();
+        params.put("petName", String.valueOf(petName));
+        params.put("petType", String.valueOf(petType));
+        params.put("petSpecies", String.valueOf(petSpecies));
+        params.put("petAge", String.valueOf(petAge));
+        params.put("phoneNumber", String.valueOf(phoneNumber));
+        params.put("referSite", String.valueOf(referSite));
+        params.put("referUserId", String.valueOf(referUserId));
 
-        redirectUrl += "?";
-        redirectUrl += "petName=" + petName + "&";
-        redirectUrl += "petType=" + petType + "&";
-        redirectUrl += "petSpecies=" + petSpecies + "&";
-        redirectUrl += "petAge=" + petAge + "&";
-        redirectUrl += "phoneNumber=" + phoneNumber + "&";
-        if (referSite != null || referUserId != null) {
-            if (referSite != null) {
-                redirectUrl += "referSite=" + referSite + "&";
-            }
-            if (referUserId != null) {
-                redirectUrl += "referUserId=" + referUserId;
-            }
-        }
+        // redirect할 url 생성
+        String redirectUrl = comparisonService.makeRedirectUrl(params);
 
         response.sendRedirect(redirectUrl);
         return ResponseEntity.status(HttpStatus.FOUND).build();
     }
 
     @GetMapping("/form")
+    @Operation(summary = "견적 요청 화면을 조회하는 API", description = "사용자의 기본 정보를 파라미터로 넘긴 후, 견적서 생성 화면을 조회한다")
     public ApiResponse<?> getComparisonForm(
             @RequestParam(value = "petName") String petName,
             @RequestParam(value = "petType") String petType,

@@ -1,5 +1,6 @@
 package FITPET.dev.converter;
 
+import FITPET.dev.common.enums.ComparisonStatus;
 import FITPET.dev.dto.response.ComparisonResponse;
 import FITPET.dev.entity.Comparison;
 import FITPET.dev.entity.Pet;
@@ -32,7 +33,17 @@ public class ComparisonConverter {
                 .petSpecies(pet.getPetSpecies())
                 .comment(comparison.getComment())
                 .referSite(comparison.getReferSite())
-                .referSiteUserId(comparison.getReferSiteUserId())
+                .referSiteUserId(comparison.getReferUserId())
+                .build();
+    }
+
+    public static Comparison toComparison(PetInfo petInfo, String referSite, String referUserId, String comment){
+        return Comparison.builder()
+                .petInfo(petInfo)
+                .referUserId(referUserId)
+                .referSite(referSite)
+                .status(ComparisonStatus.PENDING)
+                .comment(comment)
                 .build();
     }
 
@@ -50,6 +61,8 @@ public class ComparisonConverter {
                 .petSpecies(pet.getPetSpecies())
                 .comment(comparison.getComment())
                 .status(comparison.getStatus().getLabel())
+                .referSite(comparison.getReferSite())
+                .referUserId(comparison.getReferUserId())
                 .build();
     }
 

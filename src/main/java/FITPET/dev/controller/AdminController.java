@@ -100,7 +100,7 @@ public class AdminController {
 
 
     /*
-     * PetInfo
+     * Comparison
      */
     @GetMapping("/comparison")
     @Operation(summary = "견적 요청 리스트 조회 API", description = "시작 날짜, 마지막 날짜, 상태값을 Parameter으로 받아 특정 기간 동안 생성된 견적 요청 정보를 조회")
@@ -108,9 +108,9 @@ public class AdminController {
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "startDate", required = false) String startDate,
             @RequestParam(name = "endDate", required = false) String endDate,
-            @RequestParam(name = "comparisonStatus", required = false, defaultValue = "PENDING") ComparisonStatus comparisonStatus
+            @RequestParam(name = "status", required = false, defaultValue = "PENDING") ComparisonStatus status
     ) {
-        return ApiResponse.SuccessResponse(SuccessStatus.GET_COMPARISON_TABLE, adminService.getComparisons(startDate, endDate, page, comparisonStatus));
+        return ApiResponse.SuccessResponse(SuccessStatus.GET_COMPARISON_TABLE, adminService.getComparisons(startDate, endDate, page, status));
     }
 
 
@@ -119,8 +119,8 @@ public class AdminController {
     public void downloadPetInfos(HttpServletResponse servletResponse,
                                  @RequestParam(name = "startDate") String startDate,
                                  @RequestParam(name = "endDate") String endDate,
-                                 @RequestParam(name = "comparisonStatus", required = false, defaultValue = "PENDING") ComparisonStatus comparisonStatus) {
-        adminService.downloadComparisons(servletResponse, startDate, endDate, comparisonStatus);
+                                 @RequestParam(name = "status", required = false, defaultValue = "PENDING") ComparisonStatus status) {
+        adminService.downloadComparisons(servletResponse, startDate, endDate, status);
     }
 
 
@@ -128,9 +128,9 @@ public class AdminController {
     @Operation(summary = "견적 요청 상태 변경 API", description = "특정 견적 요청 정보의 상태값을 변경")
     public ApiResponse patchPetInfoStatus(
             @PathVariable(value = "comparisonId") Long comparisonId,
-            @RequestParam(name = "comparisonStatus") ComparisonStatus comparisonStatus
+            @RequestParam(name = "status") ComparisonStatus status
     ) {
-        return ApiResponse.SuccessResponse(SuccessStatus.PATCH_COMPARISON_STATUS, adminService.patchComparisonStatus(comparisonId, comparisonStatus));
+        return ApiResponse.SuccessResponse(SuccessStatus.PATCH_COMPARISON_STATUS, adminService.patchComparisonStatus(comparisonId, status));
     }
 
 

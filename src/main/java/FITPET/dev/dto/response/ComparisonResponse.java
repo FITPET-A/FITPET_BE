@@ -56,7 +56,7 @@ public class ComparisonResponse {
         private String comment;
         private String status;
         private String referSite;
-        private String referSiteUserId;
+        private String referUserId;
     }
 
     @Data
