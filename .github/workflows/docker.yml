@@ -25,7 +25,7 @@ jobs:
       uses: docker/setup-buildx-action@v2
 
     - name: Install dependencies
-      run: apt-get update && sudo apt-get install -y openjdk-17-jdk
+      run: sudo apt-get update && sudo apt-get install -y openjdk-17-jdk
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
