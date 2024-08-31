@@ -27,14 +27,11 @@ jobs:
     - name: Install dependencies
       run: sudo apt-get update && sudo apt-get install -y openjdk-17-jdk
 
-    - name: Set Yml
-      uses: microsoft/variable-substitution@v1
-      with:
-        files: ./src/main/resources/application.yml 
-      env:
-        spring.datasource.url: ${{ secrets.DB_URL }} 
-        spring.datasource.username: ${{ secrets.DB_HOST }} 
-        spring.datasource.password: ${{ secrets.DB_PASSWORD }} 
+    - name: Update application.yml with secrets
+      run: |
+        sed -i 's|${DB_URL}|'"${{ secrets.DB_URL }}"'|g' ./src/main/resources/application.yml
+        sed -i 's|${DB_HOST}|'"${{ secrets.DB_HOST }}"'|g' ./src/main/resources/application.yml
+        sed -i 's|${DB_PASSWORD}|'"${{ secrets.DB_PASSWORD }}"'|g' ./src/main/resources/application.yml
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
