@@ -39,9 +39,6 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Prune Docker System
-      run: sudo docker system prune -a --volumes -f
-
     - name: Build, Push and Run Docker container
       env:
         SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
