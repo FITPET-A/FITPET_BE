@@ -13,8 +13,7 @@ public interface ReferSiteRepository extends JpaRepository<ReferSite, Long> {
 
     Optional<ReferSite> findByChannel(String channel);
 
-    Optional<ReferSite> findById(Long referSiteId);
-
+    Optional<ReferSite> findByReferSiteId(Long ReferSiteId);
 
     @Query("SELECT r FROM ReferSite r WHERE r.deletedAt IS NULL")
     Page<ReferSite> findAllNotDeleted(Pageable pageable);

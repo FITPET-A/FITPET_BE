@@ -26,11 +26,15 @@ public class ReferSiteService {
 
     private final ReferSiteRepository referSiteRepository;
 
+    private ReferSite findReferSiteById(Long referSiteId) {
+        return referSiteRepository.findByIdAndNotDeleted(referSiteId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_REFERSITE));
+    }
+
     /*
      * 신규 유입채널 추가
      */
     public ReferSiteResponse.ReferSiteDto postReferSite(ReferSiteRequest.ReferSiteDto referSiteDto) {
-
         ReferSite referSite = ReferSiteConverter.RequestToDto(referSiteDto);
         ReferSite savedRefSite = referSiteRepository.save(referSite);
         return ReferSiteConverter.toDto(savedRefSite);
@@ -42,8 +46,7 @@ public class ReferSiteService {
      */
     @Transactional
     public ReferSiteResponse.ReferSiteDto patchReferSite(Long referSiteId, ReferSiteRequest.ReferSiteDto referSiteDto) {
-        ReferSite referSite = referSiteRepository.findById(referSiteId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_REFERSITE));
+        ReferSite referSite = findReferSiteById(referSiteId);
         referSite = ReferSiteConverter.updateFromDto(referSite, referSiteDto);
         ReferSite updatedReferSite = referSiteRepository.save(referSite);
         return ReferSiteConverter.toDto(updatedReferSite);
@@ -63,8 +66,7 @@ public class ReferSiteService {
      */
     @Transactional
     public void deleteReferSite(Long referSiteId) {
-        ReferSite referSite = referSiteRepository.findByIdAndNotDeleted(referSiteId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_REFERSITE));
+        ReferSite referSite = findReferSiteById(referSiteId);
         referSite.setDeletedAt();
         referSiteRepository.save(referSite);
     }
