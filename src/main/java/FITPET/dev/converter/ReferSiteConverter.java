@@ -31,4 +31,12 @@ public class ReferSiteConverter {
                 .build();
     }
 
+    public static ReferSite updateFromDto(ReferSite referSite, ReferSiteRequest.ReferSiteDto referSiteDto) {
+        return ReferSite.builder()
+                .referSiteId(referSite.getReferSiteId())
+                .channel(referSiteDto.getChannel())
+                .url(referSiteDto.getUrl())
+                .channelKor(referSiteDto.getChannelKor())
+                .build();
+    }
 }
