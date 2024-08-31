@@ -16,5 +16,5 @@ spring:
     generate-ddl: true
     show-sql: true
     properties:
-      hibernate:
+        hibernate.dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
