@@ -3,7 +3,7 @@ ARG JAR_FILE=build/libs/*.jar
 COPY ${JAR_FILE} app.jar
 
 RUN apt-get update && \
-    apt-get upgrade -y && \
+    apt-get upgrade -y || apt-get dist-upgrade -y && \
     apt-get install -y --no-install-recommends netcat && \
     rm -rf /var/lib/apt/lists/*
 

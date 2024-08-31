@@ -20,6 +20,7 @@ public class AdminController {
     // excel file DB에 저장
     @GetMapping("/init")
     public ApiResponse initDatabase() {
+        initService.initDatabase();
         return ApiResponse.SuccessResponse(SuccessStatus.SUCCESS);
     }
 }
