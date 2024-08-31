@@ -4,11 +4,13 @@ import FITPET.dev.common.status.ErrorStatus;
 import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.converter.ProposalConverter;
 import FITPET.dev.dto.request.ProposalRequest;
+import FITPET.dev.dto.response.ProposalResponse;
 import FITPET.dev.entity.Proposal;
 import FITPET.dev.repository.ProposalRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 @Service
@@ -35,13 +37,26 @@ public class ProposalService {
         proposalRepository.save(proposal);
     }
 
-    // 이메일 유효성 검사
+
+    /*
+     * 제휴문의 내역 전체 조회
+     * @return
+     */
+    public ProposalResponse.ProposalListDto getProposals(){
+
+        // 전체 제휴문의 내역 조회
+        List<Proposal> proposalList = proposalRepository.findAllByOrderByCreatedAtDesc();
+
+        return ProposalConverter.toProposalListDto(proposalList);
+    }
+
+
     private void validateEmail(String email) {
         if (!EMAIL_PATTERN.matcher(email).matches())
             throw new GeneralException(ErrorStatus.INVALID_EMAIL);
     }
 
-    // 전화번호 유효성 검사
+
     private void validatePhoneNumber(String phoneNum) {
         if (!PHONE_NUMBER_PATTERN.matcher(phoneNum).matches())
             throw new GeneralException(ErrorStatus.INVALID_PHONE_NUMBER);
