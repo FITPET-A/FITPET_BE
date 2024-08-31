@@ -6,12 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class RefSiteRequest {
+public class ReferSiteRequest {
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class RefSiteDto {
+    public static class ReferSiteDto {
         @NotBlank(message = "채널을 입력해주세요")
         private String channel;
         @NotBlank(message = "채널 url을 입력해주세요")

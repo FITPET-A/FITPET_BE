@@ -1,7 +1,6 @@
 package FITPET.dev.entity;
 
 import FITPET.dev.common.base.BaseEntity;
-import com.fasterxml.jackson.databind.ser.Serializers.Base;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,12 +17,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RefSite extends BaseEntity {
+public class ReferSite extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long refSiteId;
+    private Long referSiteId;
 
     @Column(nullable = true, length = 30)
     private String channel;

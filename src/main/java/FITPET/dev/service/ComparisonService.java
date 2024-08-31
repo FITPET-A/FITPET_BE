@@ -12,10 +12,12 @@ import FITPET.dev.dto.response.InsuranceResponse;
 import FITPET.dev.entity.Comparison;
 import FITPET.dev.entity.Pet;
 import FITPET.dev.entity.PetInfo;
+import FITPET.dev.entity.ReferSite;
 import FITPET.dev.repository.ComparisonRepository;
 import FITPET.dev.repository.PetInfoRepository;
 import FITPET.dev.repository.PetRepository;
 
+import FITPET.dev.repository.ReferSiteRepository;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -40,6 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ComparisonService {
 
     private final PetInfoRepository petInfoRepository;
+    private final ReferSiteRepository refSiteRepository;
     private final PetRepository petRepository;
     private final InsuranceService insuranceService;
     private final ComparisonRepository comparisonRepository;
@@ -70,7 +73,11 @@ public class ComparisonService {
         PetInfo petInfo = PetInfoConverter.toPetInfo(request, pet);
         petInfo = petInfoRepository.save(petInfo);
 
-        Comparison comparison = ComparisonConverter.toComparison(petInfo, request.getReferSite(), request.getReferUserId(), request.getComment());
+        ReferSite referSite = refSiteRepository.findByChannel(request.getReferSite())
+                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_REFERSITE));
+
+
+        Comparison comparison = ComparisonConverter.toComparison(petInfo, referSite, request.getReferUserId(), request.getComment());
         comparison = comparisonRepository.save(comparison);
 
         // 보험료 조회

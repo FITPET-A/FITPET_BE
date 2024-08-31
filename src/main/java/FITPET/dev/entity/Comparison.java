@@ -26,10 +26,7 @@ public class Comparison extends BaseEntity {
 
     @OneToOne
     @JoinColumn(name = "ref_site_id", nullable = false)
-    private RefSite refSite;
-
-    @Column(nullable = true)
-    private String referSite;
+    private ReferSite referSite;
 
     @Column(nullable = true)
     private String referUserId;
