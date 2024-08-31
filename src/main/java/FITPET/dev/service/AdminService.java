@@ -37,15 +37,9 @@ public class AdminService {
 
     private final InsuranceRepository insuranceRepository;
     private final PetInfoRepository petInfoRepository;
-    private final InquiryRepository inquiryRepository;
     private final ProposalRepository proposalRepository;
     private final InsuranceHistoryRepository insuranceHistoryRepository;
-    private final ComparisonRepository comparisonRepository;
     private final ExcelUtils excelUtils;
-
-    // 최소, 최대 조회 기간
-    private final LocalDateTime minDateTime = LocalDateTime.of(2000, 1, 1, 0, 0);
-    private final LocalDateTime maxDateTime = LocalDateTime.of(3999, 12, 31, 23, 59, 59);
 
 
     /*
@@ -89,115 +83,6 @@ public class AdminService {
 
 
     /*
-     * 견적 요청 내역 조회 (최신순)
-     * @param startDate
-     * @param endDate
-     * @param page
-     * @param comparisonStatus
-     * @return
-     */
-    public ComparisonResponse.ComparisonPageDto getComparisons(String startDate, String endDate, int page, ComparisonStatus comparisonStatus) {
-
-        // 날짜 형식 변경
-        LocalDateTime start = parseDate(startDate, " 00:00:00");
-        LocalDateTime end = parseDate(endDate, " 23:59:59");
-
-        // 견적 요청 리스트를 페이지 단위로 조회
-        Pageable pageable = PageRequest.of(page, 20);
-        Page<Comparison> comparisonPage = comparisonRepository.findByCreatedAtBetweenAndStatus(start, end, comparisonStatus, pageable);
-
-        return ComparisonConverter.toComparisonPageDto(comparisonPage);
-    }
-
-
-    /*
-     * 견적 요청 내역 엑셀 다운로드
-     * @param servletResponse
-     */
-    public void downloadComparisons(HttpServletResponse servletResponse,
-                                 String startDate, String endDate, ComparisonStatus comparisonStatus) {
-        // 날짜 형식 변경
-        LocalDateTime start = (startDate != null) ? parseDate(startDate, " 00:00:00") : minDateTime;
-        LocalDateTime end = (endDate != null) ? parseDate(endDate, " 23:59:59") : maxDateTime;
-
-        // 견적서 요청 리스트 조회
-        List<Comparison> comparisonList = comparisonRepository.findByCreatedAtBetweenAndStatus(start, end, comparisonStatus);
-
-        // excelDto로 타입 변경
-        List<ComparisonResponse.ComparisonExcelDto> comparisonExcelDtoList = convertToComparisonExcelDtoList(comparisonList);
-
-        // excel 파일 다운로드
-        excelUtils.downloadComparisons(servletResponse, comparisonExcelDtoList);
-    }
-
-
-    /*
-     * 견적 요청 상태 변경
-     * @param comparisonId
-     * @param comparisonStatus
-     * @return
-     */
-    @Transactional
-    public ComparisonResponse.ComparisonDto patchComparisonStatus(Long comparisonId, ComparisonStatus comparisonStatus){
-
-        // 견적서 단일 조회
-        Comparison comparison = findComparisonById(comparisonId);
-
-        // validate status
-        ComparisonStatus currentComparisonStatus = comparison.getStatus();
-        if (currentComparisonStatus.getIndex() > comparisonStatus.getIndex())
-            throw new GeneralException(ErrorStatus.INVALID_PATCH_PERIOR_STATUS);
-
-        // patch status
-        comparison.updateStatus(comparisonStatus);
-        return ComparisonConverter.toComparisonDto(comparison);
-    }
-
-
-    /*
-     * 1:1 문의 내역 조회
-     * @param startDate
-     * @param endDate
-     * @param inquiryStatus
-     * @return
-     */
-    public InquiryResponse.InquiryListDto getInquiries(String startDate, String endDate, InquiryStatus inquiryStatus){
-
-        // 날짜 형식 변경
-        LocalDateTime start = (startDate != null) ? parseDate(startDate, " 00:00:00") : minDateTime;
-        LocalDateTime end = (endDate != null) ? parseDate(endDate, " 23:59:59") : maxDateTime;
-
-        // 문의 내역 조회
-        List<Inquiry> inquiryList = getInquiryListByStatusBetweenDate(start, end, inquiryStatus);
-
-        return InquiryConverter.toInquiryListDto(inquiryList);
-    }
-
-
-    /*
-     * 1:1 문의 상태 변경
-     * @param inquiryId
-     * @param inquiryStatus
-     * @return
-     */
-    @Transactional
-    public InquiryResponse.InquiryDto patchInquiryStatus(Long inquiryId, InquiryStatus inquiryStatus) {
-
-        // 1:1 문의 단일 조회
-        Inquiry inquiry = findInquiryById(inquiryId);
-
-        // validate status
-        InquiryStatus currentInquiryStatus = inquiry.getStatus();
-        if (currentInquiryStatus.getIndex() > inquiryStatus.getIndex())
-            throw new GeneralException(ErrorStatus.INVALID_PATCH_PERIOR_STATUS);
-
-        // patch status
-        inquiry.updateStatus(inquiryStatus);
-        return InquiryConverter.toInquiryDto(inquiry);
-    }
-
-
-    /*
      * 제휴문의 내역 전체 조회
      * @return
      */
@@ -228,20 +113,6 @@ public class AdminService {
         }
     }
 
-
-
-    private List<Inquiry> getInquiryListByStatusBetweenDate(LocalDateTime start, LocalDateTime end, InquiryStatus inquiryStatus){
-
-        if (inquiryStatus == null){
-            // 특정 기간동안 생성된 inquiry List 최신순 정렬 후 반환
-            return inquiryRepository.findByCreatedAtBetween(start, end);
-        } else {
-            // 특정 기간동안 생성된 status 정보가 일치하는 inquiry List 최신순 정렬 후 반환
-            return inquiryRepository.findByCreatedAtBetweenAndStatus(start, end, inquiryStatus);
-        }
-    }
-
-
     private List<InsuranceResponse.InsuranceExcelDto> convertToInsuranceExcelDtoList(
             List<Insurance> insuranceList) {
         return insuranceList.stream()
@@ -249,13 +120,6 @@ public class AdminService {
                 .toList();
     }
 
-
-    private List<ComparisonResponse.ComparisonExcelDto> convertToComparisonExcelDtoList(
-            List<Comparison> comparisonList) {
-        return comparisonList.stream()
-                .map(ComparisonConverter::toComparisonExcelDto)
-                .toList();
-    }
 
 
     private LocalDateTime parseDate(String date, String timeSuffix) {
@@ -271,34 +135,6 @@ public class AdminService {
     private PetInfo findPetInfoById(Long petInfoId){
         return petInfoRepository.findById(petInfoId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_PET_INFO));
-    }
-
-
-    private Inquiry findInquiryById(Long inquiryId) {
-        return inquiryRepository.findById(inquiryId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_INQUIRY));
-    }
-
-
-    private Comparison findComparisonById(Long comparisonId) {
-        return comparisonRepository.findById(comparisonId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_COMPARISON));
-    }
-
-
-    /*
-     * 전화번호와 펫 이름으로 Comparison 검색
-     * @param content
-     */
-    public ComparisonResponse.ComparisonPageDto searchComparisons(String content, int page) {
-        int size = 20;
-        Pageable pageable = PageRequest.of(page, size);
-
-        // '-' 제거
-        String chagnedContent = content != null ? content.replaceAll("-", "") : null;
-        Page<Comparison> comparisonPage = comparisonRepository.findAllByPhoneNumOrPetName(chagnedContent, pageable);
-
-        return ComparisonConverter.toComparisonPageDto(comparisonPage);
     }
 
 
