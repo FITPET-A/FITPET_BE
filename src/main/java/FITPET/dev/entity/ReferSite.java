@@ -36,7 +36,9 @@ public class ReferSite extends BaseEntity {
     @Column(nullable = true)
     private LocalDateTime deletedAt;
 
-
+    public void setDeletedAt(){
+        this.deletedAt = LocalDateTime.now();
+    }
 
 
 

@@ -12,6 +12,7 @@ import FITPET.dev.entity.ReferSite;
 import FITPET.dev.repository.ReferSiteRepository;
 import FITPET.dev.repository.ReferSiteRepository;
 import java.sql.Ref;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -53,7 +54,18 @@ public class ReferSiteService {
      */
     public ReferSiteResponse.ReferSitePageDto getReferSite(int page) {
         Pageable pageable = PageRequest.of(page, 20);
-        Page<ReferSite> referSitePage = referSiteRepository.findAll(pageable);
+        Page<ReferSite> referSitePage = referSiteRepository.findAllNotDeleted(pageable);
         return ReferSiteConverter.toReferSitePageDto(referSitePage);
+    }
+
+    /*
+     * 유입채널 삭제
+     */
+    @Transactional
+    public void deleteReferSite(Long referSiteId) {
+        ReferSite referSite = referSiteRepository.findByIdAndNotDeleted(referSiteId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_REFERSITE));
+        referSite.setDeletedAt();
+        referSiteRepository.save(referSite);
     }
 }

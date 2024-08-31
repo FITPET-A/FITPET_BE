@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,6 +57,15 @@ public class ReferSiteController {
             @RequestParam(name = "page", required = false, defaultValue = "0") int page
     ) {
         return ApiResponse.SuccessResponse(SuccessStatus.GET_REFERSITE, referSiteService.getReferSite(page));
+    }
+
+    @DeleteMapping("/refersite/{referSiteId}")
+    @Operation(summary = "유입 채널 삭제 API", description = "유입 채널을 삭제하는 API")
+    public ApiResponse deleteReferSite(
+            @PathVariable Long referSiteId
+    ) {
+        referSiteService.deleteReferSite(referSiteId);
+        return ApiResponse.SuccessResponse(SuccessStatus.DELETE_REFERSITE);
     }
 
 
