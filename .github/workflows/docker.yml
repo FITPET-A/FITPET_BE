@@ -34,8 +34,7 @@ jobs:
            cd ./resources
            
            touch ./application.yml
-           echo "${{ secrets.YML }}" >> ./application.yml
-           cat ./application.yml
+           echo "${{ secrets.YML }}" | base64 --decode > ./application.yml
       shell: bash
 
     - name: Grant execute permission for gradlew
