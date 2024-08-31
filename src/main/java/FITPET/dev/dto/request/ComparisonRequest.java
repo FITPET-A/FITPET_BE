@@ -1,6 +1,7 @@
 package FITPET.dev.dto.request;
 
 import FITPET.dev.common.enums.PetType;
+import FITPET.dev.entity.ReferSite;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

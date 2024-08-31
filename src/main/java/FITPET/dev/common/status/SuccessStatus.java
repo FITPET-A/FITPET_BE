@@ -33,7 +33,13 @@ public enum SuccessStatus {
 
     // proposal
     POST_PROPOSAL(200, "제휴제안 전송에 성공했습니다."),
-    GET_PROPOSAL(200, "제휴제안 내역 조회에 성공했습니다."),;
+    GET_PROPOSAL(200, "제휴제안 내역 조회에 성공했습니다."),
+
+    // refersite
+    POST_REFERSITE(200, "유입 채널 추가에 성공했습니다."),
+    UPDATE_REFERSITE(200, "유입 채널 수정에 성공했습니다."),
+    GET_REFERSITE(200, "유입 채널 조회에 성공했습니다."),
+    DELETE_REFERSITE(200, "유입 채널 삭제에 성공했습니다.");
 
     private final int code;
     private final String message;

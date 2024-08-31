@@ -66,6 +66,9 @@ public enum ErrorStatus {
     // comparison
     NOT_EXIST_COMPARISON(404, "존재하지 않는 견적 요청입니다."),
 
+    // referSite
+    NOT_EXIST_REFERSITE(404, "존재하지 않는 참조 사이트입니다."),
+
 
 
     /**

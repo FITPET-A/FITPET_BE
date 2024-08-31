@@ -5,6 +5,7 @@ import FITPET.dev.dto.response.ComparisonResponse;
 import FITPET.dev.entity.Comparison;
 import FITPET.dev.entity.Pet;
 import FITPET.dev.entity.PetInfo;
+import FITPET.dev.entity.ReferSite;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
@@ -32,12 +33,12 @@ public class ComparisonConverter {
                 .petType(pet.getPetType().toString())
                 .petSpecies(pet.getPetSpecies())
                 .comment(comparison.getComment())
-                .referSite(comparison.getReferSite())
+                .referSite(comparison.getReferSite().getChannel())
                 .referSiteUserId(comparison.getReferUserId())
                 .build();
     }
 
-    public static Comparison toComparison(PetInfo petInfo, String referSite, String referUserId, String comment){
+    public static Comparison toComparison(PetInfo petInfo, ReferSite referSite, String referUserId, String comment){
         return Comparison.builder()
                 .petInfo(petInfo)
                 .referUserId(referUserId)
@@ -61,7 +62,7 @@ public class ComparisonConverter {
                 .petSpecies(pet.getPetSpecies())
                 .comment(comparison.getComment())
                 .status(comparison.getStatus().getLabel())
-                .referSite(comparison.getReferSite())
+                .referSite(comparison.getReferSite().getChannel())
                 .referUserId(comparison.getReferUserId())
                 .build();
     }
