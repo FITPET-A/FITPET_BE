@@ -11,4 +11,6 @@ public interface ReferSiteRepository extends JpaRepository<ReferSite, Long> {
 
     Optional<ReferSite> findById(Long referSiteId);
 
+
+
 }

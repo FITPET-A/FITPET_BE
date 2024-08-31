@@ -12,11 +12,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "유입 채널 API")
@@ -45,6 +47,15 @@ public class ReferSiteController {
     ) {
         ReferSiteResponse.ReferSiteDto responseDto = referSiteService.patchReferSite(referSiteId, refSiteDto);
         return ApiResponse.SuccessResponse(SuccessStatus.UPDATE_REFERSITE, responseDto);
+    }
+
+
+    @GetMapping("/refersite")
+    @Operation(summary = "유입 채널 조회 API", description = "유입 채널을 페이지네이션으로 조회하는 API")
+    public ApiResponse getReferSite(
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page
+    ) {
+        return ApiResponse.SuccessResponse(SuccessStatus.GET_REFERSITE, referSiteService.getReferSite(page));
     }
 
 

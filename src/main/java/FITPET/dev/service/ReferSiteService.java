@@ -13,6 +13,9 @@ import FITPET.dev.repository.ReferSiteRepository;
 import FITPET.dev.repository.ReferSiteRepository;
 import java.sql.Ref;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,4 +48,12 @@ public class ReferSiteService {
         return ReferSiteConverter.toDto(updatedReferSite);
     }
 
+    /*
+     * 유입채널 조회
+     */
+    public ReferSiteResponse.ReferSitePageDto getReferSite(int page) {
+        Pageable pageable = PageRequest.of(page, 20);
+        Page<ReferSite> referSitePage = referSiteRepository.findAll(pageable);
+        return ReferSiteConverter.toReferSitePageDto(referSitePage);
+    }
 }
