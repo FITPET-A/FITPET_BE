@@ -4,6 +4,7 @@ package FITPET.dev.entity;
 import FITPET.dev.common.base.BaseEntity;
 import FITPET.dev.common.enums.ComparisonStatus;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,6 +38,13 @@ public class Comparison extends BaseEntity {
 
     @Column(nullable = true, length = 500)
     private String comment;
+
+    @Column(nullable = true)
+    private LocalDateTime deletedAt;
+
+    public void setDeletedAt(){
+        this.deletedAt = LocalDateTime.now();
+    }
 
     public void updateStatus(ComparisonStatus status){
         this.status = status;
