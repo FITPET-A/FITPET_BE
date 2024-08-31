@@ -35,11 +35,7 @@ jobs:
            
            touch ./application.yml
            echo "${{ secrets.YML }}" >> ./application.yml
-      shell: bash
-
-    - name: List resources directory
-      run: |
-            ls -l ./src/main/resources
+           cat ./application.yml
       shell: bash
 
     - name: Grant execute permission for gradlew
