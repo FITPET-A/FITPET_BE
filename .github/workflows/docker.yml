@@ -3,7 +3,7 @@ name: FitPet_A CI/CD
 on:
   push:
     branches:
-      - ci/#64
+      - develop
 
 jobs:
   build:
