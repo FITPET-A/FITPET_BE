@@ -24,6 +24,10 @@ public class Comparison extends BaseEntity {
     @JoinColumn(name = "pet_info_id", nullable = true)
     private PetInfo petInfo;
 
+    @OneToOne
+    @JoinColumn(name = "ref_site_id", nullable = false)
+    private RefSite refSite;
+
     @Column(nullable = true)
     private String referSite;
 
