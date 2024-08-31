@@ -37,6 +37,11 @@ jobs:
            echo "${{ secrets.YML }}" >> ./application.yml
       shell: bash
 
+    - name: List resources directory
+      run: |
+            ls -l ./src/main/resources
+      shell: bash
+
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
@@ -52,7 +57,7 @@ jobs:
     - name: Build Docker Image
       run: |
         # Build Docker image
-        echo "Building Docker image $IMAGE_NAME..."
+        echo "Building Docker image..."
         docker build -t ${{ secrets.DOCKER_USERNAME }}/fitpet-a:latest .
 
     - name: Push Docker Image
