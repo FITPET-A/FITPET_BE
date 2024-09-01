@@ -61,7 +61,7 @@ public class InsuranceController {
         return ApiResponse.SuccessResponse(SuccessStatus.UPDATE_INSURANCE_SUCCESS, insuranceService.updateInsurancePremium(insuranceId, premium));
     }
 
-    @GetMapping("/admin/insurance/premium/{insuranceId}")
+    @GetMapping("/admin/insurance/history/{insuranceId}")
     @Operation(summary = "보험료 수정 내역 조회 API", description = "특정 보험id의 보험료 수정 내역을 조회")
     public ApiResponse getPremiumHistory(
             @PathVariable(name = "insuranceId") Long insuranceId
@@ -70,7 +70,7 @@ public class InsuranceController {
         return ApiResponse.SuccessResponse(SuccessStatus.GET_INSURANCE_PREMIUM_HISTORY, response);
     }
 
-    @PostMapping("/admin/insurance/add")
+    @PostMapping("/admin/insurance")
     @Operation(summary = "보험 정보 추가 API", description = "새로운 보험 정보를 추가")
     public ApiResponse addInsurance(
             @RequestBody InsuranceRequest request
@@ -79,7 +79,7 @@ public class InsuranceController {
     }
 
     // 보험 정보 삭제 API
-    @DeleteMapping("/admin/insurance/delete/{insuranceId}")
+    @DeleteMapping("/admin/insurance/{insuranceId}")
     @Operation(summary = "보험 정보 삭제 API", description = "해당 보험 id의 보험 정보를 삭제")
     public ApiResponse deleteInsurance(@PathVariable Long insuranceId) {
         insuranceService.deleteInsurance(insuranceId);
