@@ -27,12 +27,6 @@ jobs:
     - name: Install dependencies
       run: sudo apt-get update && sudo apt-get install -y openjdk-17-jdk
 
-    - name: Substitute variables in application.yml
-      run: |
-        sed -i 's|${DB_USERNAME}|'"${{ secrets.DB_USERNAME }}"'|g' src/main/resources/application.yml
-        sed -i 's|${DB_PASSWORD}|'"${{ secrets.DB_PASSWORD }}"'|g' src/main/resources/application.yml
-
-
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
@@ -71,7 +65,10 @@ jobs:
           sudo docker rm fitpet-container || true
 
           echo "Starting new Docker container fitpet-container..."
-          sudo docker run -d -p 8080:8080 --name fitpet-container ${{ secrets.DOCKER_USERNAME }}/fitpet-a:latest
+          sudo docker run -d -p 8080:8080 --name fitpet-container \
+            -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
+            -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            ${{ secrets.DOCKER_USERNAME }}/fitpet-a:latest
 
           echo "Pruning unused Docker objects to free up space..."
           sudo docker system prune -a --volumes -f
