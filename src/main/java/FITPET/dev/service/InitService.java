@@ -117,7 +117,7 @@ public class InitService {
     }
 
     private void initCatBreedList() {
-        Workbook workbook = readExcelFile("assets/240823_SC개발 요구사항.xlsx");
+        Workbook workbook = readExcelFile("assets/240823_SC개발_요구사항.xlsx");
         Sheet sheet = readExcelSheet(workbook, 1);
 
         for (int i = 371; i <= sheet.getLastRowNum(); i++) {
