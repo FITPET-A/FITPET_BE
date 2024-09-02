@@ -76,7 +76,11 @@ public enum ErrorStatus {
      */
     // excel
     FAILURE_RENDER_EXCEL_BODY(500, "엑셀 바디를 그리는 중 오류가 발생했습니다."),
-    FAILURE_ENCODE_EXCEL_FILE_NAME(500, "엑셀 파일 이름을 인코딩 하는 중 오류가 발생했습니다.");
+    FAILURE_ENCODE_EXCEL_FILE_NAME(500, "엑셀 파일 이름을 인코딩 하는 중 오류가 발생했습니다."),
+
+    // pdf
+    FAILURE_ENCODE_PDF_FILE_NAME(500, "PDF 파일 이름을 인코딩 하는 중 오류가 발생했습니다.");
+    ;
     
 
 
