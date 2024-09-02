@@ -8,6 +8,7 @@ import FITPET.dev.repository.PetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,9 +26,12 @@ public class PetService {
         // 품종 조회
         PetType petType = PetType.getPetType(petTypeStr);
 
+        // petSpecies가 null일 경우 빈 리스트 반환
+        if (petSpecies == null || petSpecies.isBlank())
+            return PetConverter.toPetSpeciesListDto(new ArrayList<>());
+
         // petSpecies 문자열을 상세 품종 필드에 포함하는 Pet 객체들을 List로 반환
         List<Pet> petList = petRepository.findPetListContainingDetailType(petType, petSpecies);
-
         return PetConverter.toPetSpeciesListDto(petList);
     }
 }

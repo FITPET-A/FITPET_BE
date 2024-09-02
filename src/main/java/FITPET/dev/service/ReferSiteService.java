@@ -34,11 +34,11 @@ public class ReferSiteService {
     /*
      * 신규 유입채널 추가
      */
+    @Transactional
     public ReferSiteResponse.ReferSiteDto postReferSite(ReferSiteRequest.ReferSiteDto referSiteDto) {
         ReferSite referSite = ReferSiteConverter.RequestToDto(referSiteDto);
         ReferSite savedRefSite = referSiteRepository.save(referSite);
         return ReferSiteConverter.toDto(savedRefSite);
-
     }
 
     /*
