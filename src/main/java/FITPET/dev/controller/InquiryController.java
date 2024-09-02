@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1")
-@CrossOrigin(origins = "http://localhost:3000")
 public class InquiryController {
 
     private final InquiryService inquiryService;

@@ -2,17 +2,12 @@ package FITPET.dev.controller;
 
 import FITPET.dev.common.response.ApiResponse;
 import FITPET.dev.common.status.SuccessStatus;
-import FITPET.dev.converter.InsuranceConverter;
 import FITPET.dev.dto.request.ReferSiteRequest;
-import FITPET.dev.dto.response.InsuranceResponse;
 import FITPET.dev.dto.response.ReferSiteResponse;
-import FITPET.dev.entity.Insurance;
 import FITPET.dev.service.ReferSiteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -27,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/admin")
-@CrossOrigin(origins = "http://localhost:3000")
 public class ReferSiteController {
 
     private final ReferSiteService referSiteService;
@@ -69,7 +63,5 @@ public class ReferSiteController {
         referSiteService.deleteReferSite(referSiteId);
         return ApiResponse.SuccessResponse(SuccessStatus.DELETE_REFERSITE);
     }
-
-
 
 }
