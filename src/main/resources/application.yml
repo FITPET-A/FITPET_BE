@@ -3,9 +3,9 @@ spring:
     name: dev
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/fitpet
-    username: root
-    password: jk03daeunD@
+    url: jdbc:mysql://fitpet-a-db.cj8cios80977.ap-northeast-2.rds.amazonaws.com:3306/fitpet_a_db
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   sql:
     init:
       platform: mysql
