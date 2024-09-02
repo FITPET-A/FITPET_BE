@@ -3,6 +3,7 @@ package FITPET.dev.service;
 import FITPET.dev.common.enums.ComparisonStatus;
 import FITPET.dev.common.status.ErrorStatus;
 import FITPET.dev.common.exception.GeneralException;
+import FITPET.dev.common.utils.ApachePdfUtils;
 import FITPET.dev.common.utils.ExcelUtils;
 import FITPET.dev.converter.ComparisonConverter;
 import FITPET.dev.converter.PetInfoConverter;
@@ -47,6 +48,7 @@ public class ComparisonService {
     private final InsuranceService insuranceService;
     private final ComparisonRepository comparisonRepository;
     private final ExcelUtils excelUtils;
+    private final ApachePdfUtils apachePdfUtils;
 
     // 최소, 최대 조회 기간
     private final LocalDateTime minDateTime = LocalDateTime.of(2000, 1, 1, 0, 0);
@@ -143,6 +145,17 @@ public class ComparisonService {
 
         // excel 파일 다운로드
         excelUtils.downloadComparisons(servletResponse, comparisonExcelDtoList);
+    }
+
+    /*
+     * 견적서 생성 및 pdf 다운로드
+     * @param servletResponse
+     * @param comparisonId
+     */
+    public void downloadComparisonPdf(HttpServletResponse servletResponse, Long comparisonId) {
+
+        Comparison comparison = findComparisonById(comparisonId);
+        apachePdfUtils.downloadComparisonPdf(servletResponse, comparison);
     }
 
 
