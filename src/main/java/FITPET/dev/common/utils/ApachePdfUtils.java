@@ -14,19 +14,22 @@ import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.HELVETICA_BOLD;
 
 @Slf4j
 @Component
 public class ApachePdfUtils {
+
+    private final static File fontFile = new File("src/main/resources/fonts/Pretendard.ttf");
 
     /*
      * 견적서 PDF 파일을 추출함
@@ -53,21 +56,6 @@ public class ApachePdfUtils {
         mergeAndDownloadPdf(response, fileName, doc, doc2);
     }
 
-    private String getBackgroundPath(Pet pet) {
-        String path = "src/main/resources/assets/";
-
-        return pet.getPetType() == PetType.DOG ? path + "dog_background.pdf" : path + "cat_background.pdf";
-    }
-
-
-    private PDDocument loadPDDocument(String path){
-        try{
-            return Loader.loadPDF(new File(path));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 
     private void drawComparisonPdf(PDDocument doc, Comparison comparison) {
         PDPage page = doc.getPage(0);
@@ -76,15 +64,43 @@ public class ApachePdfUtils {
             // 컨텐츠 스트림 열기
             PDPageContentStream contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true, true);
 
-            // TODO: 보험료 정보 수정
-            // 폰트 설정 및 텍스트 추가
-            PDType1Font font = new PDType1Font(HELVETICA_BOLD);
-            contentStream.setFont(font, 12);
+            // 폰트 설정
+            PDFont font = PDType0Font.load(doc, fontFile);
+            contentStream.setFont(font, 24);
             contentStream.beginText();
-            contentStream.newLineAtOffset(100, 700); // 텍스트 시작 위치
-            contentStream.endText();
 
+            // 견적 요청 정보, 반려동물 정보 편집
+            drawPetInfo(font, contentStream, comparison);
+
+            // 보험료 정보 편집
+
+
+            contentStream.endText();
             contentStream.close();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void drawPetInfo(PDFont font, PDPageContentStream contentStream, Comparison comparison){
+
+        // 견적 요청 일시
+        drawComparisonCreatedAt(contentStream, comparison.getCreatedAt());
+
+    }
+
+    private void drawComparisonCreatedAt(PDPageContentStream contentStream, LocalDateTime comparisonCreatedAt){
+        int x = 96;
+        float y = (float) (1446 + 7.5);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
+        String formattedComparisonCreatedAt = comparisonCreatedAt.format(formatter);
+
+        try {
+            contentStream.setNonStrokingColor(1.0f, 1.0f, 1.0f); // white
+            contentStream.newLineAtOffset(x, y);
+            contentStream.showText(formattedComparisonCreatedAt);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -163,6 +179,21 @@ public class ApachePdfUtils {
             return URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
         } catch (Exception e){
             throw new GeneralException(ErrorStatus.FAILURE_ENCODE_PDF_FILE_NAME);
+        }
+    }
+
+
+    private String getBackgroundPath(Pet pet) {
+        String path = "src/main/resources/assets/";
+        return pet.getPetType() == PetType.DOG ? path + "dog_background.pdf" : path + "cat_background.pdf";
+    }
+
+
+    private PDDocument loadPDDocument(String path){
+        try{
+            return Loader.loadPDF(new File(path));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
