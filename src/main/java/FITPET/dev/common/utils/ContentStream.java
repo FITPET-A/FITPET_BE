@@ -43,6 +43,18 @@ public class ContentStream {
         }
     }
 
+    public void drawStroke(float x, float y, float width){
+        try {
+            pageContentStream.setStrokingColor(0.588f, 0.588f, 0.651f);
+            pageContentStream.setLineWidth(2);
+            pageContentStream.moveTo(x, y);
+            pageContentStream.lineTo(x + width, y);
+            pageContentStream.stroke();
+        } catch (IOException e){
+            throw new RuntimeException(e);
+        }
+    }
+
     public void close(){
         try {
             this.pageContentStream.close();

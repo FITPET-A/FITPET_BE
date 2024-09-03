@@ -1,5 +1,6 @@
 package FITPET.dev.common.utils;
 
+import FITPET.dev.common.enums.Company;
 import FITPET.dev.common.enums.PetType;
 import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.common.status.ErrorStatus;
@@ -23,8 +24,11 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Slf4j
@@ -102,9 +106,9 @@ public class ApachePdfUtils {
 
     private void drawPetInfo(ContentStream contentStream, PetInfo petInfo){
         int petInfoX = 746;
-        int nameY = 1537 + 2;
-        int ageY = 1493 + 2;
-        int petSpeciesY = 1449 + 2;
+        int nameY = 1537 + 4;
+        int ageY = 1493 + 4;
+        int petSpeciesY = 1449 + 4;
 
         contentStream.setColor(1.0f, 1.0f, 1.0f); // white
 
@@ -113,7 +117,7 @@ public class ApachePdfUtils {
         contentStream.writeText(petInfoX, nameY, petInfo.getName());
 
         // age
-        contentStream.setFontSize(24);
+        contentStream.setFontSize(22);
         contentStream.writeText(petInfoX, ageY, "만 " + petInfo.getAge() + "세");
 
         // petSpecies
@@ -127,52 +131,110 @@ public class ApachePdfUtils {
         int ninetyY = 1055 + 2;
 
         float dogLabelWidth = 160F;
-        float catLabelWidth = 225.5F;
+        float catLabelWidth = 225F;
         float labelWidth = PetType.isDog(petType) ? dogLabelWidth : catLabelWidth;
 
+        // 70% 보험료 작성
+        HashMap<Company, Integer> isValueExistMap = initIsCompanyValueExistMap();
         for (InsuranceResponse.InsuranceDto insuranceDto : allInsuranceListDto.getSeventyinsuranceDtoList()){
-            writePremiumInfo(contentStream, insuranceDto, seventyY, labelWidth);
+            isValueExistMap.put(Company.getCompany(insuranceDto.getCompany()), 1);
+            writePremiumInfos(contentStream, insuranceDto, seventyY, labelWidth);
         }
+        checkValueExist(isValueExistMap, contentStream, seventyY, labelWidth);
+
+        // 80% 보험료 작성
         for (InsuranceResponse.InsuranceDto insuranceDto : allInsuranceListDto.getEightyinsuranceDtoList()){
-            writePremiumInfo(contentStream, insuranceDto, eightyY, labelWidth);
+            isValueExistMap.put(Company.getCompany(insuranceDto.getCompany()), 1);
+            writePremiumInfos(contentStream, insuranceDto, eightyY, labelWidth);
         }
+        checkValueExist(isValueExistMap, contentStream, eightyY, labelWidth);
+
+        // 90% 보험료 작성
         for (InsuranceResponse.InsuranceDto insuranceDto : allInsuranceListDto.getNinetyinsuranceDtoList()){
-            writePremiumInfo(contentStream, insuranceDto, ninetyY, labelWidth);
+            isValueExistMap.put(Company.getCompany(insuranceDto.getCompany()), 1);
+            writePremiumInfos(contentStream, insuranceDto, ninetyY, labelWidth);
         }
+        checkValueExist(isValueExistMap, contentStream, ninetyY, labelWidth);
     }
 
 
-    private void writePremiumInfo(ContentStream contentStream, InsuranceResponse.InsuranceDto insuranceDto, float Y, float labelWidth){
-        // premium
+    private void checkValueExist(HashMap<Company, Integer> map, ContentStream contentStream, float Y, float labelWidth){
+        for (Map.Entry<Company, Integer> entry : map.entrySet()) {
+            if (entry.getValue() == 0) {
+
+                // 고양이 품종 & 삼성 정보 기입 X
+                if (entry.getKey().getLabel().equals("삼성") && labelWidth != 160F)
+                    continue;
+
+                // 가입불가 메세지 작성
+                writeDiscountedPremium(contentStream, entry.getKey().getLabel(), -1, Y, labelWidth);
+                writeOriginalPremiumAndStroke(contentStream, entry.getKey().getLabel(), -1, -1, Y, labelWidth);
+            }
+        }
+
+        clearHashMap(map);
+    }
+
+
+    private void writePremiumInfos(ContentStream contentStream, InsuranceResponse.InsuranceDto insuranceDto, float Y, float labelWidth){
+        String company = insuranceDto.getCompany();
+        int premium = insuranceDto.getPremium();
+        int discountedPremium = insuranceDto.getDiscountedPremium();
+
+        if (company.equals("삼성") && labelWidth != 160F)
+            return;
+
+        float x = writeDiscountedPremium(contentStream, company, discountedPremium, Y, labelWidth);
+        writeOriginalPremiumAndStroke(contentStream, company, premium, x, Y, labelWidth);
+    }
+
+
+    private float writeDiscountedPremium(ContentStream contentStream, String company, int premium, float Y, float labelWidth){
+        DecimalFormat decimalFormat = new DecimalFormat("#,###");
         contentStream.setColor(0f, 0.549f, 1.0f);
         contentStream.setFontSize(20);
 
-        float x = getInsuranceCompanyInfoXValue(insuranceDto.getCompany(), labelWidth) + (labelWidth / 2);
-        String text = insuranceDto.getPremium() + "원";
+        // 좌표 설정
+        float x = getInsuranceCompanyInfoXValue(company, labelWidth) + (labelWidth / 2) - 2;
+        // 문자열 및 중앙정렬을 위한 X좌표 설정
+        String text = premium == -1 ? "가입 불가" : decimalFormat.format(premium) + "원";
         float centerX = getCenterX(x, text, contentStream.getFont(), 20);
-
         contentStream.writeText(centerX, Y, text);
 
-        // discountedPremium
+        return x;
+    }
+
+    private void writeOriginalPremiumAndStroke(ContentStream contentStream, String company, int premium, float X, float Y, float labelWidth){
+        DecimalFormat decimalFormat = new DecimalFormat("#,###");
         contentStream.setColor(0.588f, 0.588f, 0.651f);
         contentStream.setFontSize(18);
 
-        float discountedY = Y - 31;
-        String discountedtext = insuranceDto.getDiscountedPremium() + "원";
-        float discountedCenterX = getCenterX(x, discountedtext, contentStream.getFont(), 18);
+        // 좌표 설정
+        Y = Y - 31;
+        if (X == -1)
+            X = getInsuranceCompanyInfoXValue(company, labelWidth) + (labelWidth / 2) - 2;
 
-        contentStream.writeText(discountedCenterX, discountedY, discountedtext);
+        // 문자열 및 중앙정렬을 위한 X좌표 설정
+        String text = premium == -1 ? "가입 불가" : decimalFormat.format(premium) + "원";
+        float centerX = getCenterX(X, text, contentStream.getFont(), 18);
+        contentStream.writeText(centerX, Y, text);
+
+        // stroke 작성
+        float textWidth = getStringWidth(text, contentStream.getFont(), 18);
+        contentStream.drawStroke(centerX, Y + 6, textWidth);
     }
+
 
     private float getInsuranceCompanyInfoXValue(String company, float labelWidth){
         PetType petType = labelWidth == 160F ? PetType.DOG : PetType.CAT;
 
-        float meritzX = 234F + 4;
-        float dbX = PetType.isDog(petType) ? 414.4F + 4 : 459.5F + 4;
-        float hyndaeX = PetType.isDog(petType) ? 594.8F + 4 : 685F + 4;
-        float kbX = PetType.isDog(petType) ? 775.2F + 4 : 910F + 4;
-        float samsungX = PetType.isDog(petType) ? 955.6F + 4 : -1;
+        float meritzX = 234F;
+        float dbX = PetType.isDog(petType) ? 414.4F : 459.5F;
+        float hyndaeX = PetType.isDog(petType) ? 594.8F : 685F;
+        float kbX = PetType.isDog(petType) ? 775.2F : 910F;
+        float samsungX = PetType.isDog(petType) ? 955.6F : -1;
 
+        // 회사, 견종에 따라 x좌표 값 리턴
         return switch (company) {
             case "메리츠" -> meritzX;
             case "DB" -> dbX;
@@ -185,11 +247,14 @@ public class ApachePdfUtils {
 
 
     private float getCenterX(float x, String text, PDFont font, int fontSize){
-        float textWidth = 0;
+        float textWidth = getStringWidth(text, font, fontSize);
+        return x - (textWidth / 2);
+    }
+
+
+    private float getStringWidth(String text, PDFont font, int fontSize){
         try {
-            // 가운데 정렬 X좌표 계산
-            textWidth = font.getStringWidth(text) / 1000 * fontSize;
-            return x - (textWidth / 2);
+            return font.getStringWidth(text) / 1000 * fontSize;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -282,6 +347,24 @@ public class ApachePdfUtils {
             return Loader.loadPDF(new File(path));
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+
+    private HashMap<Company, Integer> initIsCompanyValueExistMap() {
+        return new HashMap<Company, Integer>() {{
+            put(Company.MERITZ, 0);
+            put(Company.SAMSUNG, 0);
+            put(Company.DB, 0);
+            put(Company.HYUNDAE, 0);
+            put(Company.KB, 0);
+        }};
+    }
+
+    private void clearHashMap(HashMap<Company, Integer> hashMap){
+        // 모든 값을 0으로 설정
+        for (Map.Entry<Company, Integer> entry : hashMap.entrySet()) {
+            entry.setValue(0);
         }
     }
 
