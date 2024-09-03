@@ -119,6 +119,16 @@ public class InsuranceConverter {
                 .build();
     }
 
+    public static InsuranceResponse.AllInsuranceListDto toAllInsuranceListDto(List<InsuranceResponse.InsuranceDto> seventyInsuranceList,
+                                                                              List<InsuranceResponse.InsuranceDto> eightyInsuranceList,
+                                                                              List<InsuranceResponse.InsuranceDto> ninetyInsuranceList){
+        return InsuranceResponse.AllInsuranceListDto.builder()
+                .seventyinsuranceDtoList(seventyInsuranceList)
+                .eightyinsuranceDtoList(eightyInsuranceList)
+                .ninetyinsuranceDtoList(ninetyInsuranceList)
+                .build();
+    }
+
 
 
 }
