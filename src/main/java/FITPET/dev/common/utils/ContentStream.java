@@ -1,10 +1,12 @@
 package FITPET.dev.common.utils;
 
+import lombok.Getter;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
 import java.io.IOException;
 
+@Getter
 public class ContentStream {
     private PDPageContentStream pageContentStream;
     private PDFont font;

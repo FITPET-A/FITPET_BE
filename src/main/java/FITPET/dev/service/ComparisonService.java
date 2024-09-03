@@ -6,6 +6,7 @@ import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.common.utils.ApachePdfUtils;
 import FITPET.dev.common.utils.ExcelUtils;
 import FITPET.dev.converter.ComparisonConverter;
+import FITPET.dev.converter.InsuranceConverter;
 import FITPET.dev.converter.PetInfoConverter;
 import FITPET.dev.dto.request.ComparisonRequest;
 import FITPET.dev.dto.response.ComparisonResponse;
@@ -75,12 +76,12 @@ public class ComparisonService {
         PetInfo petInfo = PetInfoConverter.toPetInfo(request, pet);
         petInfo = petInfoRepository.save(petInfo);
 
-        ReferSite referSite = refSiteRepository.findByChannel(request.getReferSite())
-                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_REFERSITE));
-
+        ReferSite referSite = null;
+        if (request.getReferSite() != null)
+            referSite = findReferSiteByChannel(request.getReferSite());
 
         Comparison comparison = ComparisonConverter.toComparison(petInfo, referSite, request.getReferUserId(), request.getComment());
-        comparison = comparisonRepository.save(comparison);
+        comparisonRepository.save(comparison);
 
         // 보험료 조회
         return getInsurancePremiumsByPetInfo(petInfo);
@@ -99,6 +100,18 @@ public class ComparisonService {
         String renewalCycle = "3년";
         String deductible = "1만원";
         String coverageRatio = "70";
+        String compensation = "15만";
+
+        return insuranceService.getInsurancePremium(detailType, age, renewalCycle, coverageRatio, deductible, compensation);
+    }
+
+
+    public InsuranceResponse.InsuranceListDto getInsurancePremiumsByPetInfoAndCoverageRatio(PetInfo petInfo, String coverageRatio) {
+
+        String detailType = petInfo.getPet().getPetSpecies();
+        int age = petInfo.getAge();
+        String renewalCycle = "3년";
+        String deductible = "1만원";
         String compensation = "15만";
 
         return insuranceService.getInsurancePremium(detailType, age, renewalCycle, coverageRatio, deductible, compensation);
@@ -155,7 +168,13 @@ public class ComparisonService {
     public void downloadComparisonPdf(HttpServletResponse servletResponse, Long comparisonId) {
 
         Comparison comparison = findComparisonById(comparisonId);
-        apachePdfUtils.downloadComparisonPdf(servletResponse, comparison);
+        PetInfo petInfo = comparison.getPetInfo();
+        List<InsuranceResponse.InsuranceDto> seventyInsuranceList = getInsurancePremiumsByPetInfoAndCoverageRatio(petInfo, "70%").getInsuranceDtoList();
+        List<InsuranceResponse.InsuranceDto> eightyInsuranceList = getInsurancePremiumsByPetInfoAndCoverageRatio(petInfo, "80%").getInsuranceDtoList();
+        List<InsuranceResponse.InsuranceDto> ninetyInsuranceList = getInsurancePremiumsByPetInfoAndCoverageRatio(petInfo, "90%").getInsuranceDtoList();
+
+        InsuranceResponse.AllInsuranceListDto allInsuranceListDto = InsuranceConverter.toAllInsuranceListDto(seventyInsuranceList, eightyInsuranceList, ninetyInsuranceList);
+        apachePdfUtils.downloadComparisonPdf(servletResponse, comparison, allInsuranceListDto);
     }
 
 
@@ -232,6 +251,11 @@ public class ComparisonService {
     private Pet findPetByPetSpecies(String petSpecies) {
         return petRepository.findByPetSpecies(petSpecies)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_PET));
+    }
+
+    private ReferSite findReferSiteByChannel(String referSite){
+        return refSiteRepository.findByChannel(referSite)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_REFERSITE));
     }
 
     private void validatePhoneNumber(String phoneNum) {
