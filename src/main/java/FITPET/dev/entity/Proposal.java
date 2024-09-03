@@ -24,7 +24,7 @@ public class Proposal extends BaseEntity {
     @Column(nullable = false, length = 30)
     private String email;
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = true, length = 30)
     private String phoneNum;
 
     @Column(nullable = false, length = 500)
