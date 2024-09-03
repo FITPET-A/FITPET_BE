@@ -61,50 +61,63 @@ public class ApachePdfUtils {
         PDPage page = doc.getPage(0);
 
         try {
-            // 컨텐츠 스트림 열기
-            PDPageContentStream contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true, true);
-
-            // 폰트 설정
+            PDPageContentStream pageContentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true, true);
             PDFont font = PDType0Font.load(doc, fontFile);
-            contentStream.setFont(font, 24);
-            contentStream.beginText();
+            ContentStream contentStream = new ContentStream(pageContentStream, font);
 
-            // 견적 요청 정보, 반려동물 정보 편집
-            drawPetInfo(font, contentStream, comparison);
-
+            // 견적 요청 일시
+            drawComparisonCreatedAt(contentStream, comparison.getCreatedAt());
+            // 반려동물 정보 편집
+            drawPetInfo(contentStream, comparison.getPetInfo());
             // 보험료 정보 편집
+            drawInsuranceInfos(contentStream, comparison);
 
-
-            contentStream.endText();
             contentStream.close();
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void drawPetInfo(PDFont font, PDPageContentStream contentStream, Comparison comparison){
 
-        // 견적 요청 일시
-        drawComparisonCreatedAt(contentStream, comparison.getCreatedAt());
-
-    }
-
-    private void drawComparisonCreatedAt(PDPageContentStream contentStream, LocalDateTime comparisonCreatedAt){
+    private void drawComparisonCreatedAt(ContentStream contentStream, LocalDateTime comparisonCreatedAt){
         int x = 96;
         float y = (float) (1446 + 7.5);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
         String formattedComparisonCreatedAt = comparisonCreatedAt.format(formatter);
 
-        try {
-            contentStream.setNonStrokingColor(1.0f, 1.0f, 1.0f); // white
-            contentStream.newLineAtOffset(x, y);
-            contentStream.showText(formattedComparisonCreatedAt);
+        contentStream.setColor(1.0f, 1.0f, 1.0f); // white
+        contentStream.setFontSize(24);
+        contentStream.writeText(x, y, formattedComparisonCreatedAt);
+    }
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    private void drawPetInfo(ContentStream contentStream, PetInfo petInfo){
+        int petInfoX = 746;
+        int nameY = 1537;
+        int ageY = 1493;
+        int petSpeciesY = 1449;
+
+        contentStream.setColor(1.0f, 1.0f, 1.0f); // white
+
+        // name
+        contentStream.setFontSize(38);
+        contentStream.writeText(petInfoX, nameY, petInfo.getName());
+
+        // age
+        contentStream.setFontSize(24);
+        contentStream.writeText(petInfoX, ageY, "만 " + petInfo.getAge());
+
+        // petSpecies
+        contentStream.writeText(petInfoX, petSpeciesY, petInfo.getPet().getPetSpecies());
+    }
+
+
+    private void drawInsuranceInfos(ContentStream contentStream, Comparison comparison) {
+
+
+
+
+
     }
 
 
