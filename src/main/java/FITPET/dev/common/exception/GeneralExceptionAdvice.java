@@ -1,6 +1,8 @@
 package FITPET.dev.common.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import FITPET.dev.common.response.ApiResponse;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,7 +13,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice(annotations = {RestController.class})
 public class GeneralExceptionAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = { GeneralException.class })
-    protected ApiResponse<String> handleException(GeneralException e) {
-        return ApiResponse.FailureResponse(e.getErrorStatus());
+    protected ResponseEntity<ApiResponse<String>> handleException(GeneralException e) {
+        log.error("Handling GeneralException: {}", e.getMessage());
+
+        ApiResponse<String> response = ApiResponse.FailureResponse(e.getErrorStatus());
+        HttpStatus status = e.getErrorStatus() != null ? e.getErrorStatus().getHttpStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
+
+        return new ResponseEntity<>(response, status);
     }
 }
