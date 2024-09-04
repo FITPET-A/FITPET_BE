@@ -36,6 +36,10 @@ dependencies {
 	// apache pdfbox
 	implementation 'org.apache.pdfbox:pdfbox:3.0.3'
 
+	// auth
+	implementation 'com.auth0:java-jwt:4.3.0'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
