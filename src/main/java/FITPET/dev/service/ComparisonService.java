@@ -59,11 +59,11 @@ public class ComparisonService {
 
 
     /*
-     * PetInfo 생성 및 저장 후 보험료 조회
+     * PetInfo 생성 및 저장
      * @param request
      * @return
      */
-    public InsuranceResponse.InsuranceListDto createComparisonAndGetInsurance(ComparisonRequest request) {
+    public ComparisonResponse.ComparisonDto createComparisonAndGetInsurance(ComparisonRequest request) {
         validatePhoneNumber(request.getPhoneNumber());
         validateAge(request.getPetAge());
         Pet pet = findPetByPetSpecies(request.getPetSpecies());
@@ -82,9 +82,7 @@ public class ComparisonService {
 
         Comparison comparison = ComparisonConverter.toComparison(petInfo, referSite, request.getReferUserId(), request.getComment());
         comparisonRepository.save(comparison);
-
-        // 보험료 조회
-        return getInsurancePremiumsByPetInfo(petInfo);
+        return ComparisonConverter.toComparisonDto(comparison);
     }
 
 

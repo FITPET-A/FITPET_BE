@@ -51,6 +51,7 @@ public class ComparisonConverter {
     public static ComparisonResponse.ComparisonDto toComparisonDto(Comparison comparison) {
         PetInfo petInfo = comparison.getPetInfo();
         Pet pet = petInfo.getPet();
+        String referSite = comparison.getReferSite() != null ? comparison.getReferSite().getChannel() : null;
 
         return ComparisonResponse.ComparisonDto.builder()
                 .comparisonId(comparison.getComparisonId())
@@ -62,7 +63,7 @@ public class ComparisonConverter {
                 .petSpecies(pet.getPetSpecies())
                 .comment(comparison.getComment())
                 .status(comparison.getStatus().getLabel())
-                .referSite(comparison.getReferSite().getChannel())
+                .referSite(referSite)
                 .referUserId(comparison.getReferUserId())
                 .build();
     }
