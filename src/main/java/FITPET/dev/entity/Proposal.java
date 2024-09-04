@@ -1,6 +1,8 @@
 package FITPET.dev.entity;
 
 import FITPET.dev.common.base.BaseEntity;
+import FITPET.dev.common.enums.InquiryStatus;
+import FITPET.dev.common.enums.ProposalStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,4 +31,12 @@ public class Proposal extends BaseEntity {
 
     @Column(nullable = false, length = 500)
     private String comment;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ProposalStatus status;
+
+    public void updateStatus(ProposalStatus proposalStatus){
+        this.status = proposalStatus;
+    }
 }

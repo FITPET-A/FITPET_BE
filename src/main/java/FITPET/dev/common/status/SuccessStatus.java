@@ -30,10 +30,14 @@ public enum SuccessStatus {
     // inquiry
     POST_INQUIRY(200, "1:1 문의 전송에 성공했습니다."),
     GET_INQUIRY(200, "1:1 문의 내역 조회에 성공했습니다."),
+    DELETE_INQUIRY(200, "1:1 문의 삭제에 성공했습니다."),
+    PATCH_INQUIRY_STATUS(200, "1:1 문의 상태 변경에 성공했습니다."),
 
     // proposal
-    POST_PROPOSAL(200, "제휴제안 전송에 성공했습니다."),
-    GET_PROPOSAL(200, "제휴제안 내역 조회에 성공했습니다."),
+    POST_PROPOSAL(200, "제휴 제안 전송에 성공했습니다."),
+    GET_PROPOSAL(200, "제휴 제안 내역 조회에 성공했습니다."),
+    PATCH_PROPOSAL_STATUS(200, "제휴 제안 상태 변경에 성공했습니다."),
+    DELETE_PROPOSAL(200, "제휴 제안 삭제에 성공했습니다."),
 
     // refersite
     POST_REFERSITE(200, "유입 채널 추가에 성공했습니다."),

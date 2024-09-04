@@ -1,5 +1,6 @@
 package FITPET.dev.converter;
 
+import FITPET.dev.common.enums.ProposalStatus;
 import FITPET.dev.dto.response.ProposalResponse;
 import FITPET.dev.entity.Proposal;
 
@@ -18,6 +19,7 @@ public class ProposalConverter {
                 .email(email)
                 .phoneNum(phoneNum)
                 .comment(comment)
+                .status(ProposalStatus.PENDING)
                 .build();
     }
 
@@ -29,6 +31,7 @@ public class ProposalConverter {
                 .email(proposal.getEmail())
                 .phoneNum(proposal.getPhoneNum())
                 .comment(proposal.getComment())
+                .status(proposal.getStatus().getLabel())
                 .build();
     }
 

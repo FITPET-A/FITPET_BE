@@ -19,6 +19,7 @@ public class ProposalResponse {
         private String email;
         private String phoneNum;
         private String comment;
+        private String status;
     }
 
     @Data
