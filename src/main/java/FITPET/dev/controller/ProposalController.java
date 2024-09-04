@@ -1,5 +1,6 @@
 package FITPET.dev.controller;
 
+import FITPET.dev.common.enums.InquiryStatus;
 import FITPET.dev.common.enums.ProposalStatus;
 import FITPET.dev.common.status.SuccessStatus;
 import FITPET.dev.common.response.ApiResponse;
@@ -28,9 +29,13 @@ public class ProposalController {
      * admin
      */
     @GetMapping("/admin/proposal")
-    @Operation(summary = "제휴 제안 내역 전체 조회 API", description = "제휴 제안 내역 전체 조회")
-    public ApiResponse getProposals(){
-        return ApiResponse.SuccessResponse(SuccessStatus.GET_PROPOSAL, proposalService.getProposals());
+    @Operation(summary = "제휴 제안 내역 조회 API", description = "시작 날짜, 마지막 날짜, 상태값을 Parameter으로 받아 특정 기간 동안 생성된 제휴 제안 내역 조회")
+    public ApiResponse getProposals(
+            @RequestParam(name = "startDate", required = false) String startDate,
+            @RequestParam(name = "endDate", required = false) String endDate,
+            @RequestParam(name = "status", required = false) ProposalStatus proposalStatus
+    ){
+        return ApiResponse.SuccessResponse(SuccessStatus.GET_PROPOSAL, proposalService.getProposals(startDate, endDate, proposalStatus));
     }
 
     @PatchMapping("/admin/proposal/status/{proposalId}")
@@ -42,4 +47,10 @@ public class ProposalController {
         return ApiResponse.SuccessResponse(SuccessStatus.PATCH_PROPOSAL_STATUS, proposalService.patchProposalStatus(proposalId, proposalStatus));
     }
 
+    @DeleteMapping("/admin/proposal/{proposalId}")
+    @Operation(summary = "제휴 제안 삭제 API", description = "특정 제휴 제안 정보를 삭제")
+    public ApiResponse deleteProposal(@PathVariable(value = "proposalId") Long proposalId){
+        proposalService.deleteProposal(proposalId);
+        return ApiResponse.SuccessResponse(SuccessStatus.DELETE_PROPOSAL);
+    }
 }
