@@ -46,4 +46,11 @@ public class InquiryController {
     ) {
         return ApiResponse.SuccessResponse(SuccessStatus.PATCH_COMPARISON_STATUS, inquiryService.patchInquiryStatus(inquiryId, inquiryStatus));
     }
+
+    @DeleteMapping("/admin/inquiry/{inquiryId}")
+    @Operation(summary = "1:1 문의 삭제 API", description = "특정 1:1 문의를 삭제")
+    public ApiResponse deleteInquiry(@PathVariable(value = "inquiryId") Long inquiryId){
+        inquiryService.deleteInquiry(inquiryId);
+        return ApiResponse.SuccessResponse(SuccessStatus.DELETE_INQUIRY);
+    }
 }

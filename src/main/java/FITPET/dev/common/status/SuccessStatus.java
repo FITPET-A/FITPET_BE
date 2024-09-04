@@ -30,6 +30,7 @@ public enum SuccessStatus {
     // inquiry
     POST_INQUIRY(200, "1:1 문의 전송에 성공했습니다."),
     GET_INQUIRY(200, "1:1 문의 내역 조회에 성공했습니다."),
+    DELETE_INQUIRY(200, "1:1 문의 삭제에 성공했습니다."),
 
     // proposal
     POST_PROPOSAL(200, "제휴제안 전송에 성공했습니다."),

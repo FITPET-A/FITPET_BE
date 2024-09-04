@@ -91,6 +91,17 @@ public class InquiryService {
     }
 
 
+    /*
+     * 1:1 문의 삭제
+     * @param inquiryId
+     */
+    @Transactional
+    public void deleteInquiry(Long inquiryId) {
+        Inquiry inquiry = findInquiryById(inquiryId);
+        inquiryRepository.delete(inquiry);
+    }
+
+
     private List<Inquiry> getInquiryListByStatusBetweenDate(LocalDateTime start, LocalDateTime end, InquiryStatus inquiryStatus){
 
         if (inquiryStatus == null){
