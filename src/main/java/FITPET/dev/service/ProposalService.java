@@ -9,6 +9,7 @@ import FITPET.dev.entity.Proposal;
 import FITPET.dev.repository.ProposalRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -25,11 +26,13 @@ public class ProposalService {
      * 제휴 제안 전송
      * @param proposalDto
      */
+    @Transactional
     public void postProposal(ProposalRequest.ProposalDto proposalDto){
 
         // 패턴 및 유효성 검사
         validateEmail(proposalDto.getEmail());
-        validatePhoneNumber(proposalDto.getPhoneNum());
+        if (proposalDto.getPhoneNum() != null)
+            validatePhoneNumber(proposalDto.getPhoneNum());
 
         // proposal 객체 생성 및 저장
         Proposal proposal = ProposalConverter.toProposal(proposalDto.getName(), proposalDto.getEmail(),
