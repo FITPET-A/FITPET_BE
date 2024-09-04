@@ -1,5 +1,6 @@
 package FITPET.dev.service;
 
+import FITPET.dev.common.enums.ProposalStatus;
 import FITPET.dev.common.status.ErrorStatus;
 import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.converter.ProposalConverter;
@@ -51,6 +52,26 @@ public class ProposalService {
     }
 
 
+    /*
+     * 제휴 제안 상태 변경
+     * @param proposalId
+     * @param proposalStatus
+     * @return
+     */
+    public ProposalResponse.ProposalDto patchProposalStatus(Long proposalId, ProposalStatus proposalStatus) {
+        Proposal proposal = findProposalById(proposalId);
+
+        // validate status
+        ProposalStatus currentProposalStatus = proposal.getStatus();
+        if (currentProposalStatus.getIndex() > proposalStatus.getIndex())
+            throw new GeneralException(ErrorStatus.INVALID_PATCH_PERIOR_STATUS);
+
+        // patch status
+        proposal.updateStatus(proposalStatus);
+        return ProposalConverter.toProposalDto(proposal);
+    }
+
+
     private void validateEmail(String email) {
         if (!EMAIL_PATTERN.matcher(email).matches())
             throw new GeneralException(ErrorStatus.INVALID_EMAIL);
@@ -60,5 +81,10 @@ public class ProposalService {
     private void validatePhoneNumber(String phoneNum) {
         if (!PHONE_NUMBER_PATTERN.matcher(phoneNum).matches())
             throw new GeneralException(ErrorStatus.INVALID_PHONE_NUMBER);
+    }
+
+    private Proposal findProposalById(Long proposalId){
+        return proposalRepository.findById(proposalId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_PROPOSAL));
     }
 }

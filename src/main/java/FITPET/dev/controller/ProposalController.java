@@ -1,5 +1,6 @@
 package FITPET.dev.controller;
 
+import FITPET.dev.common.enums.ProposalStatus;
 import FITPET.dev.common.status.SuccessStatus;
 import FITPET.dev.common.response.ApiResponse;
 import FITPET.dev.dto.request.ProposalRequest;
@@ -30,6 +31,15 @@ public class ProposalController {
     @Operation(summary = "제휴 제안 내역 전체 조회 API", description = "제휴 제안 내역 전체 조회")
     public ApiResponse getProposals(){
         return ApiResponse.SuccessResponse(SuccessStatus.GET_PROPOSAL, proposalService.getProposals());
+    }
+
+    @PatchMapping("/admin/proposal/status/{proposalId}")
+    @Operation(summary = "제휴 제안 상태 변경 API", description = "특정 제휴 제안 정보의 상태값을 변경")
+    public ApiResponse patchProposalStatus(
+            @PathVariable(value = "proposalId") Long proposalId,
+            @RequestParam(name = "status")ProposalStatus proposalStatus
+            ) {
+        return ApiResponse.SuccessResponse(SuccessStatus.PATCH_PROPOSAL_STATUS, proposalService.patchProposalStatus(proposalId, proposalStatus));
     }
 
 }

@@ -44,7 +44,7 @@ public class InquiryController {
             @PathVariable(value = "inquiryId") Long inquiryId,
             @RequestParam(name = "status") InquiryStatus inquiryStatus
     ) {
-        return ApiResponse.SuccessResponse(SuccessStatus.PATCH_COMPARISON_STATUS, inquiryService.patchInquiryStatus(inquiryId, inquiryStatus));
+        return ApiResponse.SuccessResponse(SuccessStatus.PATCH_INQUIRY_STATUS, inquiryService.patchInquiryStatus(inquiryId, inquiryStatus));
     }
 
     @DeleteMapping("/admin/inquiry/{inquiryId}")

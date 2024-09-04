@@ -33,7 +33,6 @@ public enum ErrorStatus {
     INVALID_COMPANY(400, "잘못된 회사명입니다."),
     ALREADY_DELETED_INSURANCE(400, "이미 삭제된 보험 정보입니다."),
 
-
     // validation
     INVALID_PHONE_NUMBER(400,"유효하지 않은 전화번호 형식입니다."),
     INVALID_EMAIL(400,"유효하지 않은 이메일 형식입니다."),
@@ -62,6 +61,9 @@ public enum ErrorStatus {
 
     // inquiry
     NOT_EXIST_INQUIRY(404, "존재하지 않는 1:1 문의 정보입니다."),
+
+    // proposal
+    NOT_EXIST_PROPOSAL(400, "존재하지 않는 제휴 문의 내역입니다."),
 
     // comparison
     NOT_EXIST_COMPARISON(404, "존재하지 않는 견적 요청입니다."),
