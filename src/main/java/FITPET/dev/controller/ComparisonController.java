@@ -26,9 +26,9 @@ public class ComparisonController {
     private final ComparisonService comparisonService;
 
     @PostMapping("/comparison")
-    @Operation(summary = "견적서 생성 API", description = "견적서를 생성하고 기본 보험료를 조회")
+    @Operation(summary = "견적서 생성 API", description = "반려 동물 정보 및 사이트 유입 정보를 받아 견적 요청 테이블 생성")
     public ApiResponse<?> createComparisonAndGetInsurance(@RequestBody ComparisonRequest comparisonRequest) {
-        return ApiResponse.SuccessResponse(SuccessStatus.GET_INSURANCE_PREMIUM,
+        return ApiResponse.SuccessResponse(SuccessStatus.POST_COMPARISON,
                 comparisonService.createComparisonAndGetInsurance(comparisonRequest));
     }
 

@@ -20,8 +20,8 @@ public enum SuccessStatus {
     // pet
     GET_DETAILTYPE_LIST(200, "상세품종명 리스트 조회에 성공했습니다."),
 
-
     // comparison
+    POST_COMPARISON(200, "견적 요청 생성에 성공했습니다."),
     PATCH_COMPARISON_STATUS(200, "견적서 상태 변경에 성공했습니다."),
     GET_COMPARISON_TABLE(200, "견적서 요청 내역 조회에 성공했습니다."),
     SEARCH_COMPARISON(200, "견적서 내용 검색에 성공했습니다."),

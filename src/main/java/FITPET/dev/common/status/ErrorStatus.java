@@ -64,7 +64,7 @@ public enum ErrorStatus {
     NOT_EXIST_INQUIRY(HttpStatus.NOT_FOUND, 404, "존재하지 않는 1:1 문의 정보입니다."),
 
     // proposal
-    NOT_EXIST_PROPOSAL(400, "존재하지 않는 제휴 문의 내역입니다."),
+    NOT_EXIST_PROPOSAL(HttpStatus.NOT_FOUND, 400, "존재하지 않는 제휴 문의 내역입니다."),
 
     // comparison
     NOT_EXIST_COMPARISON(HttpStatus.NOT_FOUND, 404, "존재하지 않는 견적 요청입니다."),
