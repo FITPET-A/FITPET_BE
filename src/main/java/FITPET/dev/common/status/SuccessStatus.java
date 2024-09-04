@@ -8,6 +8,9 @@ import lombok.Getter;
 public enum SuccessStatus {
     SUCCESS(200, "응답에 성공했습니다."),
 
+    SUCCESS_SIGN_UP(200, "관리자 계정 회원가입에 성공했습니다."),
+    SUCCESS_SIGN_IN(200, "관리자 계정 로그인에 성공했습니다."),
+
     // insurance
     GET_INSURANCE_PREMIUM(200, "회사별 보험료 조회에 성공했습니다."),
     GET_INSURANCE_TABLE(200, "회사별 보험 테이블 조회에 성공했습니다."),

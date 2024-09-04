@@ -48,6 +48,11 @@ public enum ErrorStatus {
     INVALID_DEDUCTIBLE_VALUE(HttpStatus.BAD_REQUEST, 400, "유효하지 않은 자부담 값입니다."),
     INVALID_RENEWAL_CYCLE_VALUE(HttpStatus.BAD_REQUEST, 400, "유효하지 않은 갱신주기 값입니다."),
 
+    // admin
+    ALREADY_EXIST_ADMIN_ACCOUNT(HttpStatus.BAD_REQUEST, 400, "이미 가입된 관리자 계정이 존재합니다."),
+    INVALID_ADMIN_SIGN_UP(HttpStatus.BAD_REQUEST, 400, "관리자 계정으로 가입할 수 없는 정보입니다."),
+    INVALID_PASSWORD_MATCH(HttpStatus.BAD_REQUEST, 400, "비밀번호가 일치하지 않습니다."),
+
 
     /**
      * 404
@@ -69,6 +74,8 @@ public enum ErrorStatus {
 
     // referSite
     NOT_EXIST_REFERSITE(HttpStatus.NOT_FOUND, 404, "존재하지 않는 참조 사이트입니다."),
+
+    NOT_EXIST_ADMIN(HttpStatus.NOT_FOUND, 404, "존재하지 않는 관리자 정보입니다."),
 
 
 
