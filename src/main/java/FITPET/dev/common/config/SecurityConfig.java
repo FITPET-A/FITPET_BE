@@ -4,8 +4,7 @@ package FITPET.dev.common.config;
 import FITPET.dev.common.security.jwt.JwtAccessDeniedHandler;
 import FITPET.dev.common.security.jwt.JwtAuthenticationEntryPoint;
 import FITPET.dev.common.security.jwt.JwtFilter;
-import FITPET.dev.common.security.jwt.JwtVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
+import FITPET.dev.common.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +23,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final JwtVerifier jwtVerifier;
+    private final JwtTokenProvider jwtTokenProvider;
     @Bean
     public BCryptPasswordEncoder customPasswordEncoder() {
         return new BCryptPasswordEncoder();
@@ -42,7 +41,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtFilter jwtFilter() {
-        return new JwtFilter(jwtVerifier);
+        return new JwtFilter(jwtTokenProvider);
     }
 
     @Bean
