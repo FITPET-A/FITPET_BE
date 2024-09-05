@@ -2,11 +2,14 @@ package FITPET.dev.service;
 
 import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.common.status.ErrorStatus;
+import FITPET.dev.converter.ComparisonConverter;
 import FITPET.dev.converter.InsuranceConverter;
 import FITPET.dev.converter.ReferSiteConverter;
 import FITPET.dev.dto.request.ReferSiteRequest;
+import FITPET.dev.dto.response.ComparisonResponse;
 import FITPET.dev.dto.response.InsuranceResponse;
 import FITPET.dev.dto.response.ReferSiteResponse;
+import FITPET.dev.entity.Comparison;
 import FITPET.dev.entity.Insurance;
 import FITPET.dev.entity.ReferSite;
 import FITPET.dev.repository.ReferSiteRepository;
@@ -69,5 +72,17 @@ public class ReferSiteService {
         ReferSite referSite = findReferSiteById(referSiteId);
         referSite.setDeletedAt();
         referSiteRepository.save(referSite);
+    }
+
+    /*
+     * 유입채널 검색
+     * @param content
+     */
+    public ReferSiteResponse.ReferSitePageDto searchReferSite(String content, int page) {
+        int size = 20;
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ReferSite> referSitePage = referSiteRepository.searchReferSites(content, pageable);
+
+        return ReferSiteConverter.toReferSitePageDto(referSitePage);
     }
 }

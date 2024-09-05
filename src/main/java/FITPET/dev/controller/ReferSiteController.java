@@ -64,4 +64,13 @@ public class ReferSiteController {
         return ApiResponse.SuccessResponse(SuccessStatus.DELETE_REFERSITE);
     }
 
+    @GetMapping("/refersite/search")
+    @Operation(summary = "유입 채널 검색 API", description = "채널명, 채널 한글명, url로 견적서 검색")
+    public ApiResponse searchReferSite(
+            @RequestParam(name = "content", required = false) String content,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page
+    ) {
+        return ApiResponse.SuccessResponse(SuccessStatus.SEARCH_REFERSITE, referSiteService.searchReferSite(content, page));
+    }
+
 }
