@@ -38,4 +38,7 @@ public interface ComparisonRepository extends JpaRepository<Comparison, Long> {
             "WHERE REPLACE(c.petInfo.phoneNum, '-', '') LIKE %?1% " +
             "OR c.petInfo.name LIKE %?1%")
     Page<Comparison> findAllByPhoneNumOrPetName(String content, Pageable pageable);
+
+
+
 }

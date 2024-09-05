@@ -10,6 +10,7 @@ import FITPET.dev.dto.request.ComparisonRequest;
 import FITPET.dev.dto.response.ComparisonResponse;
 import FITPET.dev.dto.response.InsuranceResponse;
 import FITPET.dev.entity.Comparison;
+import FITPET.dev.entity.Insurance;
 import FITPET.dev.entity.Pet;
 import FITPET.dev.entity.PetInfo;
 import FITPET.dev.entity.ReferSite;
@@ -30,6 +31,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -184,6 +186,22 @@ public class ComparisonService {
         return ComparisonConverter.toComparisonPageDto(comparisonPage);
     }
 
+    /*
+     * ComparisonId들 받아서 삭제
+     * @param ComparisonId
+     */
+
+    @Transactional
+    public void deleteComparison(ComparisonRequest.ComparisonDto comparisonDto) {
+        List<Long> comparisonIds = comparisonDto.getComparisonIds();
+        comparisonIds.forEach(id -> {
+            Comparison comparison = comparisonRepository.findById(id)
+                    .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_COMPARISON));
+            comparison.setDeletedAt();
+        });
+    }
+
+
 
     /*
      * redirect url 생성
@@ -250,4 +268,6 @@ public class ComparisonService {
                 .map(ComparisonConverter::toComparisonExcelDto)
                 .toList();
     }
+
+
 }
