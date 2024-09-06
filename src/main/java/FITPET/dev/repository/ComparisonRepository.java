@@ -18,7 +18,8 @@ import java.util.List;
 public interface ComparisonRepository extends JpaRepository<Comparison, Long> {
 
     @Query("SELECT c FROM Comparison c " +
-            "WHERE (:startDate IS NULL OR c.createdAt >= :startDate) " +
+            "WHERE c.deletedAt IS NULL " +
+            "AND (:startDate IS NULL OR c.createdAt >= :startDate) " +
             "AND (:endDate IS NULL OR c.createdAt <= :endDate) " +
             "AND (:status IS NULL OR c.status = :status) " +
             "ORDER BY c.createdAt DESC ")
@@ -28,7 +29,8 @@ public interface ComparisonRepository extends JpaRepository<Comparison, Long> {
                                                   Pageable pageable);
 
     @Query("SELECT c FROM Comparison c " +
-            "WHERE (:startDate IS NULL OR c.createdAt >= :startDate) " +
+            "WHERE c.deletedAt IS NULL " +
+            "AND (:startDate IS NULL OR c.createdAt >= :startDate) " +
             "AND (:endDate IS NULL OR c.createdAt <= :endDate) " +
             "AND (:status IS NULL OR c.status = :status) " +
             "ORDER BY c.createdAt DESC ")
@@ -38,7 +40,8 @@ public interface ComparisonRepository extends JpaRepository<Comparison, Long> {
 
 
     @Query("SELECT c FROM Comparison c " +
-            "WHERE (:content IS NULL OR " +
+            "WHERE c.deletedAt IS NULL " +
+            "AND (:content IS NULL OR " +
             "(REPLACE(c.petInfo.phoneNum, '-', '') LIKE %:content% " +
             "OR c.petInfo.name LIKE %:content% " +
             "OR c.referSite.channel LIKE %:content% " +
