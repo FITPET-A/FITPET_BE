@@ -34,6 +34,6 @@ public class ComparisonRequest {
     @AllArgsConstructor
     public static class ComparisonDto {
         @NotBlank
-        private List<Long> comparisonIds;
+        private List<Long> idList;
     }
 }

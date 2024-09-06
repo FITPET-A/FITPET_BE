@@ -193,10 +193,9 @@ public class ComparisonService {
 
     @Transactional
     public void deleteComparison(ComparisonRequest.ComparisonDto comparisonDto) {
-        List<Long> comparisonIds = comparisonDto.getComparisonIds();
+        List<Long> comparisonIds = comparisonDto.getIdList();
         comparisonIds.forEach(id -> {
-            Comparison comparison = comparisonRepository.findById(id)
-                    .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_COMPARISON));
+            Comparison comparison = findComparisonById(id);
             comparison.setDeletedAt();
         });
     }
