@@ -85,8 +85,8 @@ public class InsuranceConverter {
                 .content(insuranceDetailDtoList)
                 .currentPage(page.getNumber() + 1)
                 .pageSize(page.getSize())
-                .totalNumber(page.getNumberOfElements())
-                .totalPage(page.getTotalPages())
+                .numberOfElement(page.getNumberOfElements())
+                .totalElements((int) page.getTotalElements())                .totalPage(page.getTotalPages())
                 .build();
     }
 

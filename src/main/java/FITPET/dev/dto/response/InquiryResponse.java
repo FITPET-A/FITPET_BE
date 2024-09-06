@@ -52,7 +52,8 @@ public class InquiryResponse {
         private List<InquiryDto> content;
         private int currentPage; // 현재 페이지 번호
         private int pageSize; // 페이지 크기
-        private int totalNumber; // 전체 content 개수
+        private int numberOfElement; // 현재 페이지의 element 개수
+        private int totalElements; // 전체 element 개수
         private int totalPage; // 전체 페이지 개수
     }
 }

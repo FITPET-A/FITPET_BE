@@ -80,7 +80,8 @@ public class ComparisonConverter {
                 .content(comparisonDtoList)
                 .currentPage(comparisonPage.getNumber() + 1)
                 .pageSize(comparisonPage.getSize())
-                .totalNumber((int) comparisonPage.getTotalElements())
+                .numberOfElement(comparisonPage.getNumberOfElements())
+                .totalElements((int) comparisonPage.getTotalElements())
                 .totalPage(comparisonPage.getTotalPages())
                 .build();
     }
