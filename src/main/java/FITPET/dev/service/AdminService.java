@@ -1,7 +1,6 @@
 package FITPET.dev.service;
 
 import FITPET.dev.common.exception.GeneralException;
-import FITPET.dev.common.security.dto.AuthTokenDto;
 import FITPET.dev.common.security.jwt.JwtTokenProvider;
 import FITPET.dev.common.status.ErrorStatus;
 import FITPET.dev.converter.AdminConverter;
@@ -43,11 +42,11 @@ public class AdminService {
         adminRepository.save(admin);
 
         // create token
-        AuthTokenDto accessToken = jwtTokenProvider.createAccessToken(admin.getAdminId());
-        AuthTokenDto refreshToken = jwtTokenProvider.createRefreshToken(admin.getAdminId());
+        String accessToken = jwtTokenProvider.createAccessToken(admin.getAdminId());
+        String refreshToken = jwtTokenProvider.createRefreshToken(admin.getAdminId());
 
         // save refresh token
-        admin.setRefreshToken(refreshToken.getToken());
+        admin.setRefreshToken(refreshToken);
         return AdminConverter.toSignDto(accessToken, refreshToken);
     }
 
@@ -63,11 +62,11 @@ public class AdminService {
             throw new GeneralException(ErrorStatus.INVALID_PASSWORD_MATCH);
 
         // create token
-        AuthTokenDto accessToken = jwtTokenProvider.createAccessToken(admin.getAdminId());
-        AuthTokenDto refreshToken = jwtTokenProvider.createRefreshToken(admin.getAdminId());
+        String accessToken = jwtTokenProvider.createAccessToken(admin.getAdminId());
+        String refreshToken = jwtTokenProvider.createRefreshToken(admin.getAdminId());
 
         // save refresh token
-        admin.setRefreshToken(refreshToken.getToken());
+        admin.setRefreshToken(refreshToken);
         return AdminConverter.toSignDto(accessToken, refreshToken);
     }
 

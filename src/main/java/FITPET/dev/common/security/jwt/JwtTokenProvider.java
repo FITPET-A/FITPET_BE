@@ -1,6 +1,5 @@
 package FITPET.dev.common.security.jwt;
 
-import FITPET.dev.common.security.dto.AuthTokenDto;
 import FITPET.dev.common.security.dto.TokenDto;
 import FITPET.dev.converter.TokenConverter;
 import com.auth0.jwt.JWT;
@@ -26,23 +25,21 @@ public class JwtTokenProvider {
     @Value("${app.jwt.accessTokenValidMS}") private Long accessTokenValidMilliseconds;
     @Value("${app.jwt.refreshTokenValidMS}") private Long refreshTokenValidMilliseconds;
 
-    public AuthTokenDto createAccessToken(Long id) {
+    public String createAccessToken(Long id) {
         return createToken(id, accessTokenValidMilliseconds);
     }
 
-    public AuthTokenDto createRefreshToken(Long id) {
+    public String createRefreshToken(Long id) {
         return createToken(id, refreshTokenValidMilliseconds);
     }
 
-    private AuthTokenDto createToken(Long id, Long tokenValidMilliseconds){
+    private String createToken(Long id, Long tokenValidMilliseconds){
         Date expiredAt = new Date(System.currentTimeMillis() + tokenValidMilliseconds);
 
-        String token = JWT.create()
+        return JWT.create()
                 .withClaim("userId", id)
                 .withExpiresAt(expiredAt)
                 .sign(tokenAlgorithm);
-
-        return TokenConverter.toAuthTokenDto(token);
     }
 
     public TokenDto validateToken(String token){

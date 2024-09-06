@@ -1,6 +1,5 @@
 package FITPET.dev.dto.response;
 
-import FITPET.dev.common.security.dto.AuthTokenDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +12,7 @@ public class AdminResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SignDto {
-        private AuthTokenDto accessToken;
-        private AuthTokenDto refreshToken;
+        private String accessToken;
+        private String refreshToken;
     }
 }
