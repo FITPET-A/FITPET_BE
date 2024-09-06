@@ -25,7 +25,7 @@ public class Comparison extends BaseEntity {
     @JoinColumn(name = "pet_info_id", nullable = true)
     private PetInfo petInfo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "refer_site_id", nullable = true)
     private ReferSite referSite;
 

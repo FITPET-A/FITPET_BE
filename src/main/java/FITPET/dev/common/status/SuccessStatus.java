@@ -47,7 +47,8 @@ public enum SuccessStatus {
     POST_REFERSITE(200, "유입 채널 추가에 성공했습니다."),
     UPDATE_REFERSITE(200, "유입 채널 수정에 성공했습니다."),
     GET_REFERSITE(200, "유입 채널 조회에 성공했습니다."),
-    DELETE_REFERSITE(200, "유입 채널 삭제에 성공했습니다.");
+    DELETE_REFERSITE(200, "유입 채널 삭제에 성공했습니다."),
+    SEARCH_REFERSITE(200, "유입 채널 검색에 성공했습니다.");
 
     private final int code;
     private final String message;

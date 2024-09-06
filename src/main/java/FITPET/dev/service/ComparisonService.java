@@ -1,6 +1,7 @@
 package FITPET.dev.service;
 
 import FITPET.dev.common.enums.ComparisonStatus;
+import FITPET.dev.common.enums.PetType;
 import FITPET.dev.common.status.ErrorStatus;
 import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.common.utils.ApachePdfUtils;
@@ -210,9 +211,9 @@ public class ComparisonService {
         Pageable pageable = PageRequest.of(page, size);
 
         // '-' 제거
-        String chagnedContent = content != null ? content.replaceAll("-", "") : null;
-        Page<Comparison> comparisonPage = comparisonRepository.findAllByPhoneNumOrPetName(chagnedContent, pageable);
+        String changedContent = content != null ? content.replaceAll("-", "") : null;
 
+        Page<Comparison> comparisonPage = comparisonRepository.searchComparison(changedContent, pageable);
         return ComparisonConverter.toComparisonPageDto(comparisonPage);
     }
 

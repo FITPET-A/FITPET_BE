@@ -21,4 +21,7 @@ public interface ReferSiteRepository extends JpaRepository<ReferSite, Long> {
     @Query("SELECT r FROM ReferSite r WHERE r.deletedAt IS NULL AND r.referSiteId = :id")
     Optional<ReferSite> findByIdAndNotDeleted(@Param("id") Long id);
 
+    @Query("SELECT r FROM ReferSite r WHERE r.deletedAt IS NULL AND " +
+            "(:content IS NULL OR (r.channel LIKE %:content% OR r.url LIKE %:content% OR r.channelKor LIKE %:content%))")
+    Page<ReferSite> searchReferSites(@Param("content") String content, Pageable pageable);
 }
