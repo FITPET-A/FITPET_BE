@@ -8,6 +8,7 @@ import FITPET.dev.service.ComparisonService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -128,6 +129,14 @@ public class ComparisonController {
             @RequestParam(value = "referUserId", required = false) String referUserId
     ){
         return ApiResponse.SuccessResponse(SuccessStatus.GET_COMPARISON_VIEW);
+    }
+
+    @PatchMapping("/admin/comparison")
+    @Operation(summary = "견적 요청 삭제 API", description = "특정 견적 요청 정보를 삭제")
+    public ApiResponse deleteComparison(
+            @RequestBody ComparisonRequest.ComparisonDto comparisonDto) {
+        comparisonService.deleteComparison(comparisonDto);
+        return ApiResponse.SuccessResponse(SuccessStatus.DELETE_COMPARISON);
     }
 
 }
