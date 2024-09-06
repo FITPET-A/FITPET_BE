@@ -68,6 +68,8 @@ jobs:
           sudo docker run -d -p 8080:8080 --name fitpet-container \
             -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
             -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            -e ACCESS_TOKEN_EXP=${{ secrets.ACCESS_TOKEN_EXP }} \
+            -e REFRESH_TOKEN_EXP=${{ secret.REFRESH_TOKEN_EXP }} \
             ${{ secrets.DOCKER_USERNAME }}/fitpet-a:latest
 
           echo "Pruning unused Docker objects to free up space..."
