@@ -1,6 +1,9 @@
 package FITPET.dev.repository;
 
+import static FITPET.dev.common.enums.PetType.DOG;
+
 import FITPET.dev.common.enums.ComparisonStatus;
+import FITPET.dev.common.enums.PetType;
 import FITPET.dev.entity.Comparison;
 import FITPET.dev.entity.PetInfo;
 import org.springframework.data.domain.Page;
@@ -35,7 +38,14 @@ public interface ComparisonRepository extends JpaRepository<Comparison, Long> {
 
 
     @Query("SELECT c FROM Comparison c " +
-            "WHERE REPLACE(c.petInfo.phoneNum, '-', '') LIKE %?1% " +
-            "OR c.petInfo.name LIKE %?1%")
-    Page<Comparison> findAllByPhoneNumOrPetName(String content, Pageable pageable);
+            "WHERE (:content IS NULL OR " +
+            "(REPLACE(c.petInfo.phoneNum, '-', '') LIKE %:content% " +
+            "OR c.petInfo.name LIKE %:content% " +
+            "OR c.referSite.channel LIKE %:content% " +
+            "OR c.petInfo.pet.petSpecies LIKE %:content% " +
+            "OR c.comment LIKE %:content%)) " +
+            "ORDER BY c.createdAt DESC")
+    Page<Comparison> searchComparison(
+            @Param("content") String content,
+            Pageable pageable);
 }
