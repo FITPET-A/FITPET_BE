@@ -9,5 +9,4 @@ import lombok.Getter;
 @Builder
 public class AuthTokenDto {
     private String token;
-    private Long expiredIn;
 }

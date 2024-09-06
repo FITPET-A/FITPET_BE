@@ -42,7 +42,7 @@ public class JwtTokenProvider {
                 .withExpiresAt(expiredAt)
                 .sign(tokenAlgorithm);
 
-        return TokenConverter.toAuthTokenDto(token, tokenValidMilliseconds);
+        return TokenConverter.toAuthTokenDto(token);
     }
 
     public TokenDto validateToken(String token){

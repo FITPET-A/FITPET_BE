@@ -10,10 +10,9 @@ public class TokenConverter {
                 .build();
     }
 
-    public static AuthTokenDto toAuthTokenDto(String token, Long expiredIn) {
+    public static AuthTokenDto toAuthTokenDto(String token) {
         return AuthTokenDto.builder()
                 .token(token)
-                .expiredIn(expiredIn)
                 .build();
     }
 }
