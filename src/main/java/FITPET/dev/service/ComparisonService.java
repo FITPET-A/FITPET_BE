@@ -130,8 +130,8 @@ public class ComparisonService {
     public ComparisonResponse.ComparisonPageDto getComparisons(String startDate, String endDate, int page, ComparisonStatus comparisonStatus) {
 
         // 날짜 형식 변경
-        LocalDateTime start = parseDate(startDate, " 00:00:00");
-        LocalDateTime end = parseDate(endDate, " 23:59:59");
+        LocalDateTime start = (startDate != null) ? parseDate(startDate, " 00:00:00") : minDateTime;
+        LocalDateTime end = (endDate != null) ? parseDate(endDate, " 23:59:59") : maxDateTime;
 
         // 견적 요청 리스트를 페이지 단위로 조회
         Pageable pageable = PageRequest.of(page, 20);
