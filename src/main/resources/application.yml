@@ -20,3 +20,8 @@ spring:
 logging:
   level:
     org.springframework.web: DEBUG
+
+app:
+  jwt:
+    accessTokenValidMS: ${ACCESS_TOKEN_EXP}
+    refreshTokenValidMS: ${REFRESH_TOKEN_EXP}
