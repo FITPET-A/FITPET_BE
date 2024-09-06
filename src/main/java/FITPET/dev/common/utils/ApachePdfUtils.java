@@ -71,7 +71,7 @@ public class ApachePdfUtils {
 
         try {
             PDPageContentStream pageContentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true, true);
-            File fontFile = loadFontFile("/fonts/Pretendard.ttf");
+            File fontFile = loadFontFile("fonts/Pretendard.ttf");
             PDFont font = PDType0Font.load(doc, fontFile);
             ContentStream contentStream = new ContentStream(pageContentStream, font);
 
