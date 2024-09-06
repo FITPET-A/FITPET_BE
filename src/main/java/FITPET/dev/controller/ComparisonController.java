@@ -131,11 +131,12 @@ public class ComparisonController {
         return ApiResponse.SuccessResponse(SuccessStatus.GET_COMPARISON_VIEW);
     }
 
-    @PatchMapping("/admin/comparison")
+    @DeleteMapping("/admin/comparison/{comparisonId}")
     @Operation(summary = "견적 요청 삭제 API", description = "특정 견적 요청 정보를 삭제")
     public ApiResponse deleteComparison(
-            @RequestBody ComparisonRequest.ComparisonDto comparisonDto) {
-        comparisonService.deleteComparison(comparisonDto);
+            @PathVariable(value = "comparisonId") Long comparisonId
+            ) {
+        comparisonService.deleteComparison(comparisonId);
         return ApiResponse.SuccessResponse(SuccessStatus.DELETE_COMPARISON);
     }
 

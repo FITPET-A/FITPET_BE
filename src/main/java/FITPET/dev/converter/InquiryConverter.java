@@ -2,11 +2,15 @@ package FITPET.dev.converter;
 
 import FITPET.dev.common.enums.InquiryStatus;
 import FITPET.dev.dto.response.InquiryResponse;
+import FITPET.dev.dto.response.ProposalResponse;
 import FITPET.dev.entity.Inquiry;
 
+import FITPET.dev.entity.Proposal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
 
 public class InquiryConverter {
 
@@ -46,4 +50,19 @@ public class InquiryConverter {
                 .inquiryDtoList(inquiryDtoList)
                 .build();
     }
+
+    public static InquiryResponse.InquiryPageDto toInquiryPageDto(Page<Inquiry> page) {
+        List<InquiryResponse.InquiryDto> inquiryDtoList = page.getContent().stream()
+                .map(InquiryConverter::toInquiryDto)
+                .collect(Collectors.toList());
+
+        return InquiryResponse.InquiryPageDto.builder()
+                .content(inquiryDtoList)
+                .currentPage(page.getNumber())
+                .pageSize(page.getSize())
+                .totalNumber(page.getNumberOfElements())
+                .totalPage(page.getTotalPages())
+                .build();
+    }
+
 }

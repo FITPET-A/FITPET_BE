@@ -4,18 +4,22 @@ import FITPET.dev.common.enums.InquiryStatus;
 import FITPET.dev.common.status.ErrorStatus;
 import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.converter.InquiryConverter;
+import FITPET.dev.converter.ProposalConverter;
 import FITPET.dev.dto.request.InquiryRequest;
 import FITPET.dev.dto.response.InquiryResponse;
 import FITPET.dev.entity.Inquiry;
+import FITPET.dev.entity.Proposal;
 import FITPET.dev.repository.InquiryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.List;
 import java.util.regex.Pattern;
 
 @Service
@@ -39,7 +43,8 @@ public class InquiryService {
 
         // 패턴 및 유효성 검사
         validateEmail(inquiryDto.getEmail());
-        validatePhoneNumber(inquiryDto.getPhoneNum());
+        if (inquiryDto.getPhoneNum() != null)
+            validatePhoneNumber(inquiryDto.getPhoneNum());
 
         // inquiry 객체 생성 및 저장
         Inquiry inquiry = InquiryConverter.toInquiry(inquiryDto.getName(), inquiryDto.getEmail(),
@@ -55,17 +60,21 @@ public class InquiryService {
      * @param inquiryStatus
      * @return
      */
-    public InquiryResponse.InquiryListDto getInquiries(String startDate, String endDate, InquiryStatus inquiryStatus){
+    public InquiryResponse.InquiryPageDto getInquiries(String startDate, String endDate, InquiryStatus inquiryStatus, int page){
 
         // 날짜 형식 변경
         LocalDateTime start = (startDate != null) ? parseDate(startDate, " 00:00:00") : minDateTime;
         LocalDateTime end = (endDate != null) ? parseDate(endDate, " 23:59:59") : maxDateTime;
 
-        // 문의 내역 조회
-        List<Inquiry> inquiryList = getInquiryListByStatusBetweenDate(start, end, inquiryStatus);
+        int size = 20;
+        Pageable pageable = PageRequest.of(page, size);
 
-        return InquiryConverter.toInquiryListDto(inquiryList);
+        Page<Inquiry> inquiryPage = getInquiryListByStatusBetweenDate(start, end, inquiryStatus, pageable);
+        return InquiryConverter.toInquiryPageDto(inquiryPage);
+
+
     }
+
 
 
     /*
@@ -102,14 +111,14 @@ public class InquiryService {
     }
 
 
-    private List<Inquiry> getInquiryListByStatusBetweenDate(LocalDateTime start, LocalDateTime end, InquiryStatus inquiryStatus){
+    private Page<Inquiry> getInquiryListByStatusBetweenDate(LocalDateTime start, LocalDateTime end, InquiryStatus inquiryStatus, Pageable pageable) {
 
         if (inquiryStatus == null){
             // 특정 기간동안 생성된 inquiry List 최신순 정렬 후 반환
-            return inquiryRepository.findByCreatedAtBetween(start, end);
+            return inquiryRepository.findByCreatedAtBetween(start, end, pageable);
         } else {
             // 특정 기간동안 생성된 status 정보가 일치하는 inquiry List 최신순 정렬 후 반환
-            return inquiryRepository.findByCreatedAtBetweenAndStatus(start, end, inquiryStatus);
+            return inquiryRepository.findByCreatedAtBetweenAndStatus(start, end, inquiryStatus, pageable);
         }
     }
 

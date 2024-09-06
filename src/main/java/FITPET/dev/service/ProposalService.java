@@ -5,12 +5,18 @@ import FITPET.dev.common.enums.ProposalStatus;
 import FITPET.dev.common.status.ErrorStatus;
 import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.converter.ProposalConverter;
+import FITPET.dev.converter.ReferSiteConverter;
 import FITPET.dev.dto.request.ProposalRequest;
 import FITPET.dev.dto.response.ProposalResponse;
+import FITPET.dev.dto.response.ReferSiteResponse;
 import FITPET.dev.entity.Inquiry;
 import FITPET.dev.entity.Proposal;
+import FITPET.dev.entity.ReferSite;
 import FITPET.dev.repository.ProposalRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,18 +62,19 @@ public class ProposalService {
      * @param proposalStatus
      * @return
      */
-    public ProposalResponse.ProposalListDto getProposals(String startDate, String endDate, ProposalStatus proposalStatus){
+    public ProposalResponse.ProposalPageDto getProposals(String startDate, String endDate, ProposalStatus proposalStatus, int page){
 
         // 날짜 형식 변경
         LocalDateTime start = (startDate != null) ? parseDate(startDate, " 00:00:00") : minDateTime;
         LocalDateTime end = (endDate != null) ? parseDate(endDate, " 23:59:59") : maxDateTime;
 
+        int size = 20;
+        Pageable pageable = PageRequest.of(page, size);
+
         // 제휴 제안 내역 조회
-        List<Proposal> proposalList = getProposalListByStatusBetweenDate(start, end, proposalStatus);
-
-        return ProposalConverter.toProposalListDto(proposalList);
+        Page<Proposal> proposalPage = getProposalListByStatusBetweenDate(start, end, proposalStatus, pageable);
+        return ProposalConverter.toProposalPageDto(proposalPage);
     }
-
 
     /*
      * 제휴 제안 상태 변경
@@ -100,14 +107,14 @@ public class ProposalService {
         proposalRepository.save(proposal);
     }
 
-    private List<Proposal> getProposalListByStatusBetweenDate(LocalDateTime start, LocalDateTime end, ProposalStatus proposalStatus){
+    private Page<Proposal> getProposalListByStatusBetweenDate(LocalDateTime start, LocalDateTime end, ProposalStatus proposalStatus, Pageable pageable) {
 
         if (proposalStatus == null){
             // 특정 기간동안 생성된 proposal List 최신순 정렬 후 반환
-            return proposalRepository.findByCreatedAtBetween(start, end);
+            return proposalRepository.findByCreatedAtBetween(start, end, pageable);
         } else {
             // 특정 기간동안 생성된 status 정보가 일치하는 proposal List 최신순 정렬 후 반환
-            return proposalRepository.findByCreatedAtBetweenAndStatus(start, end, proposalStatus);
+            return proposalRepository.findByCreatedAtBetweenAndStatus(start, end, proposalStatus, pageable);
         }
     }
 

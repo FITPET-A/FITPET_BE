@@ -33,10 +33,12 @@ public class ProposalController {
     public ApiResponse getProposals(
             @RequestParam(name = "startDate", required = false) String startDate,
             @RequestParam(name = "endDate", required = false) String endDate,
-            @RequestParam(name = "status", required = false) ProposalStatus proposalStatus
+            @RequestParam(name = "status", required = false) ProposalStatus proposalStatus,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page
     ){
-        return ApiResponse.SuccessResponse(SuccessStatus.GET_PROPOSAL, proposalService.getProposals(startDate, endDate, proposalStatus));
+        return ApiResponse.SuccessResponse(SuccessStatus.GET_PROPOSAL, proposalService.getProposals(startDate, endDate, proposalStatus, page));
     }
+
 
     @PatchMapping("/admin/proposal/status/{proposalId}")
     @Operation(summary = "제휴 제안 상태 변경 API", description = "특정 제휴 제안 정보의 상태값을 변경")
