@@ -2,6 +2,8 @@ package FITPET.dev.common.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.servers.Servers;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
@@ -10,10 +12,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @OpenAPIDefinition(
-        info = @Info(title="FITPET",
+        info = @Info(title = "FITPET",
                 description = "큐시즘 Pit a Pat팀 FITPET 기업 프로젝트",
-                version = "v1")
+                version = "v1"),
+        servers = {
+                @Server(url = "https://3.38.244.36.nip.io",
+                        description = "서버 URL"),
+        }
 )
+
 @Configuration
 public class SwaggerConfig {
 
