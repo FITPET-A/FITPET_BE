@@ -223,12 +223,9 @@ public class ComparisonService {
      */
 
     @Transactional
-    public void deleteComparison(ComparisonRequest.ComparisonDto comparisonDto) {
-        List<Long> comparisonIds = comparisonDto.getIdList();
-        comparisonIds.forEach(id -> {
-            Comparison comparison = findComparisonById(id);
-            comparison.setDeletedAt();
-        });
+    public void deleteComparison(Long comparisonId) {
+        Comparison comparison = findComparisonById(comparisonId);
+        comparison.setDeletedAt();
     }
 
 
