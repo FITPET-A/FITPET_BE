@@ -11,6 +11,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // 모든 경로에 대해 CORS를 허용
                 .allowedOrigins("https://localhost:3000")
+                .allowedOrigins("https://3.38.244.36.nip.io")
                 .allowedMethods("GET", "POST", "PATCH", "DELETE")
                 .allowedHeaders("*") // 허용할 헤더
                 .allowCredentials(true) // 자격 증명 허용
