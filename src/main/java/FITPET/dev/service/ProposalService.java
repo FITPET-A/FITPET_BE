@@ -72,9 +72,8 @@ public class ProposalService {
         Pageable pageable = PageRequest.of(page, size);
 
         // 제휴 제안 내역 조회
-
-        Page<Proposal> proposalPagePage = getProposalListByStatusBetweenDate(start, end, proposalStatus, pageable);
-        return ProposalConverter.toProposalPageDto(proposalPagePage);
+        Page<Proposal> proposalPage = getProposalListByStatusBetweenDate(start, end, proposalStatus, pageable);
+        return ProposalConverter.toProposalPageDto(proposalPage);
     }
 
     /*

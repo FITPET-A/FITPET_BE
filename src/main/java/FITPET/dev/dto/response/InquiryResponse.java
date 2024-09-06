@@ -30,4 +30,29 @@ public class InquiryResponse {
     public static class InquiryListDto {
         private List<InquiryDto> inquiryDtoList;
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class InquiryDetailDto {
+        private Long inquiryId;
+        private String name;
+        private String email;
+        private String phoneNum;
+        private String comment;
+        private InquiryStatus status;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class InquiryPageDto {
+        private List<InquiryDto> content;
+        private int currentPage; // 현재 페이지 번호
+        private int pageSize; // 페이지 크기
+        private int totalNumber; // 전체 content 개수
+        private int totalPage; // 전체 페이지 개수
+    }
 }
