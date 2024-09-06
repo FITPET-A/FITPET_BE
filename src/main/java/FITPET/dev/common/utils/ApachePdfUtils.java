@@ -71,7 +71,7 @@ public class ApachePdfUtils {
 
         try {
             PDPageContentStream pageContentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true, true);
-            File fontFile = loadFontFile("fonts/Pretendard.ttf");
+            InputStream fontFile = loadFontFile("fonts/Pretendard.ttf");
             PDFont font = PDType0Font.load(doc, fontFile);
             ContentStream contentStream = new ContentStream(pageContentStream, font);
 
@@ -352,10 +352,10 @@ public class ApachePdfUtils {
     }
 
 
-    private File loadFontFile(String path){
+    private InputStream loadFontFile(String path){
         try {
             ClassPathResource resource = new ClassPathResource(path);
-            return resource.getFile();
+            return resource.getInputStream();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
