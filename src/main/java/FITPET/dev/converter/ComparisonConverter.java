@@ -22,6 +22,7 @@ public class ComparisonConverter {
     public static ComparisonResponse.ComparisonExcelDto toComparisonExcelDto(Comparison comparison) {
         PetInfo petInfo = comparison.getPetInfo();
         Pet pet = petInfo.getPet();
+        String referSite = comparison.getReferSite() != null ? comparison.getReferSite().getChannel() : null;
 
         return ComparisonResponse.ComparisonExcelDto.builder()
                 .status(comparison.getStatus())
@@ -33,7 +34,7 @@ public class ComparisonConverter {
                 .petType(pet.getPetType().toString())
                 .petSpecies(pet.getPetSpecies())
                 .comment(comparison.getComment())
-                .referSite(comparison.getReferSite().getChannel())
+                .referSite(referSite)
                 .referSiteUserId(comparison.getReferUserId())
                 .build();
     }

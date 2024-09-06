@@ -19,10 +19,12 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
@@ -35,8 +37,6 @@ import java.util.Map;
 @Component
 @NoArgsConstructor
 public class ApachePdfUtils {
-    private final static File fontFile = new File("src/main/resources/fonts/Pretendard.ttf");
-
 
     /*
      * 견적서 PDF 파일을 추출함
@@ -49,10 +49,10 @@ public class ApachePdfUtils {
         String backgroundPath = getBackgroundPath(comparison.getPetInfo().getPet());
 
         // 배경용 PDF 파일 로드
-        PDDocument doc = loadPDDocument(backgroundPath);
+        PDDocument doc = loadPDDocument("assets/" + backgroundPath);
 
         // 보험지급건 PDF 파일 로드
-        PDDocument doc2 = loadPDDocument("src/main/resources/assets/보험지급건.pdf");
+        PDDocument doc2 = loadPDDocument("assets/보험지급건.pdf");
 
         // 배경용 PDF 편집
         drawComparisonPdf(doc, comparison, allInsuranceListDto);
@@ -71,6 +71,7 @@ public class ApachePdfUtils {
 
         try {
             PDPageContentStream pageContentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true, true);
+            File fontFile = loadFontFile("/fonts/Pretendard.ttf");
             PDFont font = PDType0Font.load(doc, fontFile);
             ContentStream contentStream = new ContentStream(pageContentStream, font);
 
@@ -337,14 +338,24 @@ public class ApachePdfUtils {
 
 
     private String getBackgroundPath(Pet pet) {
-        String path = "src/main/resources/assets/";
-        return pet.getPetType() == PetType.DOG ? path + "dog_background.pdf" : path + "cat_background.pdf";
+        return pet.getPetType() == PetType.DOG ? "dog_background.pdf" : "cat_background.pdf";
     }
 
 
     private PDDocument loadPDDocument(String path){
-        try{
-            return Loader.loadPDF(new File(path));
+        ClassPathResource pdfResource = new ClassPathResource(path);
+        try (InputStream inputStream = pdfResource.getInputStream()) {
+            return Loader.loadPDF(inputStream.readAllBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    private File loadFontFile(String path){
+        try {
+            ClassPathResource resource = new ClassPathResource(path);
+            return resource.getFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

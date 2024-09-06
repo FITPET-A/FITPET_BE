@@ -25,7 +25,7 @@ public class AdminController {
         return ApiResponse.SuccessResponse(SuccessStatus.SUCCESS);
     }
 
-    @Operation(summary = "[TEMP] 관리자 계정 회원가입", description = "id, pwd, nickname 정보를 받아 회원가입 후 토큰 반환")
+    @Operation(summary = "관리자 계정 회원가입", description = "id, pwd, nickname 정보를 받아 회원가입 후 토큰 반환")
     @PostMapping("/sign-up")
     public ApiResponse signUp(@RequestBody AdminRequest.SignUpDto signUpDto) {
         return ApiResponse.SuccessResponse(SuccessStatus.SUCCESS_SIGN_UP, adminService.signUp(signUpDto));
