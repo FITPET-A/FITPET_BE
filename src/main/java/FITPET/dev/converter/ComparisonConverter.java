@@ -78,7 +78,7 @@ public class ComparisonConverter {
 
         return ComparisonResponse.ComparisonPageDto.builder()
                 .content(comparisonDtoList)
-                .currentPage(comparisonPage.getNumber())
+                .currentPage(comparisonPage.getNumber() + 1)
                 .pageSize(comparisonPage.getSize())
                 .totalNumber((int) comparisonPage.getTotalElements())
                 .totalPage(comparisonPage.getTotalPages())

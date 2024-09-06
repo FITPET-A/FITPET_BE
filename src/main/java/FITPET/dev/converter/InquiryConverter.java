@@ -58,7 +58,7 @@ public class InquiryConverter {
 
         return InquiryResponse.InquiryPageDto.builder()
                 .content(inquiryDtoList)
-                .currentPage(page.getNumber())
+                .currentPage(page.getNumber() + 1)
                 .pageSize(page.getSize())
                 .totalNumber(page.getNumberOfElements())
                 .totalPage(page.getTotalPages())

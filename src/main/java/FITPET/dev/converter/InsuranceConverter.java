@@ -83,7 +83,7 @@ public class InsuranceConverter {
 
         return InsuranceResponse.InsuranceDetailPageDto.builder()
                 .content(insuranceDetailDtoList)
-                .currentPage(page.getNumber())
+                .currentPage(page.getNumber() + 1)
                 .pageSize(page.getSize())
                 .totalNumber(page.getNumberOfElements())
                 .totalPage(page.getTotalPages())

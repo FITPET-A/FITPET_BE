@@ -54,7 +54,7 @@ public class ReferSiteConverter {
 
         return ReferSiteResponse.ReferSitePageDto.builder()
                 .content(referSiteDtoList)
-                .currentPage(page.getNumber())
+                .currentPage(page.getNumber() + 1)
                 .pageSize(page.getSize())
                 .totalNumber(page.getNumberOfElements())
                 .totalPage(page.getTotalPages())
