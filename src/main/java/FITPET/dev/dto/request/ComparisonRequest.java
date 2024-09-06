@@ -28,12 +28,4 @@ public class ComparisonRequest {
     private String referSite;
     private String referUserId;
 
-    @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ComparisonDto {
-        @NotBlank
-        private List<Long> idList;
-    }
 }
