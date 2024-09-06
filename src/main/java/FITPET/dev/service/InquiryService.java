@@ -39,7 +39,8 @@ public class InquiryService {
 
         // 패턴 및 유효성 검사
         validateEmail(inquiryDto.getEmail());
-        validatePhoneNumber(inquiryDto.getPhoneNum());
+        if (inquiryDto.getPhoneNum() != null)
+            validatePhoneNumber(inquiryDto.getPhoneNum());
 
         // inquiry 객체 생성 및 저장
         Inquiry inquiry = InquiryConverter.toInquiry(inquiryDto.getName(), inquiryDto.getEmail(),

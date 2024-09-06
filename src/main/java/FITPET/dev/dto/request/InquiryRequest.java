@@ -17,7 +17,6 @@ public class InquiryRequest {
         private String name;
         @NotBlank(message = "이메일 정보를 입력해주세요")
         private String email;
-        @NotBlank(message = "전화번호 정보를 입력해주세요")
         private String phoneNum;
         @NotBlank(message = "제휴 내용 정보를 입력해주세요")
         private String comment;
