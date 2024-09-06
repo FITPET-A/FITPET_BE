@@ -4,9 +4,12 @@ import FITPET.dev.common.enums.ProposalStatus;
 import FITPET.dev.dto.response.ProposalResponse;
 import FITPET.dev.entity.Proposal;
 
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
 
 public class ProposalConverter {
     public static String formatDateTime(LocalDateTime dateTime) {
@@ -42,6 +45,20 @@ public class ProposalConverter {
 
         return ProposalResponse.ProposalListDto.builder()
                 .proposalDtoList(proposalDtoList)
+                .build();
+    }
+
+    public static ProposalResponse.ProposalPageDto toProposalPageDto(Page<Proposal> page) {
+        List<ProposalResponse.ProposalDto> prosposalDtoList = page.getContent().stream()
+                .map(ProposalConverter::toProposalDto)
+                .collect(Collectors.toList());
+
+        return ProposalResponse.ProposalPageDto.builder()
+                .content(prosposalDtoList)
+                .currentPage(page.getNumber())
+                .pageSize(page.getSize())
+                .totalNumber(page.getNumberOfElements())
+                .totalPage(page.getTotalPages())
                 .build();
     }
 }

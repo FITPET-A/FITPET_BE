@@ -1,5 +1,6 @@
 package FITPET.dev.dto.response;
 
+import FITPET.dev.common.enums.ProposalStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,5 +29,30 @@ public class ProposalResponse {
     @AllArgsConstructor
     public static class ProposalListDto {
         private List<ProposalDto> proposalDtoList;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProposalDetailDto {
+        private Long proposalId;
+        private String name;
+        private String email;
+        private String phoneNum;
+        private String comment;
+        private ProposalStatus status;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProposalPageDto {
+        private List<ProposalDto> content;
+        private int currentPage; // 현재 페이지 번호
+        private int pageSize; // 페이지 크기
+        private int totalNumber; // 전체 content 개수
+        private int totalPage; // 전체 페이지 개수
     }
 }
