@@ -17,8 +17,6 @@ public class WebConfig implements WebMvcConfigurer {
                         "https://3.38.244.36.nip.io",
                         "https://fitpet-admin.vercel.app"
 
-
-
                 )
                 .allowedMethods("GET", "POST", "PATCH", "DELETE")
                 .allowedHeaders("*") // 허용할 헤더
