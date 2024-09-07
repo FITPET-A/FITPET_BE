@@ -1,9 +1,10 @@
 # FITPET_BE
-대학생 IT경영학회 큐시즘 30기 기업 프로젝트 : FITPET A조 Backend Repository
+대학생 IT경영학회 큐시즘 30기 기업 프로젝트 : FITPET A조 Backend Repository <br>
+2024.08.19 ~ 2024.09.09
 
 <br><br>
 
-## Member
+## 👥 Member
 |      김다은       |          김수진        |                                                                                                   
 | :------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------: | 
 |   <img src="https://avatars.githubusercontent.com/u/122000839?v=4" width=90px alt="김다은"/>       |   <img src="https://avatars.githubusercontent.com/cowboysj?v=4" width=90px alt="권채연"/>                       |
@@ -13,7 +14,23 @@
 
 <br><br>
 
-## Convention
+## 💻 Technology
+<img src="https://img.shields.io/badge/Java-007396?style=flat&logo=Java&logoColor=white" /> <br> 
+<img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat&logo=SpringBoot&logoColor=white" /> 
+<img src="https://img.shields.io/badge/Rest Docs-6DB33F?style=flat&logo=Spring&logoColor=white" /> 
+<img src="https://img.shields.io/badge/Spring Data JPA-6DB33F?style=flat&logo=Spring&logoColor=white" /> 
+<img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat&logo=SpringSecurity&logoColor=white" /> 
+<img src="https://img.shields.io/badge/Gradle-02303A?style=flat&logo=Gradle&logoColor=white" />   <br>
+<img src="https://img.shields.io/badge/AmazonEC2-FF9900?style=flat&logo=AmazonEC2&logoColor=white" /> 
+<img src="https://img.shields.io/badge/AmazonRDS-527FFF?style=flat&logo=AmazonRDS&logoColor=white" /> 
+<img src="https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=MySQL&logoColor=white" /> <br>
+<img src="https://img.shields.io/badge/Docker-2496ED?style=flat&logo=Docker&logoColor=white" /> 
+<img src="https://img.shields.io/badge/GithubActions-2088FF?style=flat&logo=GithubActions&logoColor=white" /> 
+
+
+<br><br>
+
+## 🤝 Convention
 
 **commit convention** <br>
 `conventionType: 구현한 내용` <br><br>
@@ -35,7 +52,7 @@
 <br><br>
 
 
-## Branch
+## 🪵 Branch
 ### 
 - `컨벤션명/#이슈번호`
 - pull request를 통해 develop branch에 merge 후, branch delete
@@ -44,28 +61,29 @@
 
 <br><br>
 
-## Dir
+## 📁 Directory
 
 ```PlainText
 src
   ㄴmain
     ㄴcommon
-    ㄴenums
-    ㄴexception
-    ㄴresponse
-    ㄴstatus
-    ㄴannotation
-    ㄴutils
-    ㄴbase
-    ㄴconfig
-  ㄴentity
-  ㄴcontroller
-  ㄴservice
-  ㄴrepository
-  ㄴconverter
-  ㄴdto
-    ㄴrequest
-    ㄴresponse
+      ㄴenums
+      ㄴexception
+      ㄴresponse
+      ㄴstatus
+      ㄴannotation
+      ㄴutils
+      ㄴbase
+      ㄴconfig
+      ㄴsecurity
+    ㄴentity
+    ㄴcontroller
+    ㄴservice
+    ㄴrepository
+    ㄴconverter
+    ㄴdto
+      ㄴrequest
+      ㄴresponse
 			 
 ```
 
