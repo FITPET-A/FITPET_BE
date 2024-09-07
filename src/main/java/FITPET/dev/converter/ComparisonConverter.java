@@ -63,7 +63,7 @@ public class ComparisonConverter {
                 .petType(pet.getPetType().toString())
                 .petSpecies(pet.getPetSpecies())
                 .comment(comparison.getComment())
-                .status(comparison.getStatus().getLabel())
+                .status(comparison.getStatus().toString())
                 .referSite(referSite)
                 .referUserId(comparison.getReferUserId())
                 .build();

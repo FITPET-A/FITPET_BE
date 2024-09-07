@@ -1,7 +1,6 @@
 package FITPET.dev.service;
 
 import FITPET.dev.common.enums.ComparisonStatus;
-import FITPET.dev.common.enums.PetType;
 import FITPET.dev.common.status.ErrorStatus;
 import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.common.utils.ApachePdfUtils;
@@ -13,7 +12,6 @@ import FITPET.dev.dto.request.ComparisonRequest;
 import FITPET.dev.dto.response.ComparisonResponse;
 import FITPET.dev.dto.response.InsuranceResponse;
 import FITPET.dev.entity.Comparison;
-import FITPET.dev.entity.Insurance;
 import FITPET.dev.entity.Pet;
 import FITPET.dev.entity.PetInfo;
 import FITPET.dev.entity.ReferSite;
@@ -22,19 +20,13 @@ import FITPET.dev.repository.PetInfoRepository;
 import FITPET.dev.repository.PetRepository;
 
 import FITPET.dev.repository.ReferSiteRepository;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -225,33 +217,6 @@ public class ComparisonService {
     public void deleteComparison(Long comparisonId) {
         Comparison comparison = findComparisonById(comparisonId);
         comparison.setDeletedAt();
-    }
-
-
-
-    /*
-     * redirect url 생성
-     * @param params
-     * @return
-     * @throws UnsupportedEncodingException
-     * @throws MalformedURLException
-     */
-    public String makeRedirectUrl(Map<String, String> params) throws UnsupportedEncodingException, MalformedURLException {
-
-        // TODO: 배포 후 domain 수정
-        String endpoint = "http://localhost:8080/api/v1/comparison/form";
-        StringBuilder urlBuilder = new StringBuilder(endpoint);
-        urlBuilder.append("?");
-
-        for (Map.Entry<String, String> entry : params.entrySet()) {
-            urlBuilder.append(URLEncoder.encode(entry.getKey(), "UTF-8"))
-                    .append("=")
-                    .append(URLEncoder.encode(entry.getValue(), "UTF-8"))
-                    .append("&");
-        }
-
-        URL url = new URL(urlBuilder.toString());
-        return url.toString();
     }
 
 

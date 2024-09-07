@@ -8,15 +8,9 @@ import FITPET.dev.service.ComparisonService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 @Tag(name = "견적서 API")
 @RestController
@@ -87,49 +81,6 @@ public class ComparisonController {
         return ApiResponse.SuccessResponse(SuccessStatus.PATCH_COMPARISON_STATUS, comparisonService.patchComparisonStatus(comparisonId, status));
     }
 
-
-    @GetMapping("/comparison")
-    @Operation(summary = "견적 요청 화면을 리다이렉트하는 API", description = "사용자의 기본 정보를 파라미터로 넘긴 후, 견적서 생성 화면으로 리다이렉트한다")
-    public ResponseEntity<Void> getComparisonView(
-            @RequestParam(value = "petName") String petName,
-            @RequestParam(value = "petType") String petType,
-            @RequestParam(value = "petSpecies") String petSpecies,
-            @RequestParam(value = "petAge") String petAge,
-            @RequestParam(value = "phoneNumber") String phoneNumber,
-            @RequestParam(value = "referSite", required = false) String referSite,
-            @RequestParam(value = "referUserId", required = false) String referUserId,
-            HttpServletResponse response
-    ) throws IOException {
-
-        Map<String, String> params = new HashMap<>();
-        params.put("petName", String.valueOf(petName));
-        params.put("petType", String.valueOf(petType));
-        params.put("petSpecies", String.valueOf(petSpecies));
-        params.put("petAge", String.valueOf(petAge));
-        params.put("phoneNumber", String.valueOf(phoneNumber));
-        params.put("referSite", String.valueOf(referSite));
-        params.put("referUserId", String.valueOf(referUserId));
-
-        // redirect할 url 생성
-        String redirectUrl = comparisonService.makeRedirectUrl(params);
-
-        response.sendRedirect(redirectUrl);
-        return ResponseEntity.status(HttpStatus.FOUND).build();
-    }
-
-//    @GetMapping("/comparison/form")
-//    @Operation(summary = "견적 요청 화면을 조회하는 API", description = "사용자의 기본 정보를 파라미터로 넘긴 후, 견적서 생성 화면을 조회한다")
-//    public ApiResponse<?> getComparisonForm(
-//            @RequestParam(value = "petName") String petName,
-//            @RequestParam(value = "petType") String petType,
-//            @RequestParam(value = "petSpecies") String petSpecies,
-//            @RequestParam(value = "petAge") String petAge,
-//            @RequestParam(value = "phoneNumber") String phoneNumber,
-//            @RequestParam(value = "referSite", required = false) String referSite,
-//            @RequestParam(value = "referUserId", required = false) String referUserId
-//    ){
-//        return ApiResponse.SuccessResponse(SuccessStatus.GET_COMPARISON_VIEW);
-//    }
 
     @DeleteMapping("/admin/comparison/{comparisonId}")
     @Operation(summary = "견적 요청 삭제 API", description = "특정 견적 요청 정보를 삭제")
