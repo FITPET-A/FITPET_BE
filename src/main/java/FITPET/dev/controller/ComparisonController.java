@@ -117,19 +117,19 @@ public class ComparisonController {
         return ResponseEntity.status(HttpStatus.FOUND).build();
     }
 
-    @GetMapping("/comparison/form")
-    @Operation(summary = "견적 요청 화면을 조회하는 API", description = "사용자의 기본 정보를 파라미터로 넘긴 후, 견적서 생성 화면을 조회한다")
-    public ApiResponse<?> getComparisonForm(
-            @RequestParam(value = "petName") String petName,
-            @RequestParam(value = "petType") String petType,
-            @RequestParam(value = "petSpecies") String petSpecies,
-            @RequestParam(value = "petAge") String petAge,
-            @RequestParam(value = "phoneNumber") String phoneNumber,
-            @RequestParam(value = "referSite", required = false) String referSite,
-            @RequestParam(value = "referUserId", required = false) String referUserId
-    ){
-        return ApiResponse.SuccessResponse(SuccessStatus.GET_COMPARISON_VIEW);
-    }
+//    @GetMapping("/comparison/form")
+//    @Operation(summary = "견적 요청 화면을 조회하는 API", description = "사용자의 기본 정보를 파라미터로 넘긴 후, 견적서 생성 화면을 조회한다")
+//    public ApiResponse<?> getComparisonForm(
+//            @RequestParam(value = "petName") String petName,
+//            @RequestParam(value = "petType") String petType,
+//            @RequestParam(value = "petSpecies") String petSpecies,
+//            @RequestParam(value = "petAge") String petAge,
+//            @RequestParam(value = "phoneNumber") String phoneNumber,
+//            @RequestParam(value = "referSite", required = false) String referSite,
+//            @RequestParam(value = "referUserId", required = false) String referUserId
+//    ){
+//        return ApiResponse.SuccessResponse(SuccessStatus.GET_COMPARISON_VIEW);
+//    }
 
     @DeleteMapping("/admin/comparison/{comparisonId}")
     @Operation(summary = "견적 요청 삭제 API", description = "특정 견적 요청 정보를 삭제")
