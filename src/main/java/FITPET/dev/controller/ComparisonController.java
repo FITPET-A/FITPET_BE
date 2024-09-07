@@ -69,7 +69,7 @@ public class ComparisonController {
 
 
     @GetMapping("/admin/comparison/search")
-    @Operation(summary = "견적서 검색 API", description = "전화번호와 펫 이름으로 견적서 검색")
+    @Operation(summary = "견적서 검색 API", description = "견적서 검색")
     public ApiResponse searchPetInfos(
             @RequestParam(name = "content", required = false) String content,
             @RequestParam(name = "page", required = false, defaultValue = "0") int page
