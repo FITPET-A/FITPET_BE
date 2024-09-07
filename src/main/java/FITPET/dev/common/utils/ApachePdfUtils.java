@@ -319,7 +319,7 @@ public class ApachePdfUtils {
 
             // 파일 이름 지정
             String encodedFileName = encodePdfFileName(fileName);
-            response.setHeader("Content-Disposition", "attachment; filename=\"" + encodedFileName + ".pdf\"; filename*=UTF-8''" + encodedFileName + ".pdf");
+            response.setHeader("Content-Disposition", "attachment; filename*=UTF-8''" + encodedFileName + ".pdf");
 
             return response.getOutputStream();
         } catch (IOException e){
