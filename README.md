@@ -65,26 +65,26 @@
 
 ```PlainText
 src
-  ㄴmain
-    ㄴcommon
-      ㄴenums
-      ㄴexception
-      ㄴresponse
-      ㄴstatus
-      ㄴannotation
-      ㄴutils
-      ㄴbase
-      ㄴconfig
-      ㄴsecurity
-    ㄴentity
-    ㄴcontroller
-    ㄴservice
-    ㄴrepository
-    ㄴconverter
-    ㄴdto
-      ㄴrequest
-      ㄴresponse
-			 
+└── main
+    ├── common
+    │   ├── enums
+    │   ├── exception
+    │   ├── response
+    │   ├── status
+    │   ├── annotation
+    │   ├── utils
+    │   ├── base
+    │   ├── config
+    │   └── security
+    ├── entity
+    ├── controller
+    ├── service
+    ├── repository
+    ├── converter
+    └── dto
+        ├── request
+        └── response
+	 
 ```
 
 
