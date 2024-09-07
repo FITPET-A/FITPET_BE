@@ -40,16 +40,9 @@ public interface ComparisonRepository extends JpaRepository<Comparison, Long> {
 
 
     @Query("SELECT c FROM Comparison c " +
-            "WHERE c.deletedAt IS NULL " +
-            "AND (:content IS NULL OR " +
-            "(REPLACE(c.petInfo.phoneNum, '-', '') LIKE %:content% " +
-            "OR c.petInfo.name LIKE %:content% " +
-            "OR c.referSite.channel LIKE %:content% " +
-            "OR c.petInfo.pet.petSpecies LIKE %:content% " +
-            "OR c.comment LIKE %:content%)) " +
-            "ORDER BY c.createdAt DESC")
-    Page<Comparison> searchComparison(
-            @Param("content") String content,
-            Pageable pageable);
+            "WHERE REPLACE(c.petInfo.phoneNum, '-', '') LIKE %?1% " +
+            "OR c.petInfo.name LIKE %?1%")
+    Page<Comparison> findAllByPhoneNumOrPetName(String content, Pageable pageable);
+
 
 }

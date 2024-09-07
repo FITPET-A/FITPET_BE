@@ -212,8 +212,7 @@ public class ComparisonService {
 
         // '-' 제거
         String changedContent = content != null ? content.replaceAll("-", "") : null;
-
-        Page<Comparison> comparisonPage = comparisonRepository.searchComparison(changedContent, pageable);
+        Page<Comparison> comparisonPage = comparisonRepository.findAllByPhoneNumOrPetName(changedContent, pageable);
         return ComparisonConverter.toComparisonPageDto(comparisonPage);
     }
 
