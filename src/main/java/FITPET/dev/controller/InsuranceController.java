@@ -21,7 +21,7 @@ public class InsuranceController {
     private final InsuranceService insuranceService;
 
     @GetMapping("/insurance")
-    @Operation(summary = "보험료 조회 API", description = "세부품종, 나이, 갱신주기, 보상비율, 자부담, 1일 보상 금액 정보를 Parameter으로 받아 각 회사의 보험료와 할인 보험료 정보를 조회")
+    @Operation(summary = "보험료  조회 API", description = "세부품종, 나이, 갱신주기, 보상비율, 자부담, 1일 보상 금액 정보를 Parameter으로 받아 각 회사의 보험료와 할인 보험료 정보를 조회")
     public ApiResponse getInsurancePremium(@RequestParam(name = "petSpecies") String petSpecies,
                                            @RequestParam(name = "age", defaultValue = "0") int age,
                                            @RequestParam(name = "renewalCycle", defaultValue = "3년", required = false) String renewalCycle,
@@ -53,7 +53,7 @@ public class InsuranceController {
     }
 
     @PatchMapping("/admin/insurance/{insuranceId}")
-    @Operation(summary = "보험료 수정 API", description = "특정 보험id의 보험료를 수정")
+    @Operation(summary = "(API 연결 x) 보험료 수정 API", description = "특정 보험id의 보험료를 수정")
     public ApiResponse updateInsurance(
             @PathVariable(value = "insuranceId") Long insuranceId,
             @RequestParam(name = "premium") int premium
@@ -62,7 +62,7 @@ public class InsuranceController {
     }
 
     @GetMapping("/admin/insurance/history/{insuranceId}")
-    @Operation(summary = "보험료 수정 내역 조회 API", description = "특정 보험id의 보험료 수정 내역을 조회")
+    @Operation(summary = "(API 연결 x)보험료 수정 내역 조회 API", description = "특정 보험id의 보험료 수정 내역을 조회")
     public ApiResponse getPremiumHistory(
             @PathVariable(name = "insuranceId") Long insuranceId
     ) {
@@ -71,7 +71,7 @@ public class InsuranceController {
     }
 
     @PostMapping("/admin/insurance")
-    @Operation(summary = "보험 정보 추가 API", description = "새로운 보험 정보를 추가")
+    @Operation(summary = "(API 연결 x)보험 정보 추가 API", description = "새로운 보험 정보를 추가")
     public ApiResponse addInsurance(
             @RequestBody InsuranceRequest request
     ) {
@@ -80,7 +80,7 @@ public class InsuranceController {
 
     // 보험 정보 삭제 API
     @DeleteMapping("/admin/insurance/{insuranceId}")
-    @Operation(summary = "보험 정보 삭제 API", description = "해당 보험 id의 보험 정보를 삭제")
+    @Operation(summary = "(API 연결 x)보험 정보 삭제 API", description = "해당 보험 id의 보험 정보를 삭제")
     public ApiResponse deleteInsurance(@PathVariable Long insuranceId) {
         insuranceService.deleteInsurance(insuranceId);
         return ApiResponse.SuccessResponse(SuccessStatus.DELETE_INSURANCE_SUCCESS);
@@ -88,7 +88,7 @@ public class InsuranceController {
 
     // 삭제된 보험 정보 전체 조회 API
     @GetMapping("/admin/insurance/deleted")
-    @Operation(summary = "삭제된 보험 정보 전체 조회 API", description = "삭제된 보험 정보 조회")
+    @Operation(summary = "(API 연결 x)삭제된 보험 정보 전체 조회 API", description = "삭제된 보험 정보 조회")
     public ApiResponse getDeletedInsurances(
             @RequestParam(name = "page", required = false, defaultValue = "0") int page) {
         return ApiResponse.SuccessResponse(SuccessStatus.GET_DELETED_INSURANCES, insuranceService.getDeletedInsurances(page));
