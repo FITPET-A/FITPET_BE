@@ -140,7 +140,10 @@ public class ComparisonService {
      * @param servletResponse
      */
     public void downloadComparisons(HttpServletResponse servletResponse,
-                                    String startDate, String endDate, ComparisonStatus comparisonStatus) {
+                                    String startDate, String endDate, String comparisonStatusStr) {
+
+        ComparisonStatus comparisonStatus = comparisonStatusStr.equals("all") ? null : ComparisonStatus.valueOf(comparisonStatusStr);
+
         // 날짜 형식 변경
         LocalDateTime start = (startDate != null) ? parseDate(startDate, " 00:00:00") : minDateTime;
         LocalDateTime end = (endDate != null) ? parseDate(endDate, " 23:59:59") : maxDateTime;
