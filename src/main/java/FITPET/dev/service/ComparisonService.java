@@ -119,7 +119,9 @@ public class ComparisonService {
      * @param comparisonStatus
      * @return
      */
-    public ComparisonResponse.ComparisonPageDto getComparisons(String startDate, String endDate, int page, ComparisonStatus comparisonStatus) {
+    public ComparisonResponse.ComparisonPageDto getComparisons(String startDate, String endDate, int page, String comparisonStatusStr) {
+
+        ComparisonStatus comparisonStatus = comparisonStatusStr.equals("all") ? null : ComparisonStatus.valueOf(comparisonStatusStr);
 
         // 날짜 형식 변경
         LocalDateTime start = (startDate != null) ? parseDate(startDate, " 00:00:00") : minDateTime;

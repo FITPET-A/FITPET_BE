@@ -37,7 +37,7 @@ public class ComparisonController {
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "startDate", required = false) String startDate,
             @RequestParam(name = "endDate", required = false) String endDate,
-            @RequestParam(name = "status", required = false, defaultValue = "PENDING") ComparisonStatus status
+            @RequestParam(name = "status", required = false, defaultValue = "all") String status
     ) {
         return ApiResponse.SuccessResponse(SuccessStatus.GET_COMPARISON_TABLE, comparisonService.getComparisons(startDate, endDate, page, status));
     }
