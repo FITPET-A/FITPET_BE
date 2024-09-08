@@ -1,8 +1,6 @@
 # FITPET_BE
 대학생 IT경영학회 큐시즘 30기 기업 프로젝트 : FITPET A조 Backend Repository
 
-<br><br>
-
 ## Member
 |      김다은       |          김수진        |                                                                                                   
 | :------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------: | 
@@ -10,8 +8,9 @@
 |   [@daeun084](https://github.com/daeun084)   |    [@cowboysj](https://github.com/cowboysj)  | 
 | 숭실대학교 컴퓨터학부 | 경희대학교 컴퓨터공학과 | 
 
+## Architecture
+![image](https://github.com/user-attachments/assets/55b51461-42d4-4105-99bf-8f930a1266db)
 
-<br><br>
 
 ## Convention
 
@@ -32,8 +31,6 @@
 | `refactor` | 코드 리팩토링 |
 
 
-<br><br>
-
 
 ## Branch
 ### 
@@ -41,10 +38,7 @@
 - pull request를 통해 develop branch에 merge 후, branch delete
 - 부득이하게 develop branch에 직접 commit 해야 할 경우, `!hotfix:` 사용
 
-
-<br><br>
-
-## Dir
+## Directory
 
 ```PlainText
 src/
