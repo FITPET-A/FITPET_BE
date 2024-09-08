@@ -1,5 +1,11 @@
 # FITPET_BE
-대학생 IT경영학회 큐시즘 30기 기업 프로젝트 : FITPET A조 Backend Repository
+대학생 IT경영학회 큐시즘 30기 기업 프로젝트 : FITPET A조 Backend Repository <br>
+
+![1](https://github.com/user-attachments/assets/0f660c6e-7207-4f7f-b101-f687bd0e12bc) 
+<br><br><br>
+
+
+
 
 ## Member
 |      김다은       |          김수진        |                                                                                                   
@@ -8,8 +14,15 @@
 |   [@daeun084](https://github.com/daeun084)   |    [@cowboysj](https://github.com/cowboysj)  | 
 | 숭실대학교 컴퓨터학부 | 경희대학교 컴퓨터공학과 | 
 
+<br><br><br>
+
+
 ## Architecture
-![image](https://github.com/user-attachments/assets/55b51461-42d4-4105-99bf-8f930a1266db)
+![image](https://github.com/user-attachments/assets/55b51461-42d4-4105-99bf-8f930a1266db) <br><br><br>
+
+
+## ERD
+![20](https://github.com/user-attachments/assets/b9384cc6-e3cf-4405-9c5f-057c09523ab5) <br><br><br>
 
 
 ## Convention
@@ -30,6 +43,8 @@
 | `test` | 테스트 코드 추가 및 수정, 삭제 |
 | `refactor` | 코드 리팩토링 |
 
+<br><br><br>
+
 
 
 ## Branch
@@ -37,6 +52,9 @@
 - `컨벤션명/#이슈번호`
 - pull request를 통해 develop branch에 merge 후, branch delete
 - 부득이하게 develop branch에 직접 commit 해야 할 경우, `!hotfix:` 사용
+
+<br><br><br>
+
 
 ## Directory
 
@@ -60,9 +78,13 @@ src/
 └── dto/
     ├── request/
     └── response/
-
-			 
+		 
 ```
+
+<br><br><br>
+
+
+
 
 ## 부하 테스트 
 가장 요청이 많을 것으로 예상되는 `견적서 요청 API`에 대해 K6을 이용해 부하테스트를 진행했습니다.
