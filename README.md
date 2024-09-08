@@ -1,5 +1,6 @@
 # FITPET_BE
 대학생 IT경영학회 큐시즘 30기 기업 프로젝트 : FITPET A조 Backend Repository <br>
+2024.08.19 ~ 2024.09.08
 
 ![1](https://github.com/user-attachments/assets/0f660c6e-7207-4f7f-b101-f687bd0e12bc) 
 <br><br><br>
