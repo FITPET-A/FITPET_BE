@@ -104,7 +104,7 @@ public class ProposalService {
     @Transactional
     public void deleteProposal(Long proposalId) {
         Proposal proposal = findProposalById(proposalId);
-        proposalRepository.save(proposal);
+        proposalRepository.delete(proposal);
     }
 
     private Page<Proposal> getProposalListByStatusBetweenDate(LocalDateTime start, LocalDateTime end, ProposalStatus proposalStatus, Pageable pageable) {

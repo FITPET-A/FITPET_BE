@@ -34,7 +34,7 @@ public class ProposalConverter {
                 .email(proposal.getEmail())
                 .phoneNum(proposal.getPhoneNum())
                 .comment(proposal.getComment())
-                .status(proposal.getStatus().getLabel())
+                .status(proposal.getStatus().toString())
                 .build();
     }
 
@@ -58,7 +58,8 @@ public class ProposalConverter {
                 .currentPage(page.getNumber() + 1)
                 .pageSize(page.getSize())
                 .numberOfElement(page.getNumberOfElements())
-                .totalElements((int) page.getTotalElements())                .totalPage(page.getTotalPages())
+                .totalElements((int) page.getTotalElements())
+                .totalPage(page.getTotalPages())
                 .build();
     }
 }

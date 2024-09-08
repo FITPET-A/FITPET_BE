@@ -2,10 +2,8 @@ package FITPET.dev.converter;
 
 import FITPET.dev.common.enums.InquiryStatus;
 import FITPET.dev.dto.response.InquiryResponse;
-import FITPET.dev.dto.response.ProposalResponse;
 import FITPET.dev.entity.Inquiry;
 
-import FITPET.dev.entity.Proposal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -37,7 +35,7 @@ public class InquiryConverter {
                 .email(inquiry.getEmail())
                 .phoneNum(inquiry.getPhoneNum())
                 .comment(inquiry.getComment())
-                .status(inquiry.getStatus().getLabel())
+                .status(inquiry.getStatus().toString())
                 .build();
     }
 
@@ -61,7 +59,8 @@ public class InquiryConverter {
                 .currentPage(page.getNumber() + 1)
                 .pageSize(page.getSize())
                 .numberOfElement(page.getNumberOfElements())
-                .totalElements((int) page.getTotalElements())                .totalPage(page.getTotalPages())
+                .totalElements((int) page.getTotalElements())
+                .totalPage(page.getTotalPages())
                 .build();
     }
 
