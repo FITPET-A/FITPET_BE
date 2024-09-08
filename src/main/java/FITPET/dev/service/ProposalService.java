@@ -1,17 +1,12 @@
 package FITPET.dev.service;
 
-import FITPET.dev.common.enums.InquiryStatus;
 import FITPET.dev.common.enums.ProposalStatus;
 import FITPET.dev.common.status.ErrorStatus;
 import FITPET.dev.common.exception.GeneralException;
 import FITPET.dev.converter.ProposalConverter;
-import FITPET.dev.converter.ReferSiteConverter;
 import FITPET.dev.dto.request.ProposalRequest;
 import FITPET.dev.dto.response.ProposalResponse;
-import FITPET.dev.dto.response.ReferSiteResponse;
-import FITPET.dev.entity.Inquiry;
 import FITPET.dev.entity.Proposal;
-import FITPET.dev.entity.ReferSite;
 import FITPET.dev.repository.ProposalRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.List;
 import java.util.regex.Pattern;
 
 @Service
@@ -62,7 +56,9 @@ public class ProposalService {
      * @param proposalStatus
      * @return
      */
-    public ProposalResponse.ProposalPageDto getProposals(String startDate, String endDate, ProposalStatus proposalStatus, int page){
+    public ProposalResponse.ProposalPageDto getProposals(String startDate, String endDate, String proposalStatusStr, int page){
+
+        ProposalStatus proposalStatus = proposalStatusStr.equals("all") ? null : ProposalStatus.valueOf(proposalStatusStr);
 
         // 날짜 형식 변경
         LocalDateTime start = (startDate != null) ? parseDate(startDate, " 00:00:00") : minDateTime;
@@ -108,14 +104,8 @@ public class ProposalService {
     }
 
     private Page<Proposal> getProposalListByStatusBetweenDate(LocalDateTime start, LocalDateTime end, ProposalStatus proposalStatus, Pageable pageable) {
-
-        if (proposalStatus == null){
-            // 특정 기간동안 생성된 proposal List 최신순 정렬 후 반환
-            return proposalRepository.findByCreatedAtBetween(start, end, pageable);
-        } else {
             // 특정 기간동안 생성된 status 정보가 일치하는 proposal List 최신순 정렬 후 반환
             return proposalRepository.findByCreatedAtBetweenAndStatus(start, end, proposalStatus, pageable);
-        }
     }
 
 

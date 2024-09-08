@@ -9,17 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
-
-    @Query("SELECT i FROM Inquiry i " +
-            "WHERE (:startDate IS NULL OR i.createdAt >= :startDate) " +
-            "AND (:endDate IS NULL OR i.createdAt <= :endDate) " +
-            "ORDER BY i.createdAt DESC ")
-    Page<Inquiry> findByCreatedAtBetween(@Param(value = "startDate") LocalDateTime startDate,
-                                         @Param(value = "endDate") LocalDateTime endDate, Pageable pageable);
-
 
     @Query("SELECT i FROM Inquiry i " +
             "WHERE (:startDate IS NULL OR i.createdAt >= :startDate) " +
@@ -28,5 +19,6 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
             "ORDER BY i.createdAt DESC ")
     Page<Inquiry> findByCreatedAtBetweenAndStatus(@Param(value = "startDate") LocalDateTime startDate,
                                                   @Param(value = "endDate") LocalDateTime endDate,
-                                                  @Param(value = "status") InquiryStatus status,Pageable pageable);
+                                                  @Param(value = "status") InquiryStatus status,
+                                                  Pageable pageable);
 }

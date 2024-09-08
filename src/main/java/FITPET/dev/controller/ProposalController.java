@@ -1,6 +1,5 @@
 package FITPET.dev.controller;
 
-import FITPET.dev.common.enums.InquiryStatus;
 import FITPET.dev.common.enums.ProposalStatus;
 import FITPET.dev.common.status.SuccessStatus;
 import FITPET.dev.common.response.ApiResponse;
@@ -33,7 +32,7 @@ public class ProposalController {
     public ApiResponse getProposals(
             @RequestParam(name = "startDate", required = false) String startDate,
             @RequestParam(name = "endDate", required = false) String endDate,
-            @RequestParam(name = "status", required = false) ProposalStatus proposalStatus,
+            @RequestParam(name = "status", required = false, defaultValue = "all") String proposalStatus,
             @RequestParam(name = "page", required = false, defaultValue = "0") int page
     ){
         return ApiResponse.SuccessResponse(SuccessStatus.GET_PROPOSAL, proposalService.getProposals(startDate, endDate, proposalStatus, page));

@@ -33,7 +33,7 @@ public class InquiryController {
     public ApiResponse getInquiries(
             @RequestParam(name = "startDate", required = false) String startDate,
             @RequestParam(name = "endDate", required = false) String endDate,
-            @RequestParam(name = "status", required = false) InquiryStatus inquiryStatus,
+            @RequestParam(name = "status", required = false, defaultValue = "all") String inquiryStatus,
              @RequestParam(name = "page", required = false, defaultValue = "0") int page
     ){
         return ApiResponse.SuccessResponse(SuccessStatus.GET_INQUIRY, inquiryService.getInquiries(startDate, endDate, inquiryStatus, page));

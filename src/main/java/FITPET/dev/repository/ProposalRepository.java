@@ -17,15 +17,6 @@ public interface ProposalRepository extends JpaRepository<Proposal, Long> {
     @Query("SELECT p FROM Proposal p " +
             "WHERE (:startDate IS NULL OR p.createdAt >= :startDate) " +
             "AND (:endDate IS NULL OR p.createdAt <= :endDate) " +
-            "ORDER BY p.createdAt DESC ")
-    Page<Proposal> findByCreatedAtBetween(@Param(value = "startDate") LocalDateTime startDate,
-                                          @Param(value = "endDate") LocalDateTime endDate, Pageable pageable
-    );
-
-
-    @Query("SELECT p FROM Proposal p " +
-            "WHERE (:startDate IS NULL OR p.createdAt >= :startDate) " +
-            "AND (:endDate IS NULL OR p.createdAt <= :endDate) " +
             "AND (:status IS NULL OR p.status = :status) " +
             "ORDER BY p.createdAt DESC ")
     Page<Proposal> findByCreatedAtBetweenAndStatus(@Param(value = "startDate") LocalDateTime startDate,

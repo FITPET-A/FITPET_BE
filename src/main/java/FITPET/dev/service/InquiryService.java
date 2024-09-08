@@ -60,7 +60,9 @@ public class InquiryService {
      * @param inquiryStatus
      * @return
      */
-    public InquiryResponse.InquiryPageDto getInquiries(String startDate, String endDate, InquiryStatus inquiryStatus, int page){
+    public InquiryResponse.InquiryPageDto getInquiries(String startDate, String endDate, String inquiryStatusStr, int page){
+
+        InquiryStatus inquiryStatus = inquiryStatusStr.equals("all") ? null : InquiryStatus.valueOf(inquiryStatusStr);
 
         // 날짜 형식 변경
         LocalDateTime start = (startDate != null) ? parseDate(startDate, " 00:00:00") : minDateTime;
@@ -71,10 +73,7 @@ public class InquiryService {
 
         Page<Inquiry> inquiryPage = getInquiryListByStatusBetweenDate(start, end, inquiryStatus, pageable);
         return InquiryConverter.toInquiryPageDto(inquiryPage);
-
-
     }
-
 
 
     /*
@@ -112,14 +111,8 @@ public class InquiryService {
 
 
     private Page<Inquiry> getInquiryListByStatusBetweenDate(LocalDateTime start, LocalDateTime end, InquiryStatus inquiryStatus, Pageable pageable) {
-
-        if (inquiryStatus == null){
-            // 특정 기간동안 생성된 inquiry List 최신순 정렬 후 반환
-            return inquiryRepository.findByCreatedAtBetween(start, end, pageable);
-        } else {
             // 특정 기간동안 생성된 status 정보가 일치하는 inquiry List 최신순 정렬 후 반환
             return inquiryRepository.findByCreatedAtBetweenAndStatus(start, end, inquiryStatus, pageable);
-        }
     }
 
     private Inquiry findInquiryById(Long inquiryId) {
