@@ -63,9 +63,9 @@ public class InsuranceConverter {
 
     public static InsuranceResponse.InsuranceDetailDto toInsuranceDetailDto(Insurance insurance) {
         return InsuranceResponse.InsuranceDetailDto.builder()
-
                 .insuranceId(insurance.getInsuranceId())
                 .petType(insurance.getPetType())
+                .company(insurance.getCompany().getLabel())
                 .age(insurance.getAge())
                 .dogBreedRank(insurance.getDogBreedRank())
                 .renewalCycle(insurance.getRenewalCycle().getLabel())

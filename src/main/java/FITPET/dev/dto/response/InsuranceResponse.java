@@ -58,6 +58,7 @@ public class InsuranceResponse {
     @AllArgsConstructor
     public static class InsuranceDetailDto {
         private Long insuranceId;
+        private String company;
         private PetType petType;
         private int age;
         private String dogBreedRank; // 견종등급
