@@ -88,11 +88,6 @@ public class InquiryService {
         // 1:1 문의 단일 조회
         Inquiry inquiry = findInquiryById(inquiryId);
 
-        // validate status
-        InquiryStatus currentInquiryStatus = inquiry.getStatus();
-        if (currentInquiryStatus.getIndex() > inquiryStatus.getIndex())
-            throw new GeneralException(ErrorStatus.INVALID_PATCH_PERIOR_STATUS);
-
         // patch status
         inquiry.updateStatus(inquiryStatus);
         return InquiryConverter.toInquiryDto(inquiry);

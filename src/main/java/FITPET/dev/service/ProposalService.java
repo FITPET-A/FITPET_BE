@@ -82,11 +82,6 @@ public class ProposalService {
     public ProposalResponse.ProposalDto patchProposalStatus(Long proposalId, ProposalStatus proposalStatus) {
         Proposal proposal = findProposalById(proposalId);
 
-        // validate status
-        ProposalStatus currentProposalStatus = proposal.getStatus();
-        if (currentProposalStatus.getIndex() > proposalStatus.getIndex())
-            throw new GeneralException(ErrorStatus.INVALID_PATCH_PERIOR_STATUS);
-
         // patch status
         proposal.updateStatus(proposalStatus);
         return ProposalConverter.toProposalDto(proposal);

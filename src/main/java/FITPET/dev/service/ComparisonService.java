@@ -58,6 +58,7 @@ public class ComparisonService {
      * @param request
      * @return
      */
+    @Transactional
     public ComparisonResponse.ComparisonDto createComparisonAndGetInsurance(ComparisonRequest request) {
         validatePhoneNumber(request.getPhoneNumber());
         validateAge(request.getPetAge());
@@ -78,24 +79,6 @@ public class ComparisonService {
         Comparison comparison = ComparisonConverter.toComparison(petInfo, referSite, request.getReferUserId(), request.getComment());
         comparisonRepository.save(comparison);
         return ComparisonConverter.toComparisonDto(comparison);
-    }
-
-
-    /*
-     * default 값으로 보험료 조회
-     * @param petInfo
-     * @return
-     */
-    public InsuranceResponse.InsuranceListDto getInsurancePremiumsByPetInfo(PetInfo petInfo) {
-
-        String detailType = petInfo.getPet().getPetSpecies();
-        int age = petInfo.getAge();
-        String renewalCycle = "3년";
-        String deductible = "1만원";
-        String coverageRatio = "70";
-        String compensation = "15만";
-
-        return insuranceService.getInsurancePremium(detailType, age, renewalCycle, coverageRatio, deductible, compensation);
     }
 
 
@@ -188,11 +171,6 @@ public class ComparisonService {
         // 견적서 단일 조회
         Comparison comparison = findComparisonById(comparisonId);
 
-        // validate status
-        ComparisonStatus currentComparisonStatus = comparison.getStatus();
-        if (currentComparisonStatus.getIndex() > comparisonStatus.getIndex())
-            throw new GeneralException(ErrorStatus.INVALID_PATCH_PERIOR_STATUS);
-
         // patch status
         comparison.updateStatus(comparisonStatus);
         return ComparisonConverter.toComparisonDto(comparison);
@@ -217,7 +195,6 @@ public class ComparisonService {
      * ComparisonId들 받아서 삭제
      * @param ComparisonId
      */
-
     @Transactional
     public void deleteComparison(Long comparisonId) {
         Comparison comparison = findComparisonById(comparisonId);

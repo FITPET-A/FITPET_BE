@@ -79,17 +79,6 @@ public class InsuranceService {
 
 
     /*
-     * 상세 품종명으로 Pet 객체를 찾아 반환
-     * @param detailType
-     * @return
-     */
-    private Pet findPetByPetSpecies(String petSpecies){
-        return petRepository.findByPetSpecies(petSpecies)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_PET));
-    }
-
-
-    /*
      * 필드 정보들을 만족하는 insurance 객체들을 찾아 리스트로 반환
      * @param pet
      * @param age
@@ -181,6 +170,7 @@ public class InsuranceService {
     /*
      * 보험 정보 추가
      */
+    @Transactional
     public InsuranceResponse.InsuranceDetailDto addInsurance(InsuranceRequest request) {
         Insurance insurance = InsuranceConverter.RequestToInsurance(request);
         insuranceRepository.save(insurance);
@@ -243,6 +233,17 @@ public class InsuranceService {
         // 보험 수정 이력 저장
         InsuranceHistory history = InsuranceHistoryConverter.createHistory(insurance, oldPremium, newPremium);
         insuranceHistoryRepository.save(history);
+    }
+
+
+    /*
+     * 상세 품종명으로 Pet 객체를 찾아 반환
+     * @param detailType
+     * @return
+     */
+    private Pet findPetByPetSpecies(String petSpecies){
+        return petRepository.findByPetSpecies(petSpecies)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_PET));
     }
 
 
