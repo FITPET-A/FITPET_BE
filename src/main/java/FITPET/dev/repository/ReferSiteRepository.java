@@ -15,13 +15,15 @@ public interface ReferSiteRepository extends JpaRepository<ReferSite, Long> {
 
     Optional<ReferSite> findByReferSiteId(Long ReferSiteId);
 
-    @Query("SELECT r FROM ReferSite r WHERE r.deletedAt IS NULL")
+    @Query("SELECT r FROM ReferSite r WHERE r.deletedAt IS NULL ORDER BY r.createdAt DESC")
     Page<ReferSite> findAllNotDeleted(Pageable pageable);
 
     @Query("SELECT r FROM ReferSite r WHERE r.deletedAt IS NULL AND r.referSiteId = :id")
     Optional<ReferSite> findByIdAndNotDeleted(@Param("id") Long id);
 
     @Query("SELECT r FROM ReferSite r WHERE r.deletedAt IS NULL AND " +
-            "(:content IS NULL OR (r.channel LIKE %:content% OR r.url LIKE %:content% OR r.channelKor LIKE %:content%))")
+            "(:content IS NULL OR (r.channel LIKE %:content% OR r.url LIKE %:content% OR r.channelKor LIKE %:content%)) " +
+            "ORDER BY r.createdAt DESC")
     Page<ReferSite> searchReferSites(@Param("content") String content, Pageable pageable);
+
 }
