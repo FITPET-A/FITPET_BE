@@ -55,6 +55,7 @@ public class AdminService {
      * @param signInDto
      * @return
      */
+    @Transactional
     public AdminResponse.SignDto signIn(AdminRequest.SignInDto signInDto) {
         Admin admin = findAdminById(signInDto.getId());
 

@@ -29,11 +29,6 @@ public class ReferSiteService {
 
     private final ReferSiteRepository referSiteRepository;
 
-    private ReferSite findReferSiteById(Long referSiteId) {
-        return referSiteRepository.findByIdAndNotDeleted(referSiteId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_REFERSITE));
-    }
-
     /*
      * 신규 유입채널 추가
      */
@@ -84,5 +79,10 @@ public class ReferSiteService {
         Page<ReferSite> referSitePage = referSiteRepository.searchReferSites(content, pageable);
 
         return ReferSiteConverter.toReferSitePageDto(referSitePage);
+    }
+
+    private ReferSite findReferSiteById(Long referSiteId) {
+        return referSiteRepository.findByIdAndNotDeleted(referSiteId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_EXIST_REFERSITE));
     }
 }
