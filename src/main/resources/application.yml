@@ -9,6 +9,8 @@ spring:
   sql:
     init:
       platform: mysql
+  jackson:
+    time-zone: Asia/Seoul
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
@@ -17,8 +19,6 @@ spring:
     show-sql: true
     properties:
         format_sql: true
-  jackson:
-    time-zone: Asia/Seoul
 logging:
   level:
     org.springframework.web: DEBUG
